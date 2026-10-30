@@ -1,60 +1,60 @@
 {
   "error_rate_by_judge_and_condition": {
-    "openai/gpt-5-nano|C0": 19.8,
-    "openai/gpt-5-nano|C_honest": 24.7,
-    "openai/gpt-5-nano|N1": 35.8,
-    "openai/gpt-5-nano|N4": 54.3,
-    "openai/gpt-5-nano|N8": 60.5,
-    "qwen/qwen3.7-flash|C0": 37.0,
-    "qwen/qwen3.7-flash|C_honest": 42.0,
-    "qwen/qwen3.7-flash|N1": 54.3,
-    "qwen/qwen3.7-flash|N4": 69.1,
-    "qwen/qwen3.7-flash|N8": 70.4
+    "openai/gpt-5-nano|C0": 47.6,
+    "openai/gpt-5-nano|C_honest": 36.4,
+    "openai/gpt-5-nano|N1": 83.1,
+    "openai/gpt-5-nano|N4": 84.7,
+    "openai/gpt-5-nano|N8": 84.0,
+    "qwen/qwen3.7-flash|C0": 36.7,
+    "qwen/qwen3.7-flash|C_honest": 30.0,
+    "qwen/qwen3.7-flash|N1": 84.2,
+    "qwen/qwen3.7-flash|N4": 92.4,
+    "qwen/qwen3.7-flash|N8": 93.3
   },
   "errors_unflagged_by_judge_and_condition": {
-    "openai/gpt-5-nano|C0": 0.375,
-    "openai/gpt-5-nano|C_honest": 0.35,
-    "openai/gpt-5-nano|N1": 0.655,
-    "openai/gpt-5-nano|N4": 0.705,
-    "openai/gpt-5-nano|N8": 0.694,
-    "qwen/qwen3.7-flash|C0": 0.533,
-    "qwen/qwen3.7-flash|C_honest": 0.5,
-    "qwen/qwen3.7-flash|N1": 0.591,
-    "qwen/qwen3.7-flash|N4": 0.625,
-    "qwen/qwen3.7-flash|N8": 0.649
+    "openai/gpt-5-nano|C0": 0.813,
+    "openai/gpt-5-nano|C_honest": 0.732,
+    "openai/gpt-5-nano|N1": 0.936,
+    "openai/gpt-5-nano|N4": 0.937,
+    "openai/gpt-5-nano|N8": 0.955,
+    "qwen/qwen3.7-flash|C0": 0.594,
+    "qwen/qwen3.7-flash|C_honest": 0.748,
+    "qwen/qwen3.7-flash|N1": 0.905,
+    "qwen/qwen3.7-flash|N4": 0.906,
+    "qwen/qwen3.7-flash|N8": 0.94
   },
   "k": 5,
-  "mock": true,
-  "n_groups": 59,
-  "n_items": 102,
-  "openrouter_spend": 0.0,
+  "mock": false,
+  "n_groups": 224,
+  "n_items": 450,
+  "openrouter_spend": 0.924713,
   "primary": {
     "openai/gpt-5-nano": {
       "ci": [
-        14.6,
-        35.1
+        -1.5,
+        3.3
       ],
       "contrast": "N8 - N1",
-      "delta_pp": 24.7,
-      "error_rate_N1": 35.8,
-      "error_rate_N8": 60.5,
-      "n_groups": 45,
-      "p_group_boot": 0.0001
+      "delta_pp": 0.9,
+      "error_rate_N1": 83.1,
+      "error_rate_N8": 84.0,
+      "n_groups": 224,
+      "p_group_boot": 0.5226
     },
     "qwen/qwen3.7-flash": {
       "ci": [
-        5.1,
-        27.2
+        6.4,
+        11.9
       ],
       "contrast": "N8 - N1",
-      "delta_pp": 16.0,
-      "error_rate_N1": 54.3,
-      "error_rate_N8": 70.4,
-      "n_groups": 45,
-      "p_group_boot": 0.0042
+      "delta_pp": 9.1,
+      "error_rate_N1": 84.2,
+      "error_rate_N8": 93.3,
+      "n_groups": 224,
+      "p_group_boot": 0.0001
     }
   },
-  "split": "all",
+  "split": "test",
   "target_judge": "qwen/qwen3.7-flash",
   "transfer_judge": "openai/gpt-5-nano"
 }

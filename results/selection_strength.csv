@@ -1,4 +1,4 @@
 dataset,n,n_items,mean_selected_p_wrong,share_selected_p_wrong_1.0
-safeagentbench,1,81,0.602,0.173
-safeagentbench,4,81,0.775,0.333
-safeagentbench,8,81,0.844,0.469
+safeagentbench,1,450,0.851,0.771
+safeagentbench,4,450,0.948,0.896
+safeagentbench,8,450,0.965,0.929

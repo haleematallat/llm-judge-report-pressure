@@ -14,8 +14,9 @@
 | dev batch, first attempt | 21 | 553s | $0.2618 | **discarded**: 69–78% of samples unparseable, 62% retries |
 | smoke test after the fix | 1 | 11s | $0.0021 | kept |
 | **dev batch, kept** | **21** | **168s** | **$0.0409** | 0% unparseable, 0% retries |
-| main run | 450 | — | — | see the run metadata |
-| reasoning-on check | ~60 | — | — | secondary, PREREG §7 |
+| **main run** | **450** | **1310s** | **$0.9247** | 0% unparseable, 4,500 judge rows |
+| reasoning-on check | 60 | 109s | $0.0681 | secondary, PREREG §7; 55% unparseable by design |
+| **pilot total** | | | **$1.4243** | of the $6.00 budget; $4.5757 unspent |
 
 The discarded $0.2818 is counted against the budget: the guard tracks key usage, not
 usable data. See README §9.2 for what went wrong and what it cost in validity.

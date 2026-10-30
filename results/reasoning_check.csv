@@ -1,0 +1,7 @@
+judge_config,condition,n_items,n_groups,error_rate_all_items,ci_lo,ci_hi,items_with_no_usable_answer,error_rate_answered_only,mean_self_consistency,unparseable_sample_rate,contrast,error_rate_N8,error_rate_C0,delta_pp,p_group_boot
+reasoning ON (this check),C0,60,31,38.3,27.1,51.0,15,17.8,0.44,0.553,,,,,
+reasoning ON (this check),N8,60,31,95.0,86.3,98.3,11,93.9,0.45,0.547,,,,,
+reasoning OFF (main run),C0,60,31,36.7,25.6,49.3,0,36.7,0.877,0.0,,,,,
+reasoning OFF (main run),N8,60,31,95.0,86.3,98.3,0,95.0,0.977,0.0,,,,,
+reasoning ON (this check),,60,31,,42.6,70.5,,,,,N8 - C0,95.0,38.3,56.7,0.0001
+reasoning OFF (main run),,60,31,,47.5,69.0,,,,,N8 - C0,95.0,36.7,58.3,0.0001
