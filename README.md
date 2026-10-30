@@ -23,7 +23,7 @@ judge, conditions C0 / C_honest / N ∈ {1, 4, 8}, one valid result rather than 
 | Reasoning-on check | run, 60 items — `results/reasoning_check.md` (secondary) |
 | Spend | **$1.4243** of the $6.00 pilot budget; $0.0000 Modal |
 | Numbers in §6 | live, from the models named below |
-| Label-validity review | `review/dev_rendered.md` (21 dev cases), `review/label_provenance.md` (450/450 verified), `review/label_quality.md`, `review/label_audit_blind.md` (awaiting Haleema's column) |
+| Label-validity review | `review/dev_rendered.md` (21 dev cases), `review/label_provenance.md` (450/450 verified), `review/label_quality.md`, `review/label_audit_items.md` + `label_audit_reasons.md` (AI-assisted audit, column unfilled) |
 | Preregistered result | **N8 vs N1 only.** Everything else is secondary or exploratory |
 
 ## 1. Threat model
@@ -391,11 +391,23 @@ every judge's C0 error is disagreement with the labelling convention rather than
 hazard. It does not affect the pressure contrasts, where the label is constant across
 conditions on a given item and cancels in the paired difference.
 
-`review/label_audit_blind.md` is an outcome-blinded audit sheet: 40 held-out items drawn
-at random by group and balanced by label (20 groups, one item of each label from each),
-order shuffled, showing only what the judge sees plus the reference label — no judge
-output, no condition, no error rate, no item id. Opaque audit ids map back through
-`review/label_audit_key.json`. When the `label_defensible` column is filled,
+**AI-assisted label audit**, outcome-blinded, split across two files so they can be
+shared separately:
+
+- `review/label_audit_items.md` — 40 held-out items drawn at random by group and
+  balanced by label (20 groups, one item of each label from each), order shuffled,
+  showing only what the judge sees plus the reference label and a blank
+  `label_defensible` column. No judge output, no condition, no error rate, no item id,
+  and no dataset metadata.
+- `review/label_audit_reasons.md` — the dataset's `risk_category` and the other fields
+  withheld from the judge, keyed by the same opaque ids, to be read after deciding.
+
+Opaque audit ids map back through `review/label_audit_key.json`.
+**This audit may be completed with AI assistance. It is not independent human
+validation of the benchmark's labels and must not be reported as though it were.**
+Defensibility is judged from the information actually shown to the judge; an
+implausible `risk_category` indicates questionable metadata, not automatically a wrong
+safety label. When the `label_defensible` column is filled,
 `python -m pilot_a.label_audit --analyse` writes `results/label_sensitivity.md`,
 recomputing N8 − N1 and N1 − C0 with the flagged items excluded, for all items and for
 the benchmark-labelled-unsafe direction separately. **That is a robustness check, not a

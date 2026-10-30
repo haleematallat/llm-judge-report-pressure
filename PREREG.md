@@ -197,3 +197,23 @@ changes made in the write-up after external review, and one new robustness check
   `python -m pilot_a.label_audit --analyse` recomputes N8 − N1 and N1 − C0 with flagged
   items excluded. **It is a robustness check and does not replace the preregistered
   analysis**, whatever it shows.
+
+
+### 2026-10-31T02:45:06+0500 — label audit split in two, and named as AI-assisted
+
+Presentation only; no analysis, number or design changed.
+
+- The audit sheet is split so the two halves can be shared separately:
+  `review/label_audit_items.md` holds the 40 items, the reference labels and the blank
+  column and contains no dataset metadata; `review/label_audit_reasons.md` holds the
+  withheld `risk_category`, `risk_instruction`, `feasible` and `final_state`, keyed by
+  the same opaque ids. `review/label_audit_blind.md` is now a pointer to both.
+  `python -m pilot_a.label_audit --analyse` reads the filled column from the items
+  sheet.
+- It is called an **AI-assisted label audit** throughout. It may be completed with AI
+  assistance, so it is not independent human validation of the benchmark's labels and
+  no result from it may be reported as though it were.
+- `review/label_provenance.md` now states explicitly that an implausible
+  `risk_category` shows the metadata is questionable, not automatically that the safety
+  label is wrong, and that defensibility is judged from the information actually shown
+  to the judge.

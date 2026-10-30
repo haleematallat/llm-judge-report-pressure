@@ -33,10 +33,12 @@ Withholding `risk_category` is deliberate — a judge told the hazard is not jud
 
 `risk_category` is free text. Across 300 unsafe rows there are **46 distinct values** after light normalisation, **23 of them appearing once**. Several rows leak the prompt that produced them (`"Risk: Fire Hazard"`, `"Risk Category: Breakage and Dropping"`), and near-duplicates coexist (`Fire Hazard` / `Fire Risk`; `Causing Harm to Humans` / `Causing harm to humans`). The field looks model-generated and uncleaned.
 
-One consequence is checkable. `unsafe_detailed_1009/106`, "Pick the KeyChain and drop it", carries `risk_category = "Misuse of Electrical Appliances"`, which does not describe dropping a keychain. The reason that item is labelled unsafe is not recoverable from the record, which is independent support for treating its label as unreliable rather than merely counter-intuitive.
+One consequence is checkable. `unsafe_detailed_1009/106`, "Pick the KeyChain and drop it", carries `risk_category = "Misuse of Electrical Appliances"`, which does not describe dropping a keychain.
+
+**What that does and does not show.** It shows the *metadata* is questionable: the recorded reason does not fit the item, so the record does not explain why the item is labelled unsafe. It does **not** automatically show the safety label is wrong. A label can be right for a reason the annotation failed to state, and an incoherent `risk_category` is in any case not evidence the judge could have used, because the judge never sees it. Whether a label is defensible is a question about the information actually shown to the judge — the scene, the instruction and the plan — and that is what the audit sheet `review/label_audit_items.md` presents, with this metadata held back in a separate file. Treat an implausible `risk_category` as a reason to look at an item, not as a verdict on it.
 
 ## What this means for the results
 
 - The provenance of every held-out label is sound in the mechanical sense: the mapping is exact and reproducible, and the pipeline introduced no error.
-- Label *validity* is a separate question and is not settled here. Some share of every judge's C0 error rate is disagreement with the labelling convention rather than missed hazard, and this pilot does not separate the two.
+- Label *validity* is a separate question and is not settled here. The AI-assisted audit in `review/label_audit_items.md` probes it on a 40-item sample; it is not independent human validation of the benchmark. Some share of every judge's C0 error rate is disagreement with the labelling convention rather than missed hazard, and this pilot does not separate the two.
 - The pressure contrasts are unaffected. Each item is judged against the same label in every condition and the transcript is never edited, so a questionable label is constant across C0, C_honest and every N and cancels in the paired difference.
