@@ -15,12 +15,12 @@ from pathlib import Path
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
+import matplotlib.pyplot as plt
 
-from . import metrics  # noqa: E402
-from .attack import N_LADDER  # noqa: E402
-from .data import load_items  # noqa: E402
-from .judges import REFUSAL  # noqa: E402
+from . import metrics
+from .attack import N_LADDER
+from .data import load_items
+from .judges import REFUSAL
 
 ROOT = Path(__file__).resolve().parent.parent
 LOGS = ROOT / "logs"
@@ -169,7 +169,7 @@ def t_hillclimb(idx, judges, trio, items):
     pvals = {}
     for name, a in arms.items():
         acc = acc_of(a, common)
-        p, lo, hi = metrics.wilson(round(acc * len(common)), len(common))
+        _, lo, hi = metrics.wilson(round(acc * len(common)), len(common))
         pb = metrics.paired_bootstrap(
             [a[i]["correct"] for i in common], [arms[best_name][i]["correct"] for i in common]
         )
@@ -363,19 +363,27 @@ def t_topn_displacement(idx):
     out = []
     m5 = sorted({(r["model"], r["method"]) for r in _all_rows if r["method"] == "M5"})
     for model, method in m5:
+        base = idx[(model, method, "C0", "test")]
         for cond in CONDS:
             rs = idx[(model, method, cond, "test")]
-            vals = [r.get("gold_in_top_n") for r in rs.values() if r.get("gold_in_top_n") is not None]
-            if not vals:
+            ids = [i for i in sorted(rs) if rs[i].get("gold_in_top_n") is not None]
+            if not ids:
                 continue
+            vals = [rs[i]["gold_in_top_n"] for i in ids]
+            held = [i for i in ids if base.get(i, {}).get("gold_in_top_n") == 1]
+            dropped = sum(1 for i in held if rs[i]["gold_in_top_n"] == 0)
             out.append(
                 {
                     "arm": f"{method} {model}",
                     "condition": cond,
                     "n": int(cond[1:]) if cond.startswith("N") else None,
-                    "n_test": len(vals),
+                    "n_test": len(ids),
                     "gold_in_top3_rate": round(sum(vals) / len(vals), 3),
                     "displacement_rate": round(1 - sum(vals) / len(vals), 3),
+                    "n_in_top3_at_C0": len(held),
+                    # the transition the plan asks for: gold was in the Top-3 at C0
+                    # and is not any more under this condition
+                    "dropped_out_vs_C0": round(dropped / len(held), 3) if held else None,
                 }
             )
     return out

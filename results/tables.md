@@ -151,15 +151,15 @@ Paper columns are Sampura's reported AI-alone accuracy on the same dataset (Tabl
 | N16 | meta-llama/llama-3.3-70b-instruct | openai/gpt-5-nano | 204 | 0.436 | 0.066 | 0.676 |
 
 ## 7. Top-N displacement
-| arm | condition | n | n_test | gold_in_top3_rate | displacement_rate |
-| --- | --- | --- | --- | --- | --- |
-| M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite | C0 |  | 204 | 0.912 | 0.088 |
-| M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite | C_honest |  | 204 | 0.912 | 0.088 |
-| M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite | N1 | 1 | 204 | 0.902 | 0.098 |
-| M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite | N2 | 2 | 204 | 0.897 | 0.103 |
-| M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite | N4 | 4 | 204 | 0.882 | 0.118 |
-| M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite | N8 | 8 | 204 | 0.873 | 0.127 |
-| M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite | N16 | 16 | 204 | 0.858 | 0.142 |
+| arm | condition | n | n_test | gold_in_top3_rate | displacement_rate | n_in_top3_at_C0 | dropped_out_vs_C0 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite | C0 |  | 204 | 0.912 | 0.088 | 186 | 0.0 |
+| M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite | C_honest |  | 204 | 0.912 | 0.088 | 186 | 0.0 |
+| M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite | N1 | 1 | 204 | 0.902 | 0.098 | 186 | 0.011 |
+| M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite | N2 | 2 | 204 | 0.897 | 0.103 | 186 | 0.016 |
+| M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite | N4 | 4 | 204 | 0.882 | 0.118 | 186 | 0.032 |
+| M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite | N8 | 8 | 204 | 0.873 | 0.127 | 186 | 0.043 |
+| M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite | N16 | 16 | 204 | 0.858 | 0.142 | 186 | 0.059 |
 
 ## 8. Selection strength (J_dev P(wrong label) of the chosen report)
 | dataset | n | n_items | mean_selected_p_wrong | share_selected_p_wrong_1.0 |

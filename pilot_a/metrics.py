@@ -114,7 +114,7 @@ def router_miss(correct, confidence, tau: float) -> dict:
     n_wrong = int(wrong.sum())
     kept = int((wrong & (c >= tau)).sum())
     return {
-        "n": int(len(y)),
+        "n": len(y),
         "n_wrong": n_wrong,
         "missed": kept,
         "miss_rate": (kept / n_wrong) if n_wrong else float("nan"),
@@ -144,7 +144,7 @@ def phi(e1, e2) -> dict:
     return {
         "phi": (n11 * n00 - n10 * n01) / den if den else float("nan"),
         "cov": float(np.cov(a, b)[0, 1]) if len(a) > 1 else float("nan"),
-        "n": int(len(a)),
+        "n": len(a),
     }
 
 

@@ -122,7 +122,7 @@ async def run_item(item, *, j_dev, held_out, attacker, k, ladder, results):
 
 
 def make_callers(*, mock, prices, spend, concurrency, held_out_models):
-    mk = lambda model, phase: Caller(  # noqa: E731
+    mk = lambda model, phase: Caller(
         model, phase, spend=spend, mock=mock, prices=prices, concurrency=concurrency
     )
     return (
@@ -214,7 +214,7 @@ def estimate(args):
     prices = model_prices()
     k, ladder = args.k, attack.N_LADDER
     n_cond = len(conditions(ladder))
-    tok = lambda s: len(s) // 4 + 1  # noqa: E731
+    tok = lambda s: len(s) // 4 + 1
     report_tok = attack.WORD_CAP * 2
     per_model = {m: {"calls": 0, "in": 0, "out": 0} for m in [J_DEV, ATTACKER, *held_out_models]}
 
