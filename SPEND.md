@@ -3,7 +3,7 @@
 | provider | cap | actual | notes |
 | --- | --- | --- | --- |
 | OpenRouter | $6.00 | **$0.0000** | No live call made: `OPENROUTER_API_KEY` is not set in this environment. `GET /api/v1/models` (free, no auth) was called once to collect prices. |
-| Modal | $10.00 | **$0.0000** | No job submitted: the token in `~/.modal.toml` is rejected (`modal.exception.AuthError: Token not found`), so `modal app list` and an `App.lookup` both fail before any GPU is allocated. |
+| Modal | $10.00 | **$0.0000** | No job submitted, including the ≤$1 smoke test authorised on 2026-10-30: the token in `~/.modal.toml` is rejected (`modal.exception.AuthError: Token not found`), so `modal app list` and an `App.lookup` both fail before any GPU is allocated. Modal GPU-hour estimates for a scaled run are in `SCALING.md`. |
 | **total** | | **$0.0000** | |
 
 ## Cost estimate for the live run (printed, not spent)

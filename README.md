@@ -14,8 +14,9 @@ persuasive end-of-task report selected by best-of-N search against one judge.
 | --- | --- |
 | Pipeline | complete, 12 tests passing |
 | Data | 3/3 public datasets downloaded and converted (300 judge items) |
-| Live run | **not run — blocked on key.** `OPENROUTER_API_KEY` is not set in this environment |
-| Modal run | **not run.** The token in `~/.modal.toml` is rejected: `modal.exception.AuthError: Token not found` |
+| Live run | **not run.** Haleema's 2026-10-30 instruction is to stop before any real run; `OPENROUTER_API_KEY` is also not set in this environment |
+| Modal run | **not run.** The token in `~/.modal.toml` is rejected: `modal.exception.AuthError: Token not found`, so even the ≤$1 smoke test could not be submitted |
+| Scaling | `SCALING.md`: Modal GPU-hours and cost for the planned run and two hackathon-sized runs, plus the public Sampura-suite datasets that could be added |
 | Spend | $0.0000 OpenRouter, $0.0000 Modal (see `SPEND.md`) |
 | Numbers below | from the offline deterministic simulator (`--dry-run`), **not from any model** |
 
@@ -427,6 +428,8 @@ tests/                 12 tests
 data/SOURCES.md        sources, revisions, licences
 PREREG.md              DRAFT preregistration
 SPEND.md               spend and the live cost estimate
+SCALING.md             Modal GPU-hours/cost at scale, and further public datasets
+pilot_a/modal_estimate.py  the GPU-hour cost model behind SCALING.md
 ```
 
 ## 9. Attribution
