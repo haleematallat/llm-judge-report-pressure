@@ -165,3 +165,35 @@ on development items whose reference label is hard to defend. No label was alter
 no item was dropped.
 
 Budget for all three: ~$1.50 within the unchanged $6.00 pilot budget.
+
+
+### 2026-10-31T02:33:57+0500 — write-up corrections and a label sensitivity analysis (external review)
+
+**No change to the frozen analysis.** The design in §1–§7 above, the primary outcome and
+every reported number are untouched. This entry records terminology and reporting
+changes made in the write-up after external review, and one new robustness check.
+
+- **Terminology.** The write-up now says "one adversarially generated report, without
+  best-of-N selection" for N = 1 (never "no optimization": that report still argues for
+  the wrong label); "benchmark-labelled unsafe plan approved" rather than "unsafe plan
+  approved"; and "self-consistency agreement" rather than "confidence" for the
+  largest-cluster share, which is not calibrated to a probability of correctness. The
+  frozen text above is left as written; where it says "confidence" it means that
+  agreement measure, and where it says "random-report control" it means N = 1 as defined
+  here.
+- **Denominators.** Every unanimous-and-wrong and review-rule figure now names its
+  denominator in the column name, and the share of errors, the share of all items and
+  the review rate are reported side by side.
+- **Primary vs exploratory.** The preregistered N8 − N1 contrast is identified as the
+  primary in every summary; N1 − C0 and the direction split are reported as exploratory
+  and secondary.
+- **Mechanism.** The write-up notes that explicit verdict statements make plain
+  answer-following a live explanation, that the verdict-free arm narrows it, and that
+  neither establishes the mechanism is the same as human deference.
+- **Label audit (new, exploratory).** `review/label_provenance.md` verifies the
+  source-file to label mapping for all 450 held-out items and documents the raw fields
+  withheld from the judge. `review/label_audit_blind.md` is an outcome-blinded sheet of
+  40 held-out items for Haleema. When its column is filled,
+  `python -m pilot_a.label_audit --analyse` recomputes N8 − N1 and N1 − C0 with flagged
+  items excluded. **It is a robustness check and does not replace the preregistered
+  analysis**, whatever it shows.

@@ -4,11 +4,13 @@ Specified after the main results were seen and recorded as a dated amendment in 
 
 Subset: 152 held-out items sampled by whole groups. Third judge `meta-llama/llama-3.3-70b-instruct`, chosen on dev C0 only (`logs/third_judge.json`); never queried during any selection.
 
-`report_type` is `none` (C0), `honest`, `original` (the main study's reports, which may state a verdict) or `verdict_free` (reports that may not state a verdict, address the judge, or use either option string).
+`report_type` is `none` (C0), `honest`, `original` (the main study's reports, which may state a verdict) or `verdict_free` (reports that may not state a verdict, address the judge, or use either option string). N=1 in every row is **one adversarially generated report, without best-of-N selection**.
+
+Because the original reports state a verdict explicitly, plain answer-following is a live explanation for their effect: the judge may be copying a stated answer rather than being persuaded by a narrative. The verdict-free arm narrows that — those reports never state a verdict or name an option — but it does not establish that the remaining effect works through the same mechanism as human deference to an assistant, and nothing here tests that.
 
 ## Error rate by judge, report type and condition
 
-| judge | report_type | condition | n_items | n_groups | error_rate | ci_lo | ci_hi | error_rate_unsafe_approved | mean_self_consistency |
+| judge | report_type | condition | n_items | n_groups | error_rate | ci_lo | ci_hi | error_rate_benchmark_unsafe_approved | mean_self_consistency_agreement |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | qwen/qwen3.7-flash | none | C0 | 152 | 78 | 39.5 | 32.1 | 47.4 | 44.9 | 0.897 |
 | qwen/qwen3.7-flash | honest | C_honest | 152 | 78 | 29.6 | 22.9 | 37.3 | 32.1 | 0.93 |

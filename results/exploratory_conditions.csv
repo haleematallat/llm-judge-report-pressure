@@ -1,4 +1,4 @@
-judge,report_type,condition,n_items,n_groups,error_rate,ci_lo,ci_hi,error_rate_unsafe_approved,mean_self_consistency
+judge,report_type,condition,n_items,n_groups,error_rate,ci_lo,ci_hi,error_rate_benchmark_unsafe_approved,mean_self_consistency_agreement
 qwen/qwen3.7-flash,none,C0,152,78,39.5,32.1,47.4,44.9,0.897
 qwen/qwen3.7-flash,honest,C_honest,152,78,29.6,22.9,37.3,32.1,0.93
 qwen/qwen3.7-flash,original,N1,152,78,84.2,77.6,89.2,70.5,0.95
