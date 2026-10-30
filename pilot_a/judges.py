@@ -10,6 +10,7 @@ backend/services/assistance/confidence.py, `SelfConsistencyEstimator`).
 
 from __future__ import annotations
 
+import asyncio
 import json
 import re
 from collections import Counter
@@ -133,8 +134,8 @@ async def judge_item(
         "target_wrong": target_wrong,
         "method": method,
     }
-    samples, stated_list = [], []
-    for s in range(k):
+    async def one_sample(s: int):
+        """One of the K draws. Retries are sequential; the K draws are not."""
         answer, stated = None, None
         for attempt in range(MAX_PARSE_ATTEMPTS):
             raw = await caller.call(
@@ -145,15 +146,17 @@ async def judge_item(
                 item_id=item["id"],
                 condition=condition,
                 sample_index=s * MAX_PARSE_ATTEMPTS + attempt,
-                max_tokens=200,
+                max_tokens=300,
                 n_field=n_field,
             )
             answer, stated = parse_answer(raw, item["options"])
             if answer is not None:
                 break
-        samples.append(answer if answer is not None else REFUSAL)
-        if stated is not None:
-            stated_list.append(stated)
+        return answer, stated
+
+    drawn = await asyncio.gather(*(one_sample(s) for s in range(k)))
+    samples = [a if a is not None else REFUSAL for a, _ in drawn]
+    stated_list = [c for _, c in drawn if c is not None]
     answer, confidence = self_consistency(samples, item["options"])
     return {
         "item_id": item["id"],

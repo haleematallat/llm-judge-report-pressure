@@ -752,3 +752,97 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--full", action="store_true", help="also emit the arms disabled in the run config")
     main(full=ap.parse_args().full)
+
+
+def dev_batch_summary(split: str = "dev") -> str:
+    """Amendment 1 step 2: what the real dev batch cost, and what the main run will.
+
+    Reads the raw call logs, not the aggregated results, so retries, refusals and
+    provider-reported cost are measured rather than estimated.
+    """
+    import statistics
+
+    meta = json.loads((LOGS / f"run_meta.{split}.json").read_text())
+    calls = []
+    for path in LOGS.glob("*/*.jsonl"):
+        for line in path.open():
+            calls.append(json.loads(line))
+    fresh = [c for c in calls if c.get("usage")]
+    judged = [json.loads(line) for line in (LOGS / f"judge_results.{split}.jsonl").open()]
+
+    per_model = {}
+    for c in calls:
+        d = per_model.setdefault(
+            c["model"],
+            {"calls": 0, "fresh": 0, "cached": 0, "tok_in": 0, "tok_out": 0, "reasoning": 0,
+             "cost": 0.0, "retries": 0, "judge_calls": 0},
+        )
+        d["calls"] += 1
+        u = c.get("usage") or {}
+        if u:
+            d["fresh"] += 1
+            d["tok_in"] += u.get("prompt_tokens", 0)
+            d["tok_out"] += u.get("completion_tokens", 0)
+            d["reasoning"] += (u.get("completion_tokens_details") or {}).get("reasoning_tokens", 0)
+            d["cost"] += c.get("cost") or 0.0
+        else:
+            d["cached"] += 1
+        if c["kind"] == "judge":
+            d["judge_calls"] += 1
+            if c["sample_index"] % 3 != 0:
+                d["retries"] += 1
+
+    rows = []
+    for m, d in sorted(per_model.items()):
+        rows.append(
+            {
+                "model": m,
+                "calls": d["calls"],
+                "fresh": d["fresh"],
+                "cached": d["cached"],
+                "tok_in": d["tok_in"],
+                "tok_out": d["tok_out"],
+                "reasoning_tok": d["reasoning"],
+                "out_per_fresh_call": round(d["tok_out"] / d["fresh"], 1) if d["fresh"] else 0,
+                "retry_share_of_judge_calls": round(d["retries"] / d["judge_calls"], 3)
+                if d["judge_calls"]
+                else None,
+                "cost_usd": round(d["cost"], 4),
+            }
+        )
+    total_cost = sum(r["cost_usd"] for r in rows)
+    n_samples = sum(len(r["samples"]) for r in judged)
+    n_refused = sum(r["refusals"] for r in judged)
+    no_answer = sum(1 for r in judged if r["answer"] == REFUSAL)
+    per_item = meta["openrouter_spend"] / meta["n_items"] if meta["n_items"] else 0.0
+
+    test_items = len([i for i in load_items() if i["split"] == "test"])
+    projected = per_item * test_items
+    write_csv("dev_batch_calls", rows)
+    md = [
+        f"# Dev-batch summary ({meta['timestamp']})\n\n",
+        f"Real run, {meta['n_items']} development items in {meta['n_groups']} groups, "
+        f"{meta['seconds']}s wall clock. Target judge `{meta['j_dev']}`, transfer judge "
+        f"`{meta['transfer']}`, attacker `{meta['attacker']}`.\n\n",
+        "## Measured\n\n",
+        md_table(rows),
+        f"\n- Provider-reported cost this run: **${meta['openrouter_spend']:.4f}** "
+        f"(${per_item:.5f} per item).\n",
+        f"- Pilot spend so far: **${meta.get('pilot_spent_before', 0) + meta['openrouter_spend']:.4f}** "
+        f"of the ${meta['pilot_budget']:.2f} budget.\n",
+        f"- Peak concurrently reserved: ${meta['peak_reserved']:.4f} over "
+        f"{meta['spend_reservations']} reservations.\n",
+        f"- Judge samples: {n_samples}; unparseable (coded as refusals): {n_refused} "
+        f"({100 * n_refused / n_samples:.1f}%); items with no usable answer at all: {no_answer}.\n",
+        f"- Median completion tokens per fresh call: "
+        f"{statistics.median([c['usage']['completion_tokens'] for c in fresh]) if fresh else 0:.0f}.\n",
+        "\n## Recomputed main-run cost\n\n",
+        f"At ${per_item:.5f} per item, {test_items} held-out items project to "
+        f"**${projected:.4f}**, or **${projected * 1.3:.4f}** with the 30% "
+        f"retry/concurrency headroom the amendment requires.\n",
+        f"\nRemaining budget after the dev batch: "
+        f"${meta['pilot_budget'] - meta.get('pilot_spent_before', 0) - meta['openrouter_spend']:.4f}.\n",
+    ]
+    out = RESULTS / "dev_batch_summary.md"
+    out.write_text("".join(md))
+    return str(out)

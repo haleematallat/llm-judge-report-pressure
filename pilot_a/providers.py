@@ -129,6 +129,21 @@ class Spend:
                 )
 
 
+# Reasoning settings, decided from the dev batch (see README "Deviations").
+# Both judges are reasoning models: left alone they spend the entire max_tokens budget
+# on reasoning tokens and return an empty string, which the parser reads as a refusal.
+# The measured dev batch had 69-78% refused samples and 62% retry calls. Turning
+# reasoning down makes the judge answer in ~12-28 tokens and parse first time.
+# `enabled: false` is rejected (HTTP 4xx) by the OpenAI family, which takes
+# `effort: minimal` instead, so the setting is per model with a safe default.
+DEFAULT_REASONING = {"effort": "minimal"}
+REASONING = {
+    "qwen/qwen3.7-flash": {"enabled": False},
+    "deepseek/deepseek-v4.1-flash": {"enabled": False},
+    "openai/gpt-5-nano": {"effort": "minimal"},
+}
+
+
 # Every distinct pass that may send the same prompt to the same model.
 # "select" scores candidate reports; "eval" is the measurement that must never
 # reuse a selection draw.
@@ -169,6 +184,7 @@ class Caller:
     ):
         self.model, self.phase, self.spend = model, phase, spend
         self.temperature, self.mock = temperature, mock
+        self.reasoning = REASONING.get(model, DEFAULT_REASONING)
         self.prices = (prices or {}).get(model, {"prompt": 0.0, "completion": 0.0})
         self.sem = asyncio.Semaphore(concurrency)
         safe = model.replace("/", "__")
@@ -181,6 +197,11 @@ class Caller:
         self.calls = 0
         self.tokens_in = 0
         self.tokens_out = 0
+
+    def _params_tag(self, max_tokens: int) -> str:
+        from .data import sha256
+
+        return sha256(json.dumps([self.reasoning, max_tokens], sort_keys=True))[:10]
 
     def _load_cache(self) -> dict:
         if not self.cache_path.exists():
@@ -229,7 +250,13 @@ class Caller:
     ) -> str:
         ph = prompt_hash(messages)
         did = draw_id(stage, sample_index)
-        key = f"{self.model}|{ph}|{did}|{self.temperature}"
+        # "mock" is in the key for the same reason "stage" is: a dry run and a live run
+        # build byte-identical prompts, so without it a live call would be served the
+        # simulator's answer out of the cache. `params` is there for the same reason
+        # again: the prompt hash covers the messages only, so a change to the reasoning
+        # setting or the output cap would otherwise replay the old response.
+        params = self._params_tag(max_tokens)
+        key = f"{'mock' if self.mock else 'live'}|{self.model}|{ph}|{did}|{self.temperature}|{params}"
         seed = draw_seed(stage, sample_index)
         cached = self._cache.get(key)
         if cached is not None:
@@ -255,6 +282,7 @@ class Caller:
                 "item_id": item_id,
                 "stage": stage,
                 "cache_key": key,
+                "reasoning": self.reasoning,
                 "draw_seed": seed,
                 "condition": condition,
                 "n": n_field,
@@ -301,6 +329,7 @@ class Caller:
             "temperature": self.temperature,
             "max_tokens": max_tokens,
             "seed": seed,
+            "reasoning": self.reasoning,
         }
         headers = {"Authorization": f"Bearer {os.environ['OPENROUTER_API_KEY']}"}
         last = None

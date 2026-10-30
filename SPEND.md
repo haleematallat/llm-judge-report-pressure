@@ -25,6 +25,27 @@ $0.1027.
 
 Both runs together are about 8% of the $6.00 cap.
 
+## How the $6.00 cap is measured (baseline + budget)
+
+The OpenRouter key is shared and already carried **$7.7745** of lifetime usage from
+earlier work before this pilot made its first call. A guard capping *total key usage*
+at $6.00 would therefore refuse every call. Haleema's intent is $6.00 of **new** spend
+for Pilot A, so the guard is baseline-relative:
+
+- The key's usage is read once, immediately before this pilot's first paid call, and
+  written to `logs/pilot_baseline.json` (`baseline_usage = 7.774466788`, recorded
+  2026-10-30T17:27:07+05:00).
+- Every later run reads that file rather than re-reading the key, so restarting a run
+  cannot extend the budget by moving the baseline forward.
+- The enforced cap is `baseline + $6.00`. The dev batch and the main run draw on one
+  shared $6.00 pilot budget, not $6.00 each.
+
+**Combined cap.** Pilot B runs against the same key with its own $3.00 budget, so a
+second, independent guard requires total key usage to stay at or below
+`baseline + $9.00`. That one catches the other pilot's spend, which this process can
+neither see nor reserve. Both guards are checked before a run starts and the run
+aborts rather than partially executing.
+
 ## Spend guard (amendment 1, fix 6)
 
 `pilot_a.providers.Spend` **reserves** each call's maximum possible cost before dispatch

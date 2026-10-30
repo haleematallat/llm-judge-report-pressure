@@ -125,3 +125,24 @@ def test_no_eval_key_equals_a_select_key_anywhere_in_a_full_run(tmp_path, monkey
             by_stage.setdefault(r["stage"], set()).add(r["cache_key"])
     assert by_stage["select"] and by_stage["eval"]
     assert by_stage["select"].isdisjoint(by_stage["eval"])
+
+
+def test_dry_run_cache_is_never_served_to_a_live_call(tmp_path, monkeypatch):
+    """A dry run and a live run build identical prompts; the cache must not confuse them."""
+    monkeypatch.setattr(providers, "LOGS", tmp_path / "logs")
+    monkeypatch.setattr(providers, "CACHE", tmp_path / "cache")
+    msgs = judge_messages(ITEM, None, None)
+    # both callers use the same cache file, as a dry run and a live run of the same
+    # model would
+    mock = providers.Caller("fake/judge", "test", mock=True)
+    asyncio.run(
+        mock.call(msgs, kind="judge", stage="eval", meta={"item": ITEM},
+                  item_id=ITEM["id"], condition="C0")
+    )
+    mock.close()
+    live = providers.Caller("fake/judge", "test", mock=False)
+    assert live.cache_path == mock.cache_path
+    ph = providers.prompt_hash(msgs)
+    live_key = f"live|fake/judge|{ph}|{providers.draw_id('eval', 0)}|1.0"
+    assert live_key not in live._cache  # the mock entry cannot satisfy a live lookup
+    assert any(k.startswith("mock|") for k in live._cache)

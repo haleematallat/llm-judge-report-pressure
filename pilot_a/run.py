@@ -40,8 +40,35 @@ TRANSFER = "openai/gpt-5-nano"  # transfer judge: never queried during selection
 ATTACKER = "deepseek/deepseek-v4.1-flash"
 HELD_OUT = [TRANSFER]
 
+# $6.00 is this pilot's budget, not an absolute ceiling on the key: the key is shared
+# and already carried prior usage before this pilot began. The baseline is recorded on
+# the first live run and every later run measures against it, so the dev batch and the
+# main run draw on ONE $6.00 pilot budget rather than $6.00 each.
 OPENROUTER_CAP = 6.00
+# Pilot B runs against the same key with its own $3.00 budget, so the key as a whole
+# must stay at or below the shared baseline + $9.00. This is a second, independent
+# guard: it catches the other pilot's spend, which this process cannot see or reserve.
+COMBINED_CAP = 9.00
+BASELINE_PATH = ROOT / "logs" / "pilot_baseline.json"
 CONDITIONS_FIXED = ("C0", "C_honest")
+
+
+def pilot_baseline(current_usage: float) -> float:
+    """Key usage at the moment this pilot's first paid call was about to go out."""
+    if BASELINE_PATH.exists():
+        return float(json.loads(BASELINE_PATH.read_text())["baseline_usage"])
+    BASELINE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    BASELINE_PATH.write_text(
+        json.dumps(
+            {
+                "baseline_usage": current_usage,
+                "cap_above_baseline": OPENROUTER_CAP,
+                "recorded": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+            },
+            indent=2,
+        )
+    )
+    return current_usage
 
 
 def conditions(ladder=attack.N_LADDER):
@@ -83,19 +110,26 @@ async def run_item(item, *, j_dev, held_out, attacker, k, ladder, results, use_m
         return r["text"], r["report_id"], "attack", r["target_wrong"], n
 
     all_judges = [j_dev] + held_out
-    for cond in conditions(ladder):
+
+    async def evaluate(cond, jc):
         text, rid, kind, target, n = cond_report(cond)
-        for jc in all_judges:
-            # stage="eval": fresh draws, never the samples that chose this report
-            res = await judge_item(
-                jc, item, report=text, report_id=rid, report_kind=kind,
-                target_wrong=target, condition=cond, n_field=n, k=k, stage="eval",
-            )
-            res["method"] = "M1"
-            res["gold"] = item["gold"]
-            res["role"] = "target" if jc is j_dev else "transfer"
-            results["judge"].append(res)
-        if use_methods and len(all_judges) >= 2:
+        # stage="eval": fresh draws, never the samples that chose this report
+        res = await judge_item(
+            jc, item, report=text, report_id=rid, report_kind=kind,
+            target_wrong=target, condition=cond, n_field=n, k=k, stage="eval",
+        )
+        res["method"] = "M1"
+        res["gold"] = item["gold"]
+        res["role"] = "target" if jc is j_dev else "transfer"
+        return res
+
+    conds = conditions(ladder)
+    results["judge"].extend(
+        await asyncio.gather(*(evaluate(c, jc) for c in conds for jc in all_judges))
+    )
+    if use_methods and len(all_judges) >= 2:
+        for cond in conds:
+            text, rid, kind, target, n = cond_report(cond)
             for runner in (methods.critique_then_judge, methods.top_n_ai):
                 res = await runner(
                     all_judges[1], all_judges[0], item, report=text, report_id=rid,
@@ -122,14 +156,31 @@ async def main_async(args):
     spend = None
     if not args.dry_run:
         start = key_usage()
-        spend = Spend(OPENROUTER_CAP, ROOT / "logs" / "spend_ledger.jsonl", start_usage=start)
-        print(f"OpenRouter key usage before this run: ${start:.4f} (pilot cap ${OPENROUTER_CAP:.2f})")
+        baseline = pilot_baseline(start)
+        pilot_spent = max(0.0, start - baseline)
+        cap = baseline + OPENROUTER_CAP
+        spend = Spend(cap, ROOT / "logs" / "spend_ledger.jsonl", start_usage=start)
         est = estimate(args, quiet=True)
-        print(f"Estimated cost of this run: ${est:.4f}")
-        if start + est > OPENROUTER_CAP:
+        combined = start - baseline  # everything spent on this key since the baseline
+        print(
+            f"Pilot budget ${OPENROUTER_CAP:.2f}; baseline key usage ${baseline:.4f}; "
+            f"spent by this pilot so far ${pilot_spent:.4f}; "
+            f"remaining ${OPENROUTER_CAP - pilot_spent:.4f}"
+        )
+        print(
+            f"Combined key spend since baseline (this pilot + any other): ${combined:.4f} "
+            f"of ${COMBINED_CAP:.2f}"
+        )
+        print(f"Estimated cost of this run (incl. {int(args.headroom * 100)}% headroom): ${est:.4f}")
+        if pilot_spent + est > OPENROUTER_CAP:
             raise SystemExit(
-                f"refusing to start: ${start:.4f} already used + ${est:.4f} estimated "
-                f"> cap ${OPENROUTER_CAP:.2f}"
+                f"refusing to start: this pilot has spent ${pilot_spent:.4f} + ${est:.4f} "
+                f"estimated > budget ${OPENROUTER_CAP:.2f}"
+            )
+        if combined + est > COMBINED_CAP:
+            raise SystemExit(
+                f"refusing to start: combined key spend since baseline ${combined:.4f} "
+                f"+ ${est:.4f} estimated > shared cap ${COMBINED_CAP:.2f}"
             )
     j_dev, held_out, attacker = make_callers(
         mock=args.dry_run, prices=prices, spend=spend,
@@ -168,6 +219,11 @@ async def main_async(args):
         "openrouter_spend": round(spend.spent, 6) if spend else 0.0,
         "spend_reservations": spend.reservations if spend else 0,
         "peak_reserved": round(spend.peak_committed, 6) if spend else 0.0,
+        "pilot_budget": OPENROUTER_CAP,
+        "combined_cap": COMBINED_CAP,
+        "pilot_spent_before": round(max(0.0, spend.start - pilot_baseline(spend.start)), 6)
+        if spend
+        else 0.0,
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
     }
     suffix = "" if args.split == "all" else f".{args.split}"
@@ -185,7 +241,17 @@ async def main_async(args):
         f"{len(results['judge'])} judge rows in {time.time() - t0:.1f}s"
     )
     if spend:
-        print(f"OpenRouter spend this run: ${spend.spent:.4f}; peak reserved ${spend.peak_committed:.4f}")
+        after = key_usage()
+        base = pilot_baseline(spend.start)
+        print(
+            f"OpenRouter spend this run: ${spend.spent:.4f} (reported by the API per call); "
+            f"peak reserved ${spend.peak_committed:.4f}"
+        )
+        print(
+            f"Pilot total so far: ${after - base:.4f} of ${OPENROUTER_CAP:.2f} "
+            f"(key usage now ${after:.4f}); combined since baseline "
+            f"${after - base:.4f} of ${COMBINED_CAP:.2f}"
+        )
 
 
 def estimate(args, quiet=False):

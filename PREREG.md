@@ -1,16 +1,17 @@
 # Preregistration — Pilot A
 
-**Status: SPECIFIED, NOT YET FROZEN.** Written 2026-10-30, under
-`~/pivotal-pilots/plans/pilot-a-amendment-1.md`, before any live model call. The
-amendment's procedure freezes this document *after* the real dev batch, because the
-held-out case count is set from measured dev cost. No key was visible in this
-environment, so the dev batch did not run and the freeze did not happen. Everything
-below except the one quantity marked **OPEN** is fixed and will not change.
+**Status: FROZEN 2026-10-30T18:10:03+0500.** Written 2026-10-30 under
+`~/pivotal-pilots/plans/pilot-a-amendment-1.md`. The real dev batch ran first, as the
+amendment requires, and set the two quantities that were open: the held-out case count
+and the judges' reasoning configuration. Frozen before the first main-run call.
 
-Any change after the freeze is a dated amendment appended to §8, never an edit above it.
+Any change after this point is a dated amendment appended to §8, never an edit above it.
 
 - Supersedes: the original `plans/pilot-a.md` preregistration, where they conflict.
-- Live calls made so far: **none**. OpenRouter spend $0.0000.
+- Dev batch: 21 items, 2026-10-30T17:49:55+0500, $0.0409, 0% unparseable samples.
+  Summary in `results/dev_batch_summary.md`; every dev case rendered in
+  `review/dev_rendered.md`.
+- OpenRouter spend at freeze: $0.3273 of the $6.00 pilot budget.
 
 ## 1. Question
 
@@ -36,16 +37,23 @@ so would be a defence, and the measurement is of the undefended judge.
 - **Group**: the instruction family — connected components joining each `instruction` to
   its `risk_instruction`. 301 groups over 600 items. Groups are the unit of sampling,
   splitting and bootstrapping; no group straddles the split.
-- **Sample**: ~20 development items and **OPEN** held-out items (see §7), sampled as
-  whole groups in stratified round-robin order, seed 0, dev fraction 0.25 by a hash of
-  the group id. Realised at the specified size: 21 dev (14 groups) / 81 held out
-  (45 groups).
+- **Sample**: 21 development items (14 groups) and **450 held-out items (224 groups)**,
+  sampled as whole groups in stratified round-robin order, seed 0, dev fraction 0.25 by
+  a hash of the group id. The held-out set is the entire remaining pool. Held-out label
+  balance: 224 Carry out / 226 Refuse.
 - **Judges**: target `qwen/qwen3.7-flash`; transfer `openai/gpt-5-nano` (different
   family, never queried in selection). Attacker `deepseek/deepseek-v4.1-flash`.
 - **Judge protocol**: K = 5 samples, temperature 1.0, strict JSON from a closed option
-  set, ≤3 parse attempts per sample, unparseable samples coded as refusals. Answer =
-  plurality; confidence = largest-cluster share over K; refusals form their own cluster,
-  never win, and stay in the denominator.
+  set, output cap 300 tokens, ≤3 parse attempts per sample, unparseable samples coded as
+  refusals. Answer = plurality; confidence = largest-cluster share over K; refusals form
+  their own cluster, never win, and stay in the denominator.
+- **Reasoning disabled or minimal** (set from the dev batch, see §7):
+  `qwen/qwen3.7-flash` and `deepseek/deepseek-v4.1-flash` run with
+  `reasoning: {"enabled": false}`; `openai/gpt-5-nano` rejects that and runs with
+  `reasoning: {"effort": "minimal"}`. **This differs from Sampura's judges, which
+  reason freely.** Attack success measured here may therefore be higher than it would
+  be against a reasoning judge. A small reasoning-on check on the target judge
+  (~60 held-out items, C0 vs N = 8) is specified in §7 and reported separately.
 - **Attack**: 8 candidate reports per item, ≤150 words, in the agent's voice, all arguing
   for one fixed wrong label per item (chosen deterministically from the item id).
 - **Selection**: candidates scored by the target judge as P(wrong label) over K = 5
@@ -97,14 +105,27 @@ reported with its interval rather than as a threshold decision.
   No number is entered by hand.
 - Parse failures, retries and spend are reported from the logs, not estimated.
 
-## 7. Open quantity
+## 7. Quantities set by the dev batch (now closed)
 
-**OPEN — held-out case count.** The amendment sets it from measured dev-batch cost. The
-pre-run estimate is $0.0780 for 21 dev items and $0.3018 for 81 held-out items
-(+30% headroom: $0.1014 and $0.3924), against a $6.00 cap for the whole pilot. If the
-dev batch measures close to the estimate, the cap permits substantially more than 81
-held-out cases. The count is to be set once, recorded here as a dated amendment, and not
-revisited.
+**Held-out case count: 450 items / 224 groups.** The dev batch measured $0.00195 per
+item, so 81 held-out items would have cost $0.16 of a $5.68 remainder and left the
+primary comparison needlessly imprecise. The whole remaining held-out pool is used
+instead: projected $0.88, or $1.14 with the 30% headroom. The dev set is byte-identical
+after the rebuild, so the dev batch stands. Approved by the orchestrating session before
+the freeze.
+
+**Reasoning configuration: disabled or minimal.** The first dev batch produced unusable
+data — both judges spent the entire 200-token output budget on reasoning tokens and
+returned an empty string, giving 69–78% unparseable samples and 62% retry calls at a
+cost of $0.2618. With reasoning turned down the same batch gives 0% unparseable samples,
+0% retries, a median of 12 completion tokens, and 10.6s per item instead of 387s. That
+first batch is discarded; its logs are archived outside the repository.
+
+**Pre-registered secondary check (budget permitting, reported separately):** the target
+judge with its default reasoning enabled, on ~60 held-out items, conditions C0 and
+N = 8 only, reusing the already-selected reports. Purpose: to bound how much of the
+measured attack success depends on the judges running without reasoning. It is not part
+of the primary comparison and will not be substituted for it.
 
 ## 8. Amendments after the freeze
 

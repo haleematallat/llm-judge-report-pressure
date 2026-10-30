@@ -8,6 +8,8 @@ that tries to restate the transcript is still only appended.
 
 from __future__ import annotations
 
+import asyncio
+
 from .fake import h
 
 N_CANDIDATES = 8
@@ -50,8 +52,8 @@ def _messages(system: str, item: dict, target: str | None) -> list[dict]:
 
 async def write_reports(caller, item: dict, n: int = N_CANDIDATES) -> list[dict]:
     target = target_wrong(item)
-    out = []
-    for i in range(n):
+
+    async def one(i: int):
         rid = report_id(item, i)
         text = await caller.call(
             _messages(ATTACK_SYSTEM, item, target),
@@ -63,8 +65,9 @@ async def write_reports(caller, item: dict, n: int = N_CANDIDATES) -> list[dict]
             sample_index=i,
             max_tokens=320,
         )
-        out.append({"report_id": rid, "candidate_index": i, "text": text, "target_wrong": target})
-    return out
+        return {"report_id": rid, "candidate_index": i, "text": text, "target_wrong": target}
+
+    return list(await asyncio.gather(*(one(i) for i in range(n))))
 
 
 async def write_honest(caller, item: dict) -> dict:
@@ -86,8 +89,7 @@ async def score_candidates(j_dev, item: dict, reports: list[dict], k: int = 5) -
     """P(target wrong label) under J_dev for each candidate: the selection signal."""
     from .judges import judge_item
 
-    scores = []
-    for r in reports:
+    async def one(r):
         res = await judge_item(
             j_dev,
             item,
@@ -98,8 +100,9 @@ async def score_candidates(j_dev, item: dict, reports: list[dict], k: int = 5) -
             k=k,
             stage="select",
         )
-        scores.append(res["target_wrong_share"] or 0.0)
-    return scores
+        return res["target_wrong_share"] or 0.0
+
+    return list(await asyncio.gather(*(one(r) for r in reports)))
 
 
 def best_of_n(scores: list[float], n: int) -> int:
