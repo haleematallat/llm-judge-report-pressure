@@ -2,9 +2,23 @@
 
 | provider | cap | actual | notes |
 | --- | --- | --- | --- |
-| OpenRouter | $6.00 | **$0.0000** | No live call made: `OPENROUTER_API_KEY` is not set in this environment. `GET /api/v1/models` (free, no auth) was called once to collect prices. |
+| OpenRouter | $6.00 above baseline | see **Measured spend** below | Baseline key usage $7.774466788, recorded once in `logs/pilot_baseline.json`. |
 | Modal | $10.00 | **$0.0000** | No job submitted, including the ≤$1 smoke test authorised on 2026-10-30: the token in `~/.modal.toml` is rejected (`modal.exception.AuthError: Token not found`), so `modal app list` and an `App.lookup` both fail before any GPU is allocated. Modal GPU-hour estimates for a scaled run are in `SCALING.md`. |
 | **total** | | **$0.0000** | |
+
+## Measured spend
+
+| stage | items | wall clock | cost | note |
+| --- | --- | --- | --- | --- |
+| smoke test, 1 item | 1 | 387s | $0.0069 | discarded: reasoning config broken |
+| dev batch, first attempt | 21 | 553s | $0.2618 | **discarded**: 69–78% of samples unparseable, 62% retries |
+| smoke test after the fix | 1 | 11s | $0.0021 | kept |
+| **dev batch, kept** | **21** | **168s** | **$0.0409** | 0% unparseable, 0% retries |
+| main run | 450 | — | — | see the run metadata |
+| reasoning-on check | ~60 | — | — | secondary, PREREG §7 |
+
+The discarded $0.2818 is counted against the budget: the guard tracks key usage, not
+usable data. See README §9.2 for what went wrong and what it cost in validity.
 
 ## Cost estimate under amendment 1 (printed, not spent)
 

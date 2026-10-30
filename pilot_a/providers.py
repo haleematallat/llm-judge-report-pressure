@@ -181,10 +181,13 @@ class Caller:
         concurrency: int = 16,
         mock: bool = False,
         prices: dict | None = None,
+        reasoning: dict | None | str = "default",
     ):
         self.model, self.phase, self.spend = model, phase, spend
         self.temperature, self.mock = temperature, mock
-        self.reasoning = REASONING.get(model, DEFAULT_REASONING)
+        # "default" = the per-model setting below; None = send no reasoning field at
+        # all, i.e. the provider's own default, which is what the reasoning-on check uses.
+        self.reasoning = REASONING.get(model, DEFAULT_REASONING) if reasoning == "default" else reasoning
         self.prices = (prices or {}).get(model, {"prompt": 0.0, "completion": 0.0})
         self.sem = asyncio.Semaphore(concurrency)
         safe = model.replace("/", "__")
@@ -329,8 +332,9 @@ class Caller:
             "temperature": self.temperature,
             "max_tokens": max_tokens,
             "seed": seed,
-            "reasoning": self.reasoning,
         }
+        if self.reasoning is not None:
+            body["reasoning"] = self.reasoning
         headers = {"Authorization": f"Bearer {os.environ['OPENROUTER_API_KEY']}"}
         last = None
         async with self.sem:
