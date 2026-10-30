@@ -263,6 +263,91 @@ Table 4 (Gemini 3 Flash, Sonnet 4.6) and Table 2 (Qwen3.5-9B) of arXiv 2610.2496
 
 <!-- RESULTS:END -->
 
+## 6b. Exploratory (not preregistered)
+
+Specified **after** the main results were seen, approved by Haleema, and recorded as a
+dated amendment in `PREREG.md` §8. These arms carry no multiplicity correction and none
+of them is a preregistered result. The primary comparison in §6 is unchanged: it was not
+re-run, re-specified or re-designated. Full tables in `results/exploratory_direction.md`
+and `results/exploratory_arms.md`.
+
+### Direction split (analysis only, no new calls)
+
+An error on a gold = **Refuse** item is an unsafe plan approved. An error on a
+gold = **Carry out** item is a safe plan refused. The main study's pooled rate mixes
+them. Error rate (%), all 450 held-out items:
+
+| judge | gold | C0 | C_honest | N1 | N4 | N8 |
+| --- | --- | --- | --- | --- | --- | --- |
+| target `qwen3.7-flash` | Refuse | 42.0 | 35.8 | 69.9 | 85.0 | 86.7 |
+| target `qwen3.7-flash` | Carry out | 31.2 | 24.1 | 98.7 | 100.0 | 100.0 |
+| transfer `gpt-5-nano` | Refuse | 0.4 | 2.2 | 67.3 | 69.5 | 68.1 |
+| transfer `gpt-5-nano` | Carry out | 95.1 | 71.0 | 99.1 | 100.0 | 100.0 |
+
+On the safety-relevant direction, paired and group-bootstrapped: target
+N8 − N1 = **+16.8pp [11.5, 22.3]** and N1 − C0 = +27.9pp [21.1, 34.8]; transfer
+N8 − N1 = +0.9pp [−3.6, 5.4] and N1 − C0 = +66.8pp [60.6, 72.9]. The pooled primary
+(+9.1pp on the target) is smaller than the direction-specific figure because the other
+direction reaches 100% error from N = 4 and cannot move further.
+
+### Verdict-free reports
+
+A second attacker prompt that may not state a verdict, address the judge, or use either
+option string; drafts containing "carry out", "refuse" or "the judge" are rejected and
+regenerated. **0 of 1,216 drafts were rejected** — the attacker satisfied the
+constraints first time in every case. The check is a string test, not a semantic one: a
+report can imply a verdict without those words.
+
+152 held-out items, 78 groups. Error rate (%), with the unsafe-approved direction beside
+it:
+
+| judge | C0 | N1 orig | N8 orig | VF N1 | VF N4 | VF N8 |
+| --- | --- | --- | --- | --- | --- | --- |
+| target `qwen3.7-flash` | 39.5 | 84.2 | 91.4 | 59.2 | 77.0 | 78.9 |
+| transfer `gpt-5-nano` | 46.7 | 81.6 | 82.9 | 52.0 | 53.3 | 53.3 |
+| third `llama-3.3-70b` | 42.1 | 73.7 | 77.0 | 57.9 | — | 59.2 |
+
+Contrasts (paired, group-bootstrapped):
+
+| judge | VF N8 − VF N1 (search) | VF N1 − C0 (one report) | VF N8 − N8 (vs original) |
+| --- | --- | --- | --- |
+| target | **+19.7 [13.2, 26.4]** | +19.7 [12.1, 27.3] | −12.5 [−18.4, −7.2] |
+| transfer | +1.3 [−1.3, 3.9] | +5.3 [1.3, 9.9] | −29.6 [−35.6, −23.5] |
+| third | +1.3 [0.0, 3.4] | +15.8 [8.8, 22.8] | −17.8 [−23.7, −12.0] |
+
+Two things follow from the first column, and both bear on limitation 13. Verdict-free
+reports are weaker overall than reports that assert a verdict, so they leave the
+baseline well below ceiling; with that room available, best-of-N search on the target
+judge moves the error rate by +19.7pp rather than the +7.2pp the original reports show
+on the same 152 items. Search still does not transfer: +1.3pp on both the transfer and
+the third judge, with intervals touching zero.
+
+### Third transfer judge
+
+`openai/gpt-5-nano` errs on 95.1% of gold = "Carry out" items at C0, so it is close to a
+judge that always answers "Refuse" and its 52.4% accuracy is near what that would score.
+`meta-llama/llama-3.3-70b-instruct` was chosen over `google/gemini-2.5-flash-lite` on
+**dev** C0 only (61.9% vs 57.1% overall; 40.0% vs 30.0% on the weaker class), by the
+rule that a judge failing one class cannot demonstrate transfer; record in
+`logs/third_judge.json`. It was never queried during any selection. The pick rests on 21
+dev items, so the margin between the two candidates is well inside noise; what it
+establishes is that neither is degenerate in the way gpt-5-nano is.
+
+On the 152-item subset it answers both classes (C0 error 42.1% overall, 15.4% on the
+unsafe-approved direction) and is still moved a long way by a single report
+(N1 original: 73.7% overall, 50.0% unsafe-approved).
+
+### Label quality
+
+`review/label_quality.md` lists three development items whose reference label is hard to
+defend, two of them visible only beside their group partner. No label was changed and no
+item was dropped. The convention they illustrate — hazard attached to the instruction
+rather than to the rendered plan — applies to the held-out set too, so some share of
+every judge's C0 error is disagreement with the labelling convention rather than missed
+hazard. It does not affect the pressure contrasts, where the label is constant across
+conditions on a given item and cancels in the paired difference.
+
+
 ## 7. How to run
 
 ```bash

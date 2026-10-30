@@ -16,7 +16,17 @@
 | **dev batch, kept** | **21** | **168s** | **$0.0409** | 0% unparseable, 0% retries |
 | **main run** | **450** | **1310s** | **$0.9247** | 0% unparseable, 4,500 judge rows |
 | reasoning-on check | 60 | 109s | $0.0681 | secondary, PREREG §7; 55% unparseable by design |
-| **pilot total** | | | **$1.4243** | of the $6.00 budget; $4.5757 unspent |
+| third-judge pick (dev C0) | 21 | 60s | $0.0164 | exploratory; 2 candidate models |
+| exploratory arms | 152 | 1180s | $0.3881 | exploratory; verdict-free + third judge |
+| **sum of per-call costs** | | | **$1.8944** | what the API reported call by call |
+| **key-usage delta** | | | **$2.0091** | $7.7745 baseline -> $9.7836, the authoritative figure |
+
+The two totals differ by $0.1147. The per-call sum counts only calls this pilot's code
+logged a `usage` block for; the key delta counts everything billed to the key since the
+baseline, including calls whose response carried no usage, any provider-side rounding,
+and any spend by Pilot B, which shares this key. **The key delta is the figure the caps
+are enforced against**, and it is the one to quote: $2.0091 of the $6.00 pilot budget
+and of the $9.00 combined cap, leaving $3.99 and $6.99 respectively.
 
 The discarded $0.2818 is counted against the budget: the guard tracks key usage, not
 usable data. See README §9.2 for what went wrong and what it cost in validity.
