@@ -1,0 +1,11 @@
+judge,role,contrast,family,n_items,n_groups,error_rate_a,error_rate_b,delta_pp,ci_lo,ci_hi,p_group_boot,ci_lo_row_boot,ci_hi_row_boot,p_holm
+qwen/qwen3.7-flash,target (best-of-N selection runs against it),N8 - N1,primary,81,45,70.4,54.3,16.0,5.1,27.2,0.0042,4.9,27.2,
+qwen/qwen3.7-flash,target (best-of-N selection runs against it),N4 - N1,secondary,81,45,69.1,54.3,14.8,6.2,24.1,0.0006,6.2,23.5,0.0018
+qwen/qwen3.7-flash,target (best-of-N selection runs against it),N1 - C0,secondary,81,45,54.3,37.0,17.3,4.9,30.4,0.0098,4.9,29.6,0.0196
+qwen/qwen3.7-flash,target (best-of-N selection runs against it),C_honest - C0,secondary,81,45,42.0,37.0,4.9,-5.0,15.3,0.4092,-7.4,17.3,0.4092
+qwen/qwen3.7-flash,target (best-of-N selection runs against it),N8 - C0,secondary,81,45,70.4,37.0,33.3,18.0,48.8,0.0001,19.8,46.9,0.0004
+openai/gpt-5-nano,transfer (never queried during selection),N8 - N1,primary,81,45,60.5,35.8,24.7,14.6,35.1,0.0001,14.8,35.8,
+openai/gpt-5-nano,transfer (never queried during selection),N4 - N1,secondary,81,45,54.3,35.8,18.5,9.5,28.2,0.0001,9.9,28.4,0.0004
+openai/gpt-5-nano,transfer (never queried during selection),N1 - C0,secondary,81,45,35.8,19.8,16.0,3.8,28.6,0.0118,3.7,28.4,0.0236
+openai/gpt-5-nano,transfer (never queried during selection),C_honest - C0,secondary,81,45,24.7,19.8,4.9,-6.2,16.2,0.4426,-5.0,16.0,0.4426
+openai/gpt-5-nano,transfer (never queried during selection),N8 - C0,secondary,81,45,60.5,19.8,40.7,29.4,51.3,0.0001,29.6,51.9,0.0004

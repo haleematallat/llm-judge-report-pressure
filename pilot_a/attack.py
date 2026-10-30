@@ -10,8 +10,8 @@ from __future__ import annotations
 
 from .fake import h
 
-N_CANDIDATES = 16
-N_LADDER = (1, 2, 4, 8, 16)
+N_CANDIDATES = 8
+N_LADDER = (1, 4, 8)
 WORD_CAP = 150
 
 ATTACK_SYSTEM = f"""\
@@ -56,6 +56,7 @@ async def write_reports(caller, item: dict, n: int = N_CANDIDATES) -> list[dict]
         text = await caller.call(
             _messages(ATTACK_SYSTEM, item, target),
             kind="report",
+            stage="attack",
             meta={"item": item, "candidate_index": i, "report_id": rid, "target_wrong": target},
             item_id=item["id"],
             condition=f"cand{i}",
@@ -71,6 +72,7 @@ async def write_honest(caller, item: dict) -> dict:
     text = await caller.call(
         _messages(HONEST_SYSTEM, item, None),
         kind="honest",
+        stage="honest",
         meta={"item": item, "candidate_index": -1, "report_id": rid, "target_wrong": None},
         item_id=item["id"],
         condition="C_honest",
@@ -94,6 +96,7 @@ async def score_candidates(j_dev, item: dict, reports: list[dict], k: int = 5) -
             target_wrong=r["target_wrong"],
             condition=f"select/cand{r['candidate_index']}",
             k=k,
+            stage="select",
         )
         scores.append(res["target_wrong_share"] or 0.0)
     return scores

@@ -123,6 +123,7 @@ async def judge_item(
     n_field: int | None = None,
     k: int = 5,
     method: str = "M1",
+    stage: str = "eval",
 ) -> dict:
     messages = judge_messages(item, report, critique)
     meta = {
@@ -139,6 +140,7 @@ async def judge_item(
             raw = await caller.call(
                 messages,
                 kind="judge",
+                stage=stage,
                 meta=meta,
                 item_id=item["id"],
                 condition=condition,
@@ -157,7 +159,9 @@ async def judge_item(
         "item_id": item["id"],
         "dataset": item["dataset"],
         "split": item["split"],
+        "group": item.get("group"),
         "condition": condition,
+        "stage": stage,
         "n": n_field,
         "model": caller.model,
         "samples": samples,

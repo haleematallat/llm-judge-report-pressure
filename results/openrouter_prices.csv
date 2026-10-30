@@ -60,15 +60,15 @@ deepseek/deepseek-chat-v3-0324,2.9e-07,1.14e-06,163840
 deepseek/deepseek-chat-v3.1,2.5e-07,9.5e-07,163840
 deepseek/deepseek-r1-0528,5e-07,2.15e-06,163840
 deepseek/deepseek-v3.1-terminus,2.7e-07,1e-06,163840
-deepseek/deepseek-v3.2,2.8e-07,4.2e-07,163840
+deepseek/deepseek-v3.2,2.6e-07,3.8e-07,163840
 deepseek/deepseek-v3.2-exp,2.7e-07,4.1e-07,163840
 deepseek/deepseek-v4-flash,9.1e-08,1.82e-07,1048576
 deepseek/deepseek-v4-flash-0731,1.19e-07,2.38e-07,1048576
 deepseek/deepseek-v4-flash-vision-exp,2.156e-07,6.468e-07,1048576
 deepseek/deepseek-v4-pro,8.16234e-07,1.632468e-06,1048576
-deepseek/deepseek-v4-pro-0813,1.32e-06,3.96e-06,1048576
+deepseek/deepseek-v4-pro-0813,6.6e-07,1.98e-06,1048576
 deepseek/deepseek-v4.1-flash,4.5e-08,5e-07,1048576
-deepseek/deepseek-v4.1-flash-1017,3e-07,1.2e-06,1048576
+deepseek/deepseek-v4.1-flash-1017,1.5e-07,6e-07,1048576
 deepseek/deepseek-v4.1-flash:batch,5e-08,1.5e-07,1048576
 dots-studio/dots-3-note-preview:free,0.0,0.0,512000
 elorian/glimpse,6e-07,3e-06,262144
@@ -108,7 +108,7 @@ google/gemma-2-27b-it,6.5e-07,6.5e-07,8192
 google/gemma-3-12b-it,5e-08,1.5e-07,131072
 google/gemma-3-27b-it,8e-08,3.5e-07,131072
 google/gemma-3-4b-it,5e-08,1e-07,131072
-google/gemma-4-26b-a4b-it,7.65e-08,2.55e-07,262144
+google/gemma-4-26b-a4b-it,9e-08,3e-07,262144
 google/gemma-4-26b-a4b-it:free,0.0,0.0,262144
 google/gemma-4-31b-it,2e-07,4e-07,262144
 google/gemma-4-31b-it:free,0.0,0.0,262144
@@ -183,7 +183,7 @@ moonshotai/kimi-k2-0905,6e-07,2.5e-06,262144
 moonshotai/kimi-k2-thinking,6e-07,2.5e-06,262144
 moonshotai/kimi-k2.5,5e-07,2.5e-06,262144
 moonshotai/kimi-k2.6,6.5e-07,3.41e-06,262144
-moonshotai/kimi-k2.7-code,5.6e-07,3.1e-06,262144
+moonshotai/kimi-k2.7-code,6e-07,3.5e-06,262144
 moonshotai/kimi-k3,1.92e-07,1.5e-05,1048576
 moonshotai/kimi-k3.1-pro,2e-06,1e-05,1048576
 moonshotai/kimi-k3:batch,2.28e-06,1.14e-05,1048576
@@ -361,7 +361,7 @@ qwen/qwen3.7-max,1.475e-06,4.425e-06,1000000
 qwen/qwen3.7-plus,3.2e-07,1.28e-06,1000000
 qwen/qwen3.7-plus:batch,2.3e-07,9.2e-07,262144
 qwen/qwen3.8-2.4t-a95b,2e-06,6e-06,1048576
-qwen/qwen3.8-27b,3.9e-08,1.25e-06,1000000
+qwen/qwen3.8-27b,1.5e-07,1.875e-06,1000000
 qwen/qwen3.8-flash,1.5e-07,4.7e-07,1000000
 qwen/qwen3.8-max-0902,2e-06,6e-06,1000000
 qwen/qwen3.8-max-prime,4e-06,1.2e-05,1000000
@@ -430,7 +430,7 @@ z-ai/glm-5-turbo,1.2e-06,4e-06,202752
 z-ai/glm-5.1,1.4e-06,4.4e-06,204800
 z-ai/glm-5.2,6e-09,7e-06,1048576
 z-ai/glm-5.3,8e-08,3.6e-06,1048576
-z-ai/glm-5.3-flash,4.77e-08,7.01e-08,1048576
+z-ai/glm-5.3-flash,1.5e-07,5e-07,1048576
 z-ai/glm-5.3-flash:batch,5e-08,1.8e-07,1048576
 z-ai/glm-5.3-flashx,3.7e-07,1.25e-06,1048576
 z-ai/glm-5.3-prime,2.8e-06,8.8e-06,1000000
@@ -440,12 +440,12 @@ z-ai/glm-5v-turbo,1.2e-06,4e-06,202752
 ~anthropic/claude-haiku-latest,1e-07,5e-07,1000000
 ~anthropic/claude-opus-latest,4e-06,2e-05,1000000
 ~anthropic/claude-sonnet-latest,2e-06,1e-05,1000000
-~deepseek/deepseek-flash-latest,3.39e-08,1.14e-06,1048576
+~deepseek/deepseek-flash-latest,3.1e-08,2.7e-07,1048576
 ~deepseek/deepseek-pro-latest,1.035e-07,4e-06,1048576
-~deepseek/deepseek-v4-flash-latest,5.22e-08,3e-07,1048576
+~deepseek/deepseek-v4-flash-latest,3.04e-08,3e-07,1048576
 ~google/gemini-flash-latest,7.5e-07,3.75e-06,1048576
 ~google/gemini-pro-latest,2e-06,1e-05,1048576
-~moonshotai/kimi-latest,1.624e-07,1.05572e-05,1048576
+~moonshotai/kimi-latest,1.71e-07,1.01551e-05,1048576
 ~openai/gpt-astra-latest,1e-05,5e-05,1050000
 ~openai/gpt-luna-latest,1e-07,5e-07,1050000
 ~openai/gpt-mini-latest,7.5e-07,4.5e-06,400000
@@ -453,5 +453,5 @@ z-ai/glm-5v-turbo,1.2e-06,4e-06,202752
 ~openai/gpt-terra-latest,1e-06,5e-06,1050000
 ~unbiased/pareto-latest,8e-07,3.2e-06,1048576
 ~x-ai/grok-latest,2e-06,6e-06,500000
-~z-ai/glm-flash-latest,4.77e-08,7.01e-08,1048576
+~z-ai/glm-flash-latest,2.27e-08,6.25e-08,1048576
 ~z-ai/glm-latest,6.99e-08,1.4e-06,1048576

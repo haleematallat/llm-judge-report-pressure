@@ -74,12 +74,50 @@ def paired_bootstrap(a, b, n_boot: int = 10_000, seed: int = 42) -> dict:
     return {"diff": float(d.mean()), "lo": float(lo), "hi": float(hi), "p": float(p)}
 
 
-def fit_n50(ns, correct, n_max: int = 16) -> dict:
+def paired_group_bootstrap(a, b, groups, n_boot: int = 10_000, seed: int = 42) -> dict:
+    """Mean of a-b with a percentile CI, resampling whole GROUPS with replacement.
+
+    Items from one source scenario are not independent, so resampling rows gives
+    intervals that are too narrow (amendment 1, fix 4). The cluster bootstrap draws
+    groups, then takes every item in each drawn group.
+    """
+    x, y = np.asarray(a, float), np.asarray(b, float)
+    g = np.asarray(groups)
+    assert x.shape == y.shape == g.shape
+    d = x - y
+    keys = np.unique(g)
+    members = [np.flatnonzero(g == k) for k in keys]
+    rng = np.random.default_rng(seed)
+    draws = np.empty(n_boot)
+    for i in range(n_boot):
+        pick = rng.integers(0, len(members), size=len(members))
+        idx = np.concatenate([members[j] for j in pick])
+        draws[i] = d[idx].mean()
+    lo, hi = np.percentile(draws, [2.5, 97.5])
+    p = 2 * min((draws <= 0).mean(), (draws >= 0).mean())
+    p = min(1.0, max(p, 1.0 / n_boot))
+    return {
+        "diff": float(d.mean()),
+        "lo": float(lo),
+        "hi": float(hi),
+        "p": float(p),
+        "n_items": len(d),
+        "n_groups": len(keys),
+    }
+
+
+def fit_n50(ns, correct, n_max: int | None = None) -> dict:
     """accuracy = logistic(a + b*log2 N) fitted on item-level correctness.
 
     Returns the fitted a, b and N50; n50 is None when the curve never reaches 50%
-    at or below n_max ("> 16" in the tables).
+    at or below n_max, which defaults to the largest N actually run (extrapolating
+    a 50% crossing beyond the ladder is not something the data supports).
+
+    Disabled in the amendment 1 run config; kept because the code and its test are
+    still correct and the ladder may grow again.
     """
+    if n_max is None:
+        n_max = int(max(ns)) if len(ns) else 1
     x = np.log2(np.asarray(ns, float))
     y = np.asarray(correct, float)
     if len(y) == 0 or len(set(y.tolist())) == 1:
@@ -99,27 +137,45 @@ def fit_n50(ns, correct, n_max: int = 16) -> dict:
     return {"a": a, "b": b, "n50": float(n50), "note": ""}
 
 
-def router_threshold(dev_confidences, human_frac: float = 0.30) -> float:
-    """tau set on dev-C0 so the lowest-confidence `human_frac` of items go to a human."""
+def review_threshold(dev_confidences, target_rate: float = 0.30) -> float:
+    """tau for the review rule: flag an item when self-consistency <= tau.
+
+    Self-consistency over K=5 samples only takes the values {0.2, ..., 1.0}, so a
+    quantile cannot hit an arbitrary target rate and a strict `< quantile` rule can
+    flag nothing at all. Pick the achievable threshold whose dev review rate is
+    closest to the target, preferring the smaller rate on a tie, and report the
+    rate actually achieved alongside it.
+    """
     c = np.asarray(dev_confidences, float)
     if len(c) == 0:
-        return 0.0
-    return float(np.quantile(c, human_frac))
+        return -1.0
+    best, best_key = -1.0, None
+    for v in [-1.0, *np.unique(c).tolist()]:
+        rate = float((c <= v).mean())
+        key = (abs(rate - target_rate), rate)
+        if best_key is None or key < best_key:
+            best, best_key = float(v), key
+    return best
 
 
-def router_miss(correct, confidence, tau: float) -> dict:
-    """Share of wrong answers that the router would keep (confidence >= tau)."""
+def review_outcome(correct, confidence, tau: float) -> dict:
+    """What the review rule does: what it catches, what it misses, what it wastes."""
     y, c = np.asarray(correct, int), np.asarray(confidence, float)
+    flagged = c <= tau
     wrong = y == 0
-    n_wrong = int(wrong.sum())
-    kept = int((wrong & (c >= tau)).sum())
+    n, n_wrong, n_right = len(y), int(wrong.sum()), int((~wrong).sum())
+    caught = int((flagged & wrong).sum())
+    missed = int((~flagged & wrong).sum())
+    false_pos = int((flagged & ~wrong).sum())
     return {
-        "n": len(y),
+        "n": n,
+        "review_rate": float(flagged.mean()) if n else float("nan"),
         "n_wrong": n_wrong,
-        "missed": kept,
-        "miss_rate": (kept / n_wrong) if n_wrong else float("nan"),
-        "share_of_items": kept / len(y) if len(y) else float("nan"),
-        "routed_to_human": float((c < tau).mean()) if len(c) else float("nan"),
+        "errors_caught": caught,
+        "errors_unflagged": missed,
+        "errors_unflagged_rate": missed / n_wrong if n_wrong else None,
+        "false_positives": false_pos,
+        "false_positive_rate": false_pos / n_right if n_right else None,
     }
 
 

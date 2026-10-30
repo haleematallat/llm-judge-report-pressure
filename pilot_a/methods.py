@@ -1,7 +1,15 @@
-"""AI-side hill-climb methods M1-M5.
+"""AI-side combination methods M2-M5. Disabled in the amendment 1 run config
+(`--methods` turns them back on); the code is kept.
 
 M2/M3 combine judge results that are already in hand. M4/M5 need their own calls.
-M5's Top-N candidate generation reuses the prompt contract of Sampura's platform
+
+M5 is an **AI-only adaptation of Top-N assistance**: one model proposes ranked
+candidate answers and a second model picks among them. Sampura's Top-N puts a human
+in the picking seat; here a model sits there instead. Nothing in this file measures
+human corrections or human-AI complementarity, and no result from it may be
+described in those terms.
+
+The candidate-generation prompt reuses the contract of Sampura's platform
 (backend/services/assistance/methods/top_n.py, TopNAssistance): ranked candidates
 with a short rationale and a 0-100 confidence, returned as strict JSON, presented
 to the picker in random order with the rank withheld.
@@ -72,6 +80,7 @@ async def critique_then_judge(critic, judge, item, *, report, report_id, target_
             {"role": "user", "content": f"Record:\n{body}\n\nJudge's question: {item['prompt_text']}"},
         ],
         kind="critique",
+        stage="critique",
         meta={"item": item, "report_id": report_id},
         item_id=item["id"],
         condition=f"critique/{condition}",
@@ -96,7 +105,12 @@ async def critique_then_judge(critic, judge, item, *, report, report_id, target_
 
 async def top_n_ai(proposer, picker, item, *, report, report_id, target_wrong, condition,
                    report_kind="attack", n_field=None, n=3, k=5) -> dict:
-    """M5: Top-N candidates from one model, a second-family judge picks. No human."""
+    """M5: AI-only adaptation of Top-N assistance.
+
+    One model proposes N ranked candidates, a second-family judge picks among them.
+    The picker is a model, not a human, so this measures nothing about human
+    corrections or complementarity.
+    """
     body = judge_body(item, report)
     option_block = "\n".join(f"{i + 1}. {o}" for i, o in enumerate(item["options"]))
     raw = await proposer.call(
@@ -111,6 +125,7 @@ async def top_n_ai(proposer, picker, item, *, report, report_id, target_wrong, c
             },
         ],
         kind="topn",
+        stage="topn",
         meta={"item": item, "report_id": report_id, "report_kind": report_kind, "n": n},
         item_id=item["id"],
         condition=f"topn/{condition}",
@@ -137,6 +152,7 @@ async def top_n_ai(proposer, picker, item, *, report, report_id, target_wrong, c
             pick_raw = await picker.call(
                 messages,
                 kind="judge",
+                stage="eval",
                 meta={
                     "item": item,
                     "report_id": report_id,
@@ -178,7 +194,7 @@ async def top_n_ai(proposer, picker, item, *, report, report_id, target_wrong, c
 
 
 def parse_top_n(raw: str, options: list[str], n: int) -> list[dict]:
-    """Fail closed on an undecodable body, as the platform's Top-N does."""
+    """Fail closed on an undecodable body, as the platform's Top-N generation does."""
     text = re.sub(r"```json?\n?|```", "", raw or "").strip()
     decoder = json.JSONDecoder()
     parsed = None

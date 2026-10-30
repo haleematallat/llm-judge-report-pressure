@@ -6,6 +6,41 @@
 | Modal | $10.00 | **$0.0000** | No job submitted, including the ≤$1 smoke test authorised on 2026-10-30: the token in `~/.modal.toml` is rejected (`modal.exception.AuthError: Token not found`), so `modal app list` and an `App.lookup` both fail before any GPU is allocated. Modal GPU-hour estimates for a scaled run are in `SCALING.md`. |
 | **total** | | **$0.0000** | |
 
+## Cost estimate under amendment 1 (printed, not spent)
+
+`python -m pilot_a.run --estimate --split dev|test`, prices from
+`results/openrouter_prices.csv` (fetched 2026-10-30). SafeAgentBench only, target judge
++ one transfer judge, 8 candidates, N in {1, 4, 8}, K = 5 selection + 5 fresh evaluation
+samples.
+
+| run | items | calls | tokens in | tokens out | USD | +30% headroom |
+| --- | --- | --- | --- | --- | --- | --- |
+| dev batch | 21 | 2,079 | 950,976 | 132,300 | 0.0780 | 0.1014 |
+| main run | 81 | 8,019 | 3,692,151 | 510,300 | 0.3018 | 0.3924 |
+| **both** | 102 | 10,098 | 4,643,127 | 642,600 | **0.3798** | **0.4938** |
+
+Per model, for both runs combined: `qwen/qwen3.7-flash` 6,630 calls / $0.1310;
+`deepseek/deepseek-v4.1-flash` 918 calls / $0.1462; `openai/gpt-5-nano` 2,550 calls /
+$0.1027.
+
+Both runs together are about 8% of the $6.00 cap.
+
+## Spend guard (amendment 1, fix 6)
+
+`pilot_a.providers.Spend` **reserves** each call's maximum possible cost before dispatch
+and releases the unused part on settlement, so the cap bounds committed spend, not
+merely settled spend: a plain check-then-send lets N concurrent calls each pass a check
+none of them has paid for yet. The reservation uses a pessimistic token estimate
+(`chars / 3.2 + 64` input, `max_tokens` output). `run.py` additionally refuses to start
+when prior key usage plus this run's estimate already exceeds the cap, and records
+`peak_reserved` in the run metadata. One JSON line per call is appended to
+`logs/spend_ledger.jsonl` with the reserved and the settled amount. No key is printed,
+logged or written to disk.
+
+---
+
+## Superseded: estimate for the original three-dataset plan
+
 ## Cost estimate for the live run (printed, not spent)
 
 `python -m pilot_a.run --estimate --items-per-dataset 85`, prices read from

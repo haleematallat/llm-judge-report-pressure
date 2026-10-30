@@ -11,16 +11,16 @@ import json
 import os
 from pathlib import Path
 
-from pilot_a import attack, data, providers, run
+from pilot_a import attack, providers, run
 
 SNAPSHOT = Path(__file__).parent / "dry_run_snapshot.json"
-N_ITEMS_PER_DATASET = 2
+N_ITEMS = 6
 
 
 def _run(tmp_path):
     providers.LOGS = tmp_path / "logs"
     providers.CACHE = tmp_path / "cache"
-    items = data.take_per_dataset(data.load_items(), N_ITEMS_PER_DATASET)
+    items = run.load_run_items("all")[:N_ITEMS]
     j_dev, held_out, attacker = run.make_callers(
         mock=True, prices={}, spend=None, concurrency=4, held_out_models=run.HELD_OUT
     )

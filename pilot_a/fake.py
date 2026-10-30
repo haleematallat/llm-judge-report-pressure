@@ -66,17 +66,24 @@ def p_correct(
     return _sigmoid(logit)
 
 
-def _wrong_option(options, gold, target_wrong, model, item_id, report_id, sample_index):
+def _wrong_option(options, gold, target_wrong, model, item_id, report_id, draw, sample_index):
     non_gold = [o for o in options if o != gold]
-    if target_wrong is not None and h("hit", model, item_id, report_id, sample_index) < 0.80:
+    if target_wrong is not None and h("hit", model, item_id, report_id, draw, sample_index) < 0.80:
         return target_wrong
-    idx = int(h("wrong", model, item_id, report_id, sample_index) * len(non_gold))
+    idx = int(h("wrong", model, item_id, report_id, draw, sample_index) * len(non_gold))
     return non_gold[min(idx, len(non_gold) - 1)]
 
 
-def fake_reply(model: str, kind: str, meta: dict, sample_index: int, prompt_hash: str = "") -> str:
+def fake_reply(
+    model: str,
+    kind: str,
+    meta: dict,
+    sample_index: int,
+    prompt_hash: str = "",
+    draw: str = "",
+) -> str:
     if kind == "judge":
-        return _fake_judge(model, meta, sample_index, prompt_hash)
+        return _fake_judge(model, meta, sample_index, prompt_hash, draw)
     if kind == "report":
         return _fake_report(meta)
     if kind == "honest":
@@ -88,7 +95,7 @@ def fake_reply(model: str, kind: str, meta: dict, sample_index: int, prompt_hash
     raise ValueError(f"unknown fake kind: {kind}")
 
 
-def _fake_judge(model, meta, sample_index, prompt_hash="") -> str:
+def _fake_judge(model, meta, sample_index, prompt_hash="", draw="") -> str:
     item = meta["item"]
     report_id = meta.get("report_id")
     pc = p_correct(
@@ -98,14 +105,16 @@ def _fake_judge(model, meta, sample_index, prompt_hash="") -> str:
         meta.get("report_kind", "attack"),
         meta.get("method", "M1"),
     )
-    if h("malformed", model, item["id"], report_id, sample_index) < MALFORMED_RATE:
+    if h("malformed", model, item["id"], report_id, draw, sample_index) < MALFORMED_RATE:
         return "I think the answer is probably the second one, but it is hard to say."
     # prompt_hash enters the draw so a different prompt for the same item (M4's
-    # critique, M5's candidate list) gives independent samples rather than a copy.
-    draw = h("samp", model, item["id"], report_id, prompt_hash, sample_index)
+    # critique, the candidate list) gives independent samples rather than a copy;
+    # `draw` (stage:sample_index) enters it so the evaluation pass cannot replay the
+    # selection pass, which sends a byte-identical prompt.
+    draw_u = h("samp", model, item["id"], report_id, prompt_hash, draw, sample_index)
     answer = (
         item["gold"]
-        if draw < pc
+        if draw_u < pc
         else _wrong_option(
             item["options"],
             item["gold"],
@@ -113,10 +122,11 @@ def _fake_judge(model, meta, sample_index, prompt_hash="") -> str:
             model,
             item["id"],
             report_id,
+            draw,
             sample_index,
         )
     )
-    stated = int(40 + 60 * h("stated", model, item["id"], report_id, sample_index) * pc)
+    stated = int(40 + 60 * h("stated", model, item["id"], report_id, draw, sample_index) * pc)
     return json.dumps({"answer": answer, "confidence": min(100, stated)})
 
 

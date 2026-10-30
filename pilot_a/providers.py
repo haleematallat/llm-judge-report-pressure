@@ -1,11 +1,17 @@
-"""Model calls: OpenRouter (live), Modal vLLM (live), deterministic fake (offline).
+"""Model calls: OpenRouter (live), deterministic fake (offline).
 
-Every call is cached by (model, prompt hash, sample index, temperature) and appended
-to logs/<phase>/<model>.jsonl. Nothing is ever printed that could contain a key.
+Every call is cached by (model, prompt hash, **stage**, sample index, temperature) and
+appended to logs/<phase>/<model>.jsonl. Nothing is ever printed that could contain a key.
+
+`stage` is in the key because the selection pass and the evaluation pass send the
+*same* prompt to the same judge: without it, evaluating a selected report returns the
+very samples that selected it (winner's curse). The provider seed is derived from
+the stage too, so a deterministic provider cannot hand back the selection draw either.
 
 Spend guard follows the pattern in ~/pivotal-pilots/Collusion_Sprint/betrayal/llm.py
-(key_usage/Spend): total key usage is read from OpenRouter before the run and the
-running total is checked before every paid call.
+(key_usage/Spend), with one change required by amendment 1: each call's maximum
+possible cost is *reserved* before dispatch and the unused part released afterwards,
+so concurrent in-flight requests cannot overshoot the cap together.
 """
 
 from __future__ import annotations
@@ -29,8 +35,15 @@ class SpendCapReached(RuntimeError):
     pass
 
 
-def have_key() -> bool:
+def use_openrouter_key() -> bool:
+    """Map `open_router_key` onto OPENROUTER_API_KEY in-process. Never logs the value."""
+    if not os.environ.get("OPENROUTER_API_KEY") and os.environ.get("open_router_key"):
+        os.environ["OPENROUTER_API_KEY"] = os.environ["open_router_key"]
     return bool(os.environ.get("OPENROUTER_API_KEY"))
+
+
+def have_key() -> bool:
+    return use_openrouter_key()
 
 
 def key_usage() -> float:
@@ -63,39 +76,81 @@ def model_prices() -> dict:
 
 
 class Spend:
-    """Aborts before a call would push total key usage past the cap."""
+    """Reserves each call's maximum cost before dispatch, releases the unused part after.
+
+    `check`-then-dispatch is not enough with concurrency: N in-flight calls can each
+    pass a check that none of them has yet paid for. Reserving up front means the cap
+    bounds committed spend, not merely settled spend (amendment 1, fix 6).
+    """
 
     def __init__(self, cap: float, ledger: Path, start_usage: float = 0.0):
         self.cap, self.ledger, self.start = cap, ledger, start_usage
         self.spent = 0.0
-        self.est = 0.0
+        self.committed = 0.0
+        self.reservations = 0
+        self.peak_committed = 0.0
+        self._lock = asyncio.Lock()
 
     @property
     def total(self) -> float:
-        return self.start + self.spent
+        """Everything the cap has to cover: already spent plus currently reserved."""
+        return self.start + self.spent + self.committed
 
-    def check(self):
-        if self.total + self.est > self.cap:
-            raise SpendCapReached(
-                f"OpenRouter cap ${self.cap:.2f}: key usage ${self.start:.4f} "
-                f"+ this run ${self.spent:.4f} + next ${self.est:.4f}"
-            )
+    async def reserve(self, max_cost: float, model: str) -> float:
+        async with self._lock:
+            if self.total + max_cost > self.cap:
+                raise SpendCapReached(
+                    f"OpenRouter cap ${self.cap:.2f} would be exceeded by a {model} call: "
+                    f"key usage ${self.start:.4f} + settled ${self.spent:.4f} "
+                    f"+ reserved ${self.committed:.4f} + this ${max_cost:.4f}"
+                )
+            self.committed += max_cost
+            self.reservations += 1
+            self.peak_committed = max(self.peak_committed, self.committed)
+            return max_cost
 
-    def add(self, cost: float, model: str, item_id: str):
-        self.spent += cost
-        self.est = max(self.est, cost)
-        self.ledger.parent.mkdir(parents=True, exist_ok=True)
-        with self.ledger.open("a") as f:
-            f.write(
-                json.dumps({"ts": time.time(), "model": model, "item_id": item_id, "cost": cost})
-                + "\n"
-            )
+    async def settle(self, reserved: float, actual: float, model: str, item_id: str):
+        async with self._lock:
+            self.committed = max(0.0, self.committed - reserved)
+            self.spent += actual
+            self.ledger.parent.mkdir(parents=True, exist_ok=True)
+            with self.ledger.open("a") as f:
+                f.write(
+                    json.dumps(
+                        {
+                            "ts": time.time(),
+                            "model": model,
+                            "item_id": item_id,
+                            "reserved": round(reserved, 8),
+                            "cost": round(actual, 8),
+                        }
+                    )
+                    + "\n"
+                )
+
+
+# Every distinct pass that may send the same prompt to the same model.
+# "select" scores candidate reports; "eval" is the measurement that must never
+# reuse a selection draw.
+STAGES = ("select", "eval", "attack", "honest", "critique", "topn")
 
 
 def prompt_hash(messages) -> str:
     from .data import sha256
 
     return sha256(json.dumps(messages, sort_keys=True))
+
+
+def draw_id(stage: str, sample_index: int) -> str:
+    assert stage in STAGES, f"unknown stage {stage!r}"
+    return f"{stage}:{sample_index}"
+
+
+def draw_seed(stage: str, sample_index: int) -> int:
+    """A provider seed that differs across stages even at the same sample index."""
+    from .data import sha256
+
+    return int(sha256(draw_id(stage, sample_index))[:8], 16) % (2**31)
 
 
 class Caller:
@@ -164,6 +219,7 @@ class Caller:
         messages,
         *,
         kind: str,
+        stage: str,
         meta: dict,
         item_id: str,
         condition: str,
@@ -172,21 +228,21 @@ class Caller:
         n_field: int | None = None,
     ) -> str:
         ph = prompt_hash(messages)
-        key = f"{self.model}|{ph}|{sample_index}|{self.temperature}"
+        did = draw_id(stage, sample_index)
+        key = f"{self.model}|{ph}|{did}|{self.temperature}"
+        seed = draw_seed(stage, sample_index)
         cached = self._cache.get(key)
         if cached is not None:
             raw, usage, cost = cached, None, 0.0
         elif self.mock:
             from .fake import fake_reply
 
-            raw = fake_reply(self.model, kind, meta, sample_index, ph)
+            raw = fake_reply(self.model, kind, meta, sample_index, ph, did)
             usage, cost = None, 0.0
             await self._cache_put(key, raw)
         else:
-            raw, usage = await self._live(messages, max_tokens, sample_index)
+            raw, usage = await self._live(messages, max_tokens, seed)
             cost = self._cost(usage)
-            if self.spend:
-                self.spend.add(cost, self.model, item_id)
             self.calls += 1
             self.tokens_in += (usage or {}).get("prompt_tokens", 0)
             self.tokens_out += (usage or {}).get("completion_tokens", 0)
@@ -197,6 +253,9 @@ class Caller:
                 "phase": self.phase,
                 "kind": kind,
                 "item_id": item_id,
+                "stage": stage,
+                "cache_key": key,
+                "draw_seed": seed,
                 "condition": condition,
                 "n": n_field,
                 "sample_index": sample_index,
@@ -216,15 +275,32 @@ class Caller:
             "completion_tokens", 0
         ) * self.prices.get("completion", 0.0)
 
-    async def _live(self, messages, max_tokens, sample_index):
+    def max_cost(self, messages, max_tokens: int) -> float:
+        """Upper bound on one call's cost, used for the pre-dispatch reservation."""
+        chars = sum(len(m["content"]) for m in messages)
+        tok_in = int(chars / 3.2) + 64  # deliberately pessimistic vs chars/4
+        return tok_in * self.prices.get("prompt", 0.0) + max_tokens * self.prices.get(
+            "completion", 0.0
+        )
+
+    async def _live(self, messages, max_tokens, seed):
+        reserved = 0.0
         if self.spend:
-            self.spend.check()
+            reserved = await self.spend.reserve(self.max_cost(messages, max_tokens), self.model)
+        try:
+            return await self._dispatch(messages, max_tokens, seed, reserved)
+        except BaseException:
+            if self.spend and reserved:
+                await self.spend.settle(reserved, 0.0, self.model, "failed")
+            raise
+
+    async def _dispatch(self, messages, max_tokens, seed, reserved):
         body = {
             "model": self.model,
             "messages": messages,
             "temperature": self.temperature,
             "max_tokens": max_tokens,
-            "seed": sample_index,
+            "seed": seed,
         }
         headers = {"Authorization": f"Bearer {os.environ['OPENROUTER_API_KEY']}"}
         last = None
@@ -242,7 +318,12 @@ class Caller:
                     choices = payload.get("choices") or []
                     if not choices:
                         raise RuntimeError(f"no choices: {payload.get('error')}")
-                    return choices[0]["message"]["content"] or "", payload.get("usage") or {}
+                    usage = payload.get("usage") or {}
+                    if self.spend:
+                        await self.spend.settle(
+                            reserved, self._cost(usage), self.model, body["model"]
+                        )
+                    return choices[0]["message"]["content"] or "", usage
                 except Exception as exc:  # noqa: BLE001 - retried, then re-raised
                     last = exc
                     await asyncio.sleep(min(30, 2**attempt) * (0.5 + random.random()))
