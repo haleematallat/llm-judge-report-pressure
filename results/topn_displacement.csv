@@ -1,0 +1,8 @@
+arm,condition,n,n_test,gold_in_top3_rate,displacement_rate
+M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite,C0,,204,0.912,0.088
+M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite,C_honest,,204,0.912,0.088
+M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite,N1,1,204,0.902,0.098
+M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite,N2,2,204,0.897,0.103
+M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite,N4,4,204,0.882,0.118
+M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite,N8,8,204,0.873,0.127
+M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite,N16,16,204,0.858,0.142

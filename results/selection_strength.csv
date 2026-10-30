@@ -1,0 +1,16 @@
+dataset,n,n_items,mean_selected_p_wrong,share_selected_p_wrong_1.0
+bbeh_safety,1,68,0.45,0.044
+bbeh_safety,2,68,0.576,0.088
+bbeh_safety,4,68,0.674,0.162
+bbeh_safety,8,68,0.776,0.265
+bbeh_safety,16,68,0.853,0.412
+liars_bench,1,68,0.526,0.103
+liars_bench,2,68,0.644,0.176
+liars_bench,4,68,0.75,0.324
+liars_bench,8,68,0.868,0.529
+liars_bench,16,68,0.924,0.706
+safeagentbench,1,68,0.544,0.162
+safeagentbench,2,68,0.665,0.265
+safeagentbench,4,68,0.762,0.382
+safeagentbench,8,68,0.856,0.559
+safeagentbench,16,68,0.926,0.765

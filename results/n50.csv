@@ -1,0 +1,9 @@
+arm,a,b,n50,n50_display,n_obs
+M5 M5:qwen/qwen3.7-flash->google/gemini-2.5-flash-lite,1.1927,-0.2381,,> 16,1020
+M1 google/gemini-2.5-flash-lite,1.0552,-0.317,10.04,10.0,1020
+M1 meta-llama/llama-3.3-70b-instruct,-0.017,-0.4778,0.98,1.0,1020
+M1 openai/gpt-5-nano,0.5487,-0.3281,3.19,3.2,1020
+M1 qwen/qwen3.7-flash,0.0932,-0.8874,1.08,1.1,1020
+M4 qwen/qwen3.7-flash,0.1854,-0.1363,2.57,2.6,1020
+M2 majority(3 cheapest),0.1441,-0.5361,1.2,1.2,1020
+M3 conf-weighted(3 cheapest),0.1441,-0.5361,1.2,1.2,1020
