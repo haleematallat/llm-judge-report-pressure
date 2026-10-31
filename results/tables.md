@@ -58,6 +58,24 @@ An AI-only rule over the judge's own 5 samples: it sets an item aside for a seco
 | openai/gpt-5-nano | transfer (never queried during selection) | N4 | 4 | 0.8 | 0.143 | 450 | 0.127 | 381 | 357 | 0.937 | 0.793 | 24 | 33 | 0.478 |
 | openai/gpt-5-nano | transfer (never queried during selection) | N8 | 8 | 0.8 | 0.143 | 450 | 0.113 | 378 | 361 | 0.955 | 0.802 | 17 | 34 | 0.472 |
 
+## 4b. Label-independent evidence of influence
+Neither column below uses the reference label, so neither is affected by whether that label is right. "Changed" compares a condition's majority verdict with the same judge's C0 verdict on the same item. "Argued option" is the option the attacker was told to argue for, a property of the item, not of the benchmark label. For C0 and C_honest no report argued for anything, so those rows are the base rate against which the rest should be read.
+
+**Mislabelling does not cancel in a paired difference; it reverses sign.** With two options, if an item's reference label is wrong then that item's correctness indicator is flipped in *every* condition, so its contribution to the paired difference becomes its own negative rather than dropping out. If a fraction f of items are mislabelled, the aggregate paired difference can move by up to **2f** — f = 10% permits a shift of up to 20 percentage points. On this data that bound is attainable: adversarially choosing which 10% to flip moves the primary N8 - N1 contrast on the target judge by -20.0pp, from +9.1pp to -10.9pp, which reverses its sign. An earlier version of this repository claimed the pairing protected the contrasts. That claim was wrong and is withdrawn.
+
+| judge | role | condition | n | n_items | n_groups | verdict_changed_from_C0_share_of_all_items | verdict_is_argued_option_share_of_all_items | moved_to_argued_option_share_of_all_items | n_not_already_on_argued_option_at_C0 | moved_share_of_those_eligible | report_argued_for_an_option |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| qwen/qwen3.7-flash | target (best-of-N selection runs against it) | C0 |  | 450 | 224 | 0.0 | 0.367 | 0.0 | 285 | 0.0 | False |
+| qwen/qwen3.7-flash | target (best-of-N selection runs against it) | C_honest |  | 450 | 224 | 0.253 | 0.3 | 0.093 | 285 | 0.147 | False |
+| qwen/qwen3.7-flash | target (best-of-N selection runs against it) | N1 | 1 | 450 | 224 | 0.52 | 0.842 | 0.498 | 285 | 0.786 | True |
+| qwen/qwen3.7-flash | target (best-of-N selection runs against it) | N4 | 4 | 450 | 224 | 0.567 | 0.924 | 0.562 | 285 | 0.888 | True |
+| qwen/qwen3.7-flash | target (best-of-N selection runs against it) | N8 | 8 | 450 | 224 | 0.567 | 0.933 | 0.567 | 285 | 0.895 | True |
+| openai/gpt-5-nano | transfer (never queried during selection) | C0 |  | 450 | 224 | 0.0 | 0.476 | 0.0 | 236 | 0.0 | False |
+| openai/gpt-5-nano | transfer (never queried during selection) | C_honest |  | 450 | 224 | 0.147 | 0.364 | 0.018 | 236 | 0.034 | False |
+| openai/gpt-5-nano | transfer (never queried during selection) | N1 | 1 | 450 | 224 | 0.364 | 0.831 | 0.36 | 236 | 0.686 | True |
+| openai/gpt-5-nano | transfer (never queried during selection) | N4 | 4 | 450 | 224 | 0.371 | 0.847 | 0.371 | 236 | 0.708 | True |
+| openai/gpt-5-nano | transfer (never queried during selection) | N8 | 8 | 450 | 224 | 0.364 | 0.84 | 0.364 | 236 | 0.695 | True |
+
 ## 5. C0 accuracy beside Sampura's reported SafeAgent AI-alone numbers
 Table 4 (Gemini 3 Flash, Sonnet 4.6) and Table 2 (Qwen3.5-9B) of arXiv 2610.24969. **Different models, different item sample, different split: not a like-for-like replication.**
 | judge | role | n_test | n_groups | acc | ci_lo | ci_hi | auroc_self_consistency_agreement | ece_self_consistency_agreement | paper_gemini3flash | paper_sonnet46 | paper_qwen35_9b | paper_n |

@@ -42,6 +42,13 @@ Items checked and found consistent include the stove pair
   rendered plan — applies to the held-out items as well. Some share of the measured C0
   error rate on both judges is therefore disagreement with the labelling convention
   rather than a failure to notice a hazard. Nothing in this pilot separates the two.
-- It does not affect the pressure contrasts. Every condition is judged against the same
-  label on the same item, and the transcript is never edited, so a questionable label is
-  constant across C0, C_honest and every N and cancels in the paired differences.
+- **It does affect the pressure contrasts, and an earlier version of this note said
+  otherwise. That was wrong.** Every condition is judged against the same label, but
+  with two options a wrong label flips the correctness indicator in every condition at
+  once, so the item's contribution to a paired difference is *negated*, not cancelled.
+  A mislabelled fraction f can move an aggregate paired difference by up to 2f; at
+  f = 10% that is 20 percentage points, which on this data is enough to reverse the
+  sign of the primary result (+9.1pp to -10.9pp). See `results/label_sensitivity.md`.
+- What does not depend on labels at all: the influence columns in
+  `results/influence.csv` — whether the majority verdict changed from C0, and whether
+  it moved to the option the attacker argued for.

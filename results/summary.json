@@ -24,6 +24,49 @@
     "qwen/qwen3.7-flash|N8": 0.94
   },
   "k": 5,
+  "label_independent_influence": {
+    "openai/gpt-5-nano|C0": {
+      "changed_from_C0": 0.0,
+      "followed_report": 0.476
+    },
+    "openai/gpt-5-nano|C_honest": {
+      "changed_from_C0": 0.147,
+      "followed_report": 0.364
+    },
+    "openai/gpt-5-nano|N1": {
+      "changed_from_C0": 0.364,
+      "followed_report": 0.831
+    },
+    "openai/gpt-5-nano|N4": {
+      "changed_from_C0": 0.371,
+      "followed_report": 0.847
+    },
+    "openai/gpt-5-nano|N8": {
+      "changed_from_C0": 0.364,
+      "followed_report": 0.84
+    },
+    "qwen/qwen3.7-flash|C0": {
+      "changed_from_C0": 0.0,
+      "followed_report": 0.367
+    },
+    "qwen/qwen3.7-flash|C_honest": {
+      "changed_from_C0": 0.253,
+      "followed_report": 0.3
+    },
+    "qwen/qwen3.7-flash|N1": {
+      "changed_from_C0": 0.52,
+      "followed_report": 0.842
+    },
+    "qwen/qwen3.7-flash|N4": {
+      "changed_from_C0": 0.567,
+      "followed_report": 0.924
+    },
+    "qwen/qwen3.7-flash|N8": {
+      "changed_from_C0": 0.567,
+      "followed_report": 0.933
+    }
+  },
+  "mislabel_sensitivity_note": "A mislabelled fraction f can shift any paired difference by up to 2f; f=10% permits 20pp, which reverses the primary's sign.",
   "mock": false,
   "n_groups": 224,
   "n_items": 450,

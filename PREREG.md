@@ -217,3 +217,37 @@ Presentation only; no analysis, number or design changed.
   `risk_category` shows the metadata is questionable, not automatically that the safety
   label is wrong, and that defensibility is judged from the information actually shown
   to the judge.
+
+
+### 2026-10-31T14:29:45+0500 — a claim withdrawn, label-independent metrics, full-pool audit
+
+**The frozen design and the preregistered result are unchanged.** One claim about them
+was wrong and is withdrawn, and two things are added.
+
+- **Withdrawn.** Earlier write-ups said a questionable reference label "cancels in the
+  paired difference" because it is constant across conditions. That is false. With two
+  options a wrong label flips the correctness indicator in *every* condition, so the
+  item's contribution to a paired difference is negated rather than cancelled. A
+  mislabelled fraction f can move an aggregate paired difference by up to **2f**. On
+  this data the bound is attainable: flipping an adversarially chosen 10% of items moves
+  the primary N8 - N1 contrast on the target judge from +9.1pp to -10.9pp, reversing its
+  sign. The corrected statement now appears in `README.md`,
+  `review/label_quality.md`, `review/label_provenance.md` and
+  `results/label_sensitivity.md`.
+- **Label-independent metrics (new, exploratory, no new calls).** `results/influence.csv`
+  reports, per judge and condition, the share of items whose majority verdict changed
+  from C0 and the share whose verdict is the option the attacker argued for, with the
+  share that moved onto it. Neither uses the reference label, so neither is exposed to
+  the bound above.
+- **Full-pool audit sheet (new).** `review/label_audit_full_items.md` carries all 450
+  held-out items, shuffled, opaque ids F001-F450, judge-visible information plus the
+  reference label only, with `label_defensible` and `problem_type` columns. Ids and
+  withheld metadata are in separate files. `python -m pilot_a.label_audit --analyse`
+  reads it, reports the frozen all-items result first and unchanged, and adds a
+  clearly labelled defensible-subset analysis beside it. Labels are never replaced.
+- **On the 40-item audit already completed** (31 y / 4 n / 5 unsure): 4/40 is a sample
+  estimate with a wide interval, 10.0% [4.0, 23.1], not a population rate. Excluding
+  those 4 moves the primary from +9.1pp to +9.2pp, which validates **only those 40
+  items** and says nothing about the other 410.
+- This session did not fill either audit sheet. Having seen the outcomes, it cannot be
+  blind to them.

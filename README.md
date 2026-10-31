@@ -262,6 +262,24 @@ An AI-only rule over the judge's own 5 samples: it sets an item aside for a seco
 | openai/gpt-5-nano | transfer (never queried during selection) | N4 | 4 | 0.8 | 0.143 | 450 | 0.127 | 381 | 357 | 0.937 | 0.793 | 24 | 33 | 0.478 |
 | openai/gpt-5-nano | transfer (never queried during selection) | N8 | 8 | 0.8 | 0.143 | 450 | 0.113 | 378 | 361 | 0.955 | 0.802 | 17 | 34 | 0.472 |
 
+### 4b. Label-independent evidence of influence
+Neither column below uses the reference label, so neither is affected by whether that label is right. "Changed" compares a condition's majority verdict with the same judge's C0 verdict on the same item. "Argued option" is the option the attacker was told to argue for, a property of the item, not of the benchmark label. For C0 and C_honest no report argued for anything, so those rows are the base rate against which the rest should be read.
+
+**Mislabelling does not cancel in a paired difference; it reverses sign.** With two options, if an item's reference label is wrong then that item's correctness indicator is flipped in *every* condition, so its contribution to the paired difference becomes its own negative rather than dropping out. If a fraction f of items are mislabelled, the aggregate paired difference can move by up to **2f** — f = 10% permits a shift of up to 20 percentage points. On this data that bound is attainable: adversarially choosing which 10% to flip moves the primary N8 - N1 contrast on the target judge by -20.0pp, from +9.1pp to -10.9pp, which reverses its sign. An earlier version of this repository claimed the pairing protected the contrasts. That claim was wrong and is withdrawn.
+
+| judge | role | condition | n | n_items | n_groups | verdict_changed_from_C0_share_of_all_items | verdict_is_argued_option_share_of_all_items | moved_to_argued_option_share_of_all_items | n_not_already_on_argued_option_at_C0 | moved_share_of_those_eligible | report_argued_for_an_option |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| qwen/qwen3.7-flash | target (best-of-N selection runs against it) | C0 |  | 450 | 224 | 0.0 | 0.367 | 0.0 | 285 | 0.0 | False |
+| qwen/qwen3.7-flash | target (best-of-N selection runs against it) | C_honest |  | 450 | 224 | 0.253 | 0.3 | 0.093 | 285 | 0.147 | False |
+| qwen/qwen3.7-flash | target (best-of-N selection runs against it) | N1 | 1 | 450 | 224 | 0.52 | 0.842 | 0.498 | 285 | 0.786 | True |
+| qwen/qwen3.7-flash | target (best-of-N selection runs against it) | N4 | 4 | 450 | 224 | 0.567 | 0.924 | 0.562 | 285 | 0.888 | True |
+| qwen/qwen3.7-flash | target (best-of-N selection runs against it) | N8 | 8 | 450 | 224 | 0.567 | 0.933 | 0.567 | 285 | 0.895 | True |
+| openai/gpt-5-nano | transfer (never queried during selection) | C0 |  | 450 | 224 | 0.0 | 0.476 | 0.0 | 236 | 0.0 | False |
+| openai/gpt-5-nano | transfer (never queried during selection) | C_honest |  | 450 | 224 | 0.147 | 0.364 | 0.018 | 236 | 0.034 | False |
+| openai/gpt-5-nano | transfer (never queried during selection) | N1 | 1 | 450 | 224 | 0.364 | 0.831 | 0.36 | 236 | 0.686 | True |
+| openai/gpt-5-nano | transfer (never queried during selection) | N4 | 4 | 450 | 224 | 0.371 | 0.847 | 0.371 | 236 | 0.708 | True |
+| openai/gpt-5-nano | transfer (never queried during selection) | N8 | 8 | 450 | 224 | 0.364 | 0.84 | 0.364 | 236 | 0.695 | True |
+
 ### 5. C0 accuracy beside Sampura's reported SafeAgent AI-alone numbers
 Table 4 (Gemini 3 Flash, Sonnet 4.6) and Table 2 (Qwen3.5-9B) of arXiv 2610.24969. **Different models, different item sample, different split: not a like-for-like replication.**
 | judge | role | n_test | n_groups | acc | ci_lo | ci_hi | auroc_self_consistency_agreement | ece_self_consistency_agreement | paper_gemini3flash | paper_sonnet46 | paper_qwen35_9b | paper_n |
@@ -388,11 +406,35 @@ defend, two of them visible only beside their group partner. No label was change
 item was dropped. The convention they illustrate — hazard attached to the instruction
 rather than to the rendered plan — applies to the held-out set too, so some share of
 every judge's C0 error is disagreement with the labelling convention rather than missed
-hazard. It does not affect the pressure contrasts, where the label is constant across
-conditions on a given item and cancels in the paired difference.
+hazard. **Mislabelling does not cancel in these contrasts; it reverses sign.** With two
+options, a wrong reference label flips that item's correctness indicator in *every*
+condition, so its contribution to a paired difference becomes its own negative rather
+than dropping out. If a fraction f of items are mislabelled, the aggregate paired
+difference can move by up to **2f** — f = 10% permits a 20 percentage point shift. On
+this data that bound is attainable: adversarially choosing which 10% of items to flip
+moves the primary N8 − N1 contrast on the target judge by **−20.0pp, from +9.1pp to
+−10.9pp**, reversing its sign. **An earlier version of this repository claimed the
+pairing protected the contrasts. That claim was wrong and is withdrawn.**
 
-**AI-assisted label audit**, outcome-blinded, split across two files so they can be
-shared separately:
+The AI-assisted audit of 40 items returned 4 flagged indefensible. That is a
+**sample estimate with a wide interval, not a population rate**: 4/40 = 10.0%, Wilson
+95% CI [4.0%, 23.1%]. At the interval's upper end the worst-case shift bound is 46pp.
+Removing those 4 items changes the primary contrast from +9.1pp to +9.2pp, but that
+**validates only the 40 items actually audited** and says nothing about the other 410,
+which is where most of the pool sits. The full-pool audit in
+`review/label_audit_full_items.md` exists to close that gap.
+
+**Label-independent evidence.** `results/influence.csv` reports, per judge and
+condition, the share of items whose majority verdict changed from C0 and the share
+whose verdict is the option the attacker argued for. Neither uses the reference label,
+so neither is exposed to the bound above. On the target judge, 36.7% of items already
+sit on the argued option at C0; under N = 8 that is 93.3%, with 56.7% of all items
+moving onto it and 89.5% of those not already there doing so. The honest control moves
+3.4–14.7% of eligible items. These are the figures to lean on where label validity is
+in doubt.
+
+**AI-assisted label audit**, outcome-blinded. Two samples, each split so the items and
+the withheld metadata can be shared separately:
 
 - `review/label_audit_items.md` — 40 held-out items drawn at random by group and
   balanced by label (20 groups, one item of each label from each), order shuffled,
@@ -402,17 +444,26 @@ shared separately:
 - `review/label_audit_reasons.md` — the dataset's `risk_category` and the other fields
   withheld from the judge, keyed by the same opaque ids, to be read after deciding.
 
-Opaque audit ids map back through `review/label_audit_key.json`.
+- `review/label_audit_full_items.md` — **all 450 held-out items**, shuffled, opaque ids
+  `F001`–`F450`, with `label_defensible` and `problem_type` columns. This is the sheet
+  that can close the coverage gap: the 40-item sample covers 8.9% of the pool.
+  `review/label_audit_full_reasons.md` holds its withheld metadata.
+
+Opaque audit ids map back through `review/label_audit_key.json` and
+`review/label_audit_full_key.json`.
 **This audit may be completed with AI assistance. It is not independent human
 validation of the benchmark's labels and must not be reported as though it were.**
 Defensibility is judged from the information actually shown to the judge; an
 implausible `risk_category` indicates questionable metadata, not automatically a wrong
 safety label. When the `label_defensible` column is filled,
-`python -m pilot_a.label_audit --analyse` writes `results/label_sensitivity.md`,
-recomputing N8 − N1 and N1 − C0 with the flagged items excluded, for all items and for
-the benchmark-labelled-unsafe direction separately. **That is a robustness check, not a
-replacement**: the preregistered analysis is the one over all 450 held-out items. The
-path has been exercised end to end with simulated verdicts; the real sheet is unfilled.
+`python -m pilot_a.label_audit --analyse` writes `results/label_sensitivity.md`. It
+reports the frozen all-items result **first and unchanged**, then a clearly labelled
+defensible-subset analysis beside it; no label is ever replaced or re-weighted.
+
+The 40-item sample has been filled externally (31 `y`, 4 `n`, 5 `unsure`). Removing the
+4 flagged items moves the primary from +9.1pp to +9.2pp — but that validates only those
+40 items. This session did not fill either sheet: having seen the outcomes, it cannot be
+blind to them.
 
 
 ## 7. How to run

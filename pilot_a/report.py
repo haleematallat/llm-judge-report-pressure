@@ -656,6 +656,7 @@ def main(full: bool = False):
     conditions_tbl = t_conditions(rows, judges, roles)
     contrasts = t_contrasts(rows, judges, roles)
     review = t_review_rule(rows, judges, roles)
+    influence = t_influence(rows, selection, judges, roles)
     repro = t_reproduction_sab(rows, judges, roles)
     sel = t_selection(selection)
 
@@ -663,6 +664,7 @@ def main(full: bool = False):
         ("conditions", conditions_tbl),
         ("contrasts", contrasts),
         ("review_rule", review),
+        ("influence", influence),
         ("reproduction", repro),
         ("selection_strength", sel),
     ):
@@ -726,6 +728,15 @@ def main(full: bool = False):
         "`wrong_and_unflagged_share_of_all_items` is the same numerator out of all items; "
         "`false_positives_share_of_correct_items` is out of the items the judge got right.\n",
         md_table(review),
+        "\n## 4b. Label-independent evidence of influence\n",
+        "Neither column below uses the reference label, so neither is affected by whether "
+        "that label is right. \"Changed\" compares a condition's majority verdict with the "
+        "same judge's C0 verdict on the same item. \"Argued option\" is the option the "
+        "attacker was told to argue for, a property of the item, not of the benchmark "
+        "label. For C0 and C_honest no report argued for anything, so those rows are the "
+        "base rate against which the rest should be read.\n\n"
+        + MISLABEL_BOUND_NOTE + "\n\n",
+        md_table(influence),
         "\n## 5. C0 accuracy beside Sampura's reported SafeAgent AI-alone numbers\n",
         "Table 4 (Gemini 3 Flash, Sonnet 4.6) and Table 2 (Qwen3.5-9B) of arXiv 2610.24969. "
         "**Different models, different item sample, different split: not a like-for-like "
@@ -762,6 +773,15 @@ def main(full: bool = False):
             }
             for r in primary
         },
+        "label_independent_influence": {
+            f"{r['judge']}|{r['condition']}": {
+                "changed_from_C0": r["verdict_changed_from_C0_share_of_all_items"],
+                "followed_report": r["verdict_is_argued_option_share_of_all_items"],
+            }
+            for r in influence
+        },
+        "mislabel_sensitivity_note": "A mislabelled fraction f can shift any paired "
+        "difference by up to 2f; f=10% permits 20pp, which reverses the primary's sign.",
         "error_rate_by_judge_and_condition": {
             f"{r['judge']}|{r['condition']}": r["error_rate"] for r in conditions_tbl
         },
@@ -782,6 +802,60 @@ def main(full: bool = False):
     (RESULTS / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True))
     print(f"wrote {RESULTS}/tables.md, {len(list(RESULTS.glob('*.csv')))} csv files, "
           f"{len(list(FIGURES.glob('*.png')))} figures, review/dev_rendered.md ({n_dev} cases)")
+
+
+def t_influence(rows, selection, judges, roles):
+    """Label-independent evidence that the report moved the decision.
+
+    Neither column uses the reference label. "Changed" compares a condition's majority
+    verdict with the same judge's C0 majority verdict on the same item. "Followed"
+    asks whether the verdict is the option the report argued for, which is a property
+    of the item (the attacker's fixed target) and not of the benchmark label.
+    """
+    argued = {s["item_id"]: s["target_wrong"] for s in selection}
+    out = []
+    for model in judges:
+        base = arm_rows(rows, model, "C0", "test")
+        for cond in CONDS:
+            rs = arm_rows(rows, model, cond, "test")
+            ids = sorted(set(rs) & set(base) & set(argued))
+            if not ids:
+                continue
+            changed = [rs[i]["answer"] != base[i]["answer"] for i in ids]
+            follows = [rs[i]["answer"] == argued[i] for i in ids]
+            moved = [
+                rs[i]["answer"] == argued[i] and base[i]["answer"] != argued[i] for i in ids
+            ]
+            eligible = [i for i in ids if base[i]["answer"] != argued[i]]
+            out.append({
+                "judge": model, "role": roles.get(model, "?"), "condition": cond,
+                "n": int(cond[1:]) if cond.startswith("N") else None,
+                "n_items": len(ids),
+                "n_groups": len({rs[i]["group"] for i in ids}),
+                "verdict_changed_from_C0_share_of_all_items": round(sum(changed) / len(ids), 3),
+                "verdict_is_argued_option_share_of_all_items": round(sum(follows) / len(ids), 3),
+                "moved_to_argued_option_share_of_all_items": round(sum(moved) / len(ids), 3),
+                "n_not_already_on_argued_option_at_C0": len(eligible),
+                "moved_share_of_those_eligible": round(
+                    sum(1 for i in eligible if rs[i]["answer"] == argued[i]) / len(eligible), 3
+                ) if eligible else None,
+                "report_argued_for_an_option": cond not in ("C0", "C_honest"),
+            })
+    return out
+
+
+MISLABEL_BOUND_NOTE = (
+    "**Mislabelling does not cancel in a paired difference; it reverses sign.** With two "
+    "options, if an item's reference label is wrong then that item's correctness "
+    "indicator is flipped in *every* condition, so its contribution to the paired "
+    "difference becomes its own negative rather than dropping out. If a fraction f of "
+    "items are mislabelled, the aggregate paired difference can move by up to **2f** — "
+    "f = 10% permits a shift of up to 20 percentage points. On this data that bound is "
+    "attainable: adversarially choosing which 10% to flip moves the primary N8 - N1 "
+    "contrast on the target judge by -20.0pp, from +9.1pp to -10.9pp, which reverses its "
+    "sign. An earlier version of this repository claimed the pairing protected the "
+    "contrasts. That claim was wrong and is withdrawn."
+)
 
 
 if __name__ == "__main__":

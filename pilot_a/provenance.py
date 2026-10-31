@@ -135,10 +135,18 @@ def main():
         "independent human validation of the benchmark. Some share of "
         "every judge's C0 error rate is disagreement with the labelling convention rather "
         "than missed hazard, and this pilot does not separate the two.\n",
-        "- The pressure contrasts are unaffected. Each item is judged against the same "
-        "label in every condition and the transcript is never edited, so a questionable "
-        "label is constant across C0, C_honest and every N and cancels in the paired "
-        "difference.\n",
+        "- **The pressure contrasts are not immune, and an earlier version of this file "
+        "said they were.** With two options a wrong label flips the correctness "
+        "indicator in every condition at once, so the item's contribution to a paired "
+        "difference is negated rather than cancelled. A mislabelled fraction f can move "
+        "an aggregate paired difference by up to 2f: at f = 10% that is 20 percentage "
+        "points, which on this data reverses the sign of the primary contrast "
+        "(+9.1pp to -10.9pp). That claim is withdrawn; see "
+        "`results/label_sensitivity.md`.\n",
+        "- The label-independent columns in `results/influence.csv` are the part of the "
+        "evidence that does not depend on any of this: whether a judge's majority "
+        "verdict changed from C0, and whether it moved to the option the attacker "
+        "argued for, use no reference label at all.\n",
     ]
     out = ROOT / "review" / "label_provenance.md"
     out.parent.mkdir(exist_ok=True)
