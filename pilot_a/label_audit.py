@@ -33,6 +33,9 @@ FULL_REASONS = ROOT / "review" / "label_audit_full_reasons.md"
 FULL_KEY = ROOT / "review" / "label_audit_full_key.json"
 SHEETS = (ITEMS_SHEET, FULL_ITEMS, INDEX)
 PROBLEM_TYPES = ("indefensible_label", "insufficient_context", "ambiguous_criteria", "none")
+AGENT_VERDICTS = ROOT / "review" / "full_audit_agent_verdicts.csv"
+HALEEMA_REVIEW = ROOT / "review" / "label_audit_haleema_review.md"
+CHUNK = 150  # each audit agent saw one block of this many ids, and only that block
 N_PAIRS = 20
 HIDDEN_FIELDS = ("risk_category", "final_state", "risk_instruction", "feasible", "objects")
 
@@ -262,11 +265,103 @@ def read_verdicts():
             out[key[aid]["item_id"]] = verdict
             if ptype:
                 problems[key[aid]["item_id"]] = ptype
-    return out, key, seen, problems
+    overrides, confirmed, filled = read_review_overrides()
+    out.update(overrides)  # Haleema's final column beats the agent verdict
+    return out, key, seen, problems, {"overrides": overrides, "confirmed": confirmed,
+                                      "filled": filled}
+
+
+def _all_keys():
+    key = {}
+    for path in (KEY, FULL_KEY):
+        if path.exists():
+            key.update(json.loads(path.read_text()))
+    return key
+
+
+def read_review_overrides():
+    """Haleema's final column, which beats the agent verdict for that item.
+
+    The review sheet's LAST column is the one that counts. `agree` means the agent's
+    verdict stands, so it is recorded as reviewed-and-confirmed but changes nothing;
+    `y`/`n`/`unsure` replace it. Returns (overrides, confirmed, n_filled).
+    """
+    if not HALEEMA_REVIEW.exists():
+        return {}, set(), 0
+    key = _all_keys()
+    out, confirmed, filled = {}, set(), 0
+    for line in HALEEMA_REVIEW.read_text().splitlines():
+        m = re.match(r"\|\s*([AF]\d{2,3})\s*\|[^|]*\|[^|]*\|\s*([A-Za-z_]*)\s*\|", line)
+        if not m or m.group(1) not in key:
+            continue
+        final = m.group(2).strip().lower()
+        item = key[m.group(1)]["item_id"]
+        if final == "agree":
+            confirmed.add(item)
+            filled += 1
+        elif final in ("y", "n", "unsure"):
+            out[item] = final
+            filled += 1
+    return out, confirmed, filled
+
+
+def inter_audit_agreement():
+    """Exact agreement between the 40-item sample and the full-pool audit.
+
+    Both covered the same 40 items, independently and blinded, so this is the only
+    direct evidence here about how reliable a single audit pass is.
+    """
+    stores = {}
+    for path, keypath in ((ITEMS_SHEET, KEY), (FULL_ITEMS, FULL_KEY)):
+        store = {}
+        if path.exists() and keypath.exists():
+            key = json.loads(keypath.read_text())
+            for line in path.read_text().splitlines():
+                m = re.match(r"\|\s*([AF]\d{2,3})\s*\|\s*([A-Za-z_]*)\s*\|", line)
+                if m and m.group(1) in key and m.group(2).strip().lower() in ("y", "n", "unsure"):
+                    store[key[m.group(1)]["item_id"]] = m.group(2).strip().lower()
+        stores[path.name] = store
+    a, f = stores.get(ITEMS_SHEET.name, {}), stores.get(FULL_ITEMS.name, {})
+    both = sorted(set(a) & set(f))
+    if not both:
+        return None
+    pairs = Counter((a[i], f[i]) for i in both)
+    exact = sum(v for (x, y), v in pairs.items() if x == y)
+    return {
+        "n_overlap": len(both),
+        "exact_agreement": exact,
+        "exact_agreement_share": round(exact / len(both), 3),
+        "pairs": {f"{x}->{y}": v for (x, y), v in sorted(pairs.items())},
+    }
+
+
+def by_block(verdicts, problems):
+    """Per-agent breakdown: each agent saw one contiguous block of ids."""
+    if not FULL_KEY.exists():
+        return []
+    key = json.loads(FULL_KEY.read_text())
+    blocks = {}
+    for aid, k in key.items():
+        if not aid.startswith("F") or k["item_id"] not in verdicts:
+            continue
+        b = (int(aid[1:]) - 1) // CHUNK + 1
+        d = blocks.setdefault(b, {"items": 0, "y": 0, "n": 0, "unsure": 0,
+                                  "indefensible_label": 0, "insufficient_context": 0,
+                                  "ambiguous_criteria": 0})
+        d["items"] += 1
+        d[verdicts[k["item_id"]]] += 1
+        pt = problems.get(k["item_id"])
+        if pt in d:
+            d[pt] += 1
+    return [
+        {"block": f"F{(b - 1) * CHUNK + 1:03d}-F{b * CHUNK:03d}", **d}
+        for b, d in sorted(blocks.items())
+    ]
 
 
 def analyse():
-    verdicts, key, seen, problems = read_verdicts()
+    verdicts, key, seen, problems, review = read_verdicts()
+    overrides = review["overrides"]
     filled = {a: v for a, v in seen.items() if v in ("y", "n", "unsure")}
     if not filled:
         print(f"No verdicts filled in yet ({FULL_ITEMS} / {ITEMS_SHEET}). Nothing to analyse.")
@@ -326,16 +421,23 @@ def analyse():
     # one row per ITEM, not per audit id: the 40-item sample also appears in the
     # full-pool key, so counting ids would double-count those items
     ptypes = Counter(problems[iid] for iid in verdicts if iid in problems)
+    complete = audited >= n_test
+    agree = inter_audit_agreement()
+    blocks = by_block(verdicts, problems)
+    if blocks:
+        write_csv("label_audit_by_block", blocks)
     coverage = [{
         "items_audited": audited,
+        "held_out_pool": n_test,
         "share_of_held_out_pool": round(audited / n_test, 3),
+        "review_rows_filled": review["filled"],
+        "verdicts_overridden_by_review": len(overrides),
         "flagged_indefensible": n_flag,
         "flag_rate": round(100 * rate, 1),
         "flag_rate_ci_lo": round(100 * lo, 1),
         "flag_rate_ci_hi": round(100 * hi, 1),
         "marked_unsure": len(unsure),
-        "worst_case_shift_pp_at_point_estimate": round(100 * 2 * rate, 1),
-        "worst_case_shift_pp_at_ci_upper": round(100 * 2 * hi, 1),
+        "worst_case_shift_pp_if_flagged_are_all_mislabelled": round(100 * 2 * rate, 1),
     }]
     write_csv("label_audit_coverage", coverage)
     ptable = [{"problem_type": k, "count": v} for k, v in sorted(ptypes.items()) if k]
@@ -363,16 +465,68 @@ def analyse():
         "+9.1pp to -10.9pp, reversing its sign.\n\n",
         "## Audit coverage\n\n",
         md_table(coverage),
-        f"\n{audited} of {n_test} held-out items have been audited "
-        f"({100 * audited / n_test:.1f}%). The flag rate is a **sample estimate with a "
-        f"wide interval**, not a population rate: {n_flag}/{audited} = {100 * rate:.1f}% "
-        f"[{100 * lo:.1f}, {100 * hi:.1f}]. Taking the interval's upper end, the "
-        f"worst-case shift bound is {100 * 2 * hi:.1f}pp. Excluding audited items "
-        "validates only those items; it says nothing about the un-audited remainder, "
-        "which is where most of the pool still sits.\n",
+        "\n" + (
+            f"**All {audited} held-out items have been audited; coverage is complete.** "
+            "The residual risk is no longer un-audited items — there are none — but "
+            "**auditor error**. The audit is AI-assisted, each item was seen by one "
+            "agent, and an item whose label is wrong but was marked defensible appears "
+            "nowhere in this file.\n\n"
+            if complete else
+            f"{audited} of {n_test} held-out items have been audited "
+            f"({100 * audited / n_test:.1f}%). Excluding audited items validates only "
+            "those items and says nothing about the un-audited remainder.\n\n"
+        ),
     ]
+    if agree:
+        pairs = ", ".join(f"{k} {v}" for k, v in agree["pairs"].items())
+        md.append(
+            "**Reliability evidence.** Two independent blinded audits covered the same "
+            f"{agree['n_overlap']} items — the 40-item sample and the full-pool pass. "
+            f"They agree exactly on **{agree['exact_agreement']}/{agree['n_overlap']}** "
+            f"({100 * agree['exact_agreement_share']:.1f}%): {pairs}. Every disagreement "
+            "is one step between `unsure` and a decision; there is no straight `y`/`n` "
+            "reversal. This is the only direct evidence here on how reliable a single "
+            "audit pass is, and it rests on 40 items.\n\n"
+        )
+    md.append(
+        f"**The 2f bound still applies, now to undetected mislabels.** Complete coverage "
+        "removes the un-audited gap, not the possibility that the audit itself missed "
+        "wrong labels. If a further fraction f of labels are wrong and were marked "
+        "defensible, the aggregate paired difference can still move by up to 2f, and "
+        "those items are by construction absent from every exclusion below: an "
+        "undetected 5% would permit another 10pp of movement, against a primary contrast "
+        f"of +9.1pp. The {n_flag} detected flags are "
+        f"{100 * rate:.1f}% [{100 * lo:.1f}, {100 * hi:.1f}] of the pool.\n\n"
+    )
+    n_doubtful = len(flagged) + len(unsure)
+    if review["filled"]:
+        md.append(
+            f"**Haleema's review is partly in.** `review/{HALEEMA_REVIEW.name}` has "
+            f"{review['filled']} of its rows filled: **{len(overrides)}** verdicts here "
+            f"come from its final column and override the agent's, and "
+            f"{len(review['confirmed'])} rows are marked `agree`, confirming the agent "
+            "without changing anything.\n\n"
+        )
+    else:
+        md.append(
+            "**Haleema's review is pending.** All "
+            f"{n_doubtful} doubtful items ({len(flagged)} `n` + {len(unsure)} `unsure`) "
+            "plus a random sample of 30 the agents accepted are listed for her in "
+            f"`review/{HALEEMA_REVIEW.name}`, 112 rows in all, with a blank "
+            "`your_verdict` column. When it is filled, `--analyse` takes that column in "
+            "preference to the agent's verdict (`agree` leaves the agent's standing) and "
+            "every number in this file is recomputed. **Until then the figures here are "
+            "the agents' verdicts alone and have had no human check.**\n\n"
+        )
+    if blocks:
+        md += [
+            "## By audit agent\n\n",
+            "Each agent saw one contiguous block of ids and only that block.\n\n",
+            md_table(blocks),
+            "\n",
+        ]
     if ptable:
-        md += ["\n## Problem types\n\n", md_table(ptable)]
+        md += ["## Problem types\n\n", md_table(ptable), "\n"]
     md += ["\n## Contrasts\n\n", md_table(out)]
     (RESULTS / "label_sensitivity.md").write_text("".join(md))
     print(f"{audited} verdicts, {n_flag} flagged ({100 * rate:.1f}% "

@@ -12,11 +12,27 @@ With two options, a wrong reference label flips that item's correctness indicato
 
 ## Audit coverage
 
-| items_audited | share_of_held_out_pool | flagged_indefensible | flag_rate | flag_rate_ci_lo | flag_rate_ci_hi | marked_unsure | worst_case_shift_pp_at_point_estimate | worst_case_shift_pp_at_ci_upper |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 450 | 1.0 | 26 | 5.8 | 4.0 | 8.3 | 56 | 11.6 | 16.7 |
+| items_audited | held_out_pool | share_of_held_out_pool | review_rows_filled | verdicts_overridden_by_review | flagged_indefensible | flag_rate | flag_rate_ci_lo | flag_rate_ci_hi | marked_unsure | worst_case_shift_pp_if_flagged_are_all_mislabelled |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 450 | 450 | 1.0 | 0 | 0 | 26 | 5.8 | 4.0 | 8.3 | 56 | 11.6 |
 
-450 of 450 held-out items have been audited (100.0%). The flag rate is a **sample estimate with a wide interval**, not a population rate: 26/450 = 5.8% [4.0, 8.3]. Taking the interval's upper end, the worst-case shift bound is 16.7pp. Excluding audited items validates only those items; it says nothing about the un-audited remainder, which is where most of the pool still sits.
+**All 450 held-out items have been audited; coverage is complete.** The residual risk is no longer un-audited items — there are none — but **auditor error**. The audit is AI-assisted, each item was seen by one agent, and an item whose label is wrong but was marked defensible appears nowhere in this file.
+
+**Reliability evidence.** Two independent blinded audits covered the same 40 items — the 40-item sample and the full-pool pass. They agree exactly on **37/40** (92.5%): n->n 3, n->unsure 1, unsure->unsure 3, unsure->y 2, y->y 31. Every disagreement is one step between `unsure` and a decision; there is no straight `y`/`n` reversal. This is the only direct evidence here on how reliable a single audit pass is, and it rests on 40 items.
+
+**The 2f bound still applies, now to undetected mislabels.** Complete coverage removes the un-audited gap, not the possibility that the audit itself missed wrong labels. If a further fraction f of labels are wrong and were marked defensible, the aggregate paired difference can still move by up to 2f, and those items are by construction absent from every exclusion below: an undetected 5% would permit another 10pp of movement, against a primary contrast of +9.1pp. The 26 detected flags are 5.8% [4.0, 8.3] of the pool.
+
+**Haleema's review is pending.** All 82 doubtful items (26 `n` + 56 `unsure`) plus a random sample of 30 the agents accepted are listed for her in `review/label_audit_haleema_review.md`, 112 rows in all, with a blank `your_verdict` column. When it is filled, `--analyse` takes that column in preference to the agent's verdict (`agree` leaves the agent's standing) and every number in this file is recomputed. **Until then the figures here are the agents' verdicts alone and have had no human check.**
+
+## By audit agent
+
+Each agent saw one contiguous block of ids and only that block.
+
+| block | items | y | n | unsure | indefensible_label | insufficient_context | ambiguous_criteria |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| F001-F150 | 150 | 124 | 8 | 18 | 8 | 10 | 8 |
+| F151-F300 | 150 | 122 | 8 | 20 | 8 | 5 | 15 |
+| F301-F450 | 150 | 122 | 10 | 18 | 10 | 2 | 16 |
 
 ## Problem types
 
@@ -26,6 +42,7 @@ With two options, a wrong reference label flips that item's correctness indicato
 | indefensible_label | 26 |
 | insufficient_context | 17 |
 | none | 368 |
+
 
 ## Contrasts
 

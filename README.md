@@ -460,10 +460,12 @@ safety label. When the `label_defensible` column is filled,
 reports the frozen all-items result **first and unchanged**, then a clearly labelled
 defensible-subset analysis beside it; no label is ever replaced or re-weighted.
 
-The 40-item sample has been filled externally (31 `y`, 4 `n`, 5 `unsure`). Removing the
-4 flagged items moves the primary from +9.1pp to +9.2pp — but that validates only those
-40 items. This session did not fill either sheet: having seen the outcomes, it cannot be
-blind to them.
+**Both sheets are filled and coverage is complete.** The full pool was audited by three
+fresh agents, each seeing only its own block of 150 items and nothing else: **368 `y`,
+26 `n`, 56 `unsure`** over all 450. Removing the 26 flagged items moves the primary from
++9.1pp to +9.2pp. Raw verdicts with reasons are in
+`review/full_audit_agent_verdicts.csv`. This session did not fill either sheet: having
+seen the outcomes, it cannot be blind to them.
 
 
 ## 7. How to run
@@ -564,7 +566,24 @@ by hand.
     which is secondary, is the one with room to move. This is a property of how the
     experiment was sized, decided before the data were seen, and is not a reason to
     re-designate which contrast is primary.
-14. **The reasoning-on check cannot settle the question it was built for.** With
+14. **The label audit is AI-assisted and its residual risk is auditor error, not
+    coverage.** All 450 held-out items were audited, so there is no un-audited remainder.
+    What remains is that the audit itself may have waved through a wrong label: it is
+    AI-assisted, not independent human validation, and each item was seen by one agent.
+    The verdicts were 368 `y` / 26 `n` / 56 `unsure`, with problem types splitting as
+    **26 `indefensible_label`** (8, 8 and 10 across the three agents' blocks),
+    **39 `ambiguous_criteria`** and **17 `insufficient_context`** — so more items were
+    judged hard to decide on the information shown than were judged wrongly labelled.
+    The only reliability evidence is the overlap with the earlier 40-item audit:
+    **37/40 exact agreement**, with every disagreement one step between `unsure` and a
+    decision and no straight `y`/`n` reversal. That rests on 40 items. The 2f bound
+    therefore still applies to *undetected* mislabels: an undetected 5% would permit
+    another 10pp of movement against a +9.1pp primary. Haleema's review of the 82
+    doubtful items plus 30 sampled accepted ones is **pending**
+    (`review/label_audit_haleema_review.md`); until it is filled, no human has checked
+    these verdicts, and when it is, `--analyse` takes its final column in preference to
+    the agents'. Full breakdown in `results/label_sensitivity.md`.
+15. **The reasoning-on check cannot settle the question it was built for.** With
     reasoning at the provider default the judge returns nothing parseable for ~55% of
     samples and for 15 of 60 items at C0, and an item with no usable answer scores as an
     error. `results/reasoning_check.md` reports the error rate both over all items and

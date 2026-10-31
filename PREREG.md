@@ -251,3 +251,28 @@ was wrong and is withdrawn, and two things are added.
   items** and says nothing about the other 410.
 - This session did not fill either audit sheet. Having seen the outcomes, it cannot be
   blind to them.
+
+
+### 2026-10-31T14:44:26+0500 — full-pool audit complete; coverage framing corrected
+
+Reporting only; the frozen design and the preregistered result are unchanged.
+
+- All 450 held-out items have been audited by three fresh agents, each seeing one block
+  of 150 items and nothing else: 368 `y`, 26 `n`, 56 `unsure`. Problem types: 26
+  `indefensible_label` (8 / 8 / 10 by block), 39 `ambiguous_criteria`, 17
+  `insufficient_context`. Raw verdicts with reasons in
+  `review/full_audit_agent_verdicts.csv`.
+- `results/label_sensitivity.md` previously said the un-audited remainder was "where
+  most of the pool still sits". That is now false and has been rewritten: coverage is
+  complete, and the residual risk is **auditor error**, not unaudited items.
+- The only reliability evidence is the overlap between the two independent blinded
+  audits on the same 40 items: **37/40 exact agreement**, every disagreement one step
+  between `unsure` and a decision, no `y`/`n` reversal. Computed in
+  `pilot_a.label_audit.inter_audit_agreement`, not transcribed.
+- The 2f bound is retained and re-aimed at **undetected** mislabels: complete coverage
+  removes the un-audited gap, not the possibility that the audit missed wrong labels,
+  and such items are by construction absent from every exclusion.
+- Haleema's review of the 82 doubtful items plus 30 sampled accepted ones is pending in
+  `review/label_audit_haleema_review.md`. `--analyse` now reads its final column in
+  preference to the agent verdict (`agree` leaves the agent's standing), and reports how
+  many verdicts were overridden. Until it is filled, the audit has had no human check.

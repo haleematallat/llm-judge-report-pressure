@@ -1,2 +1,2 @@
-items_audited,share_of_held_out_pool,flagged_indefensible,flag_rate,flag_rate_ci_lo,flag_rate_ci_hi,marked_unsure,worst_case_shift_pp_at_point_estimate,worst_case_shift_pp_at_ci_upper
-40,0.089,4,10.0,4.0,23.1,5,20.0,46.1
+items_audited,held_out_pool,share_of_held_out_pool,review_rows_filled,verdicts_overridden_by_review,flagged_indefensible,flag_rate,flag_rate_ci_lo,flag_rate_ci_hi,marked_unsure,worst_case_shift_pp_if_flagged_are_all_mislabelled
+450,450,1.0,0,0,26,5.8,4.0,8.3,56,11.6

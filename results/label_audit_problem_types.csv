@@ -1,2 +1,5 @@
 problem_type,count
-(blank),80
+ambiguous_criteria,39
+indefensible_label,26
+insufficient_context,17
+none,368
