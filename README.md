@@ -416,13 +416,17 @@ moves the primary N8 − N1 contrast on the target judge by **−20.0pp, from +9
 −10.9pp**, reversing its sign. **An earlier version of this repository claimed the
 pairing protected the contrasts. That claim was wrong and is withdrawn.**
 
-The AI-assisted audit of 40 items returned 4 flagged indefensible. That is a
-**sample estimate with a wide interval, not a population rate**: 4/40 = 10.0%, Wilson
-95% CI [4.0%, 23.1%]. At the interval's upper end the worst-case shift bound is 46pp.
-Removing those 4 items changes the primary contrast from +9.1pp to +9.2pp, but that
-**validates only the 40 items actually audited** and says nothing about the other 410,
-which is where most of the pool sits. The full-pool audit in
-`review/label_audit_full_items.md` exists to close that gap.
+The AI-assisted audit now covers **all 450 held-out items**, so the bound above is no
+longer about un-audited items. 26 were flagged indefensible: 26/450 = **5.8%, Wilson
+95% CI [4.0%, 8.3%]**, which bounds the shift from those items at **11.6pp** if every
+one of them is genuinely mislabelled — still comparable to the +9.1pp primary. The
+bound now bites on *undetected* mislabels instead: complete coverage removes the
+un-audited gap, not the possibility that the audit marked a wrong label defensible, and
+such items are by construction absent from every exclusion below.
+
+An earlier version of this paragraph quoted the 40-item sample (4/40 = 10.0%
+[4.0, 23.1]) and said the remaining 410 items were where most of the pool sat. They
+have since been audited.
 
 **Label-independent evidence.** `results/influence.csv` reports, per judge and
 condition, the share of items whose majority verdict changed from C0 and the share
@@ -462,8 +466,19 @@ defensible-subset analysis beside it; no label is ever replaced or re-weighted.
 
 **Both sheets are filled and coverage is complete.** The full pool was audited by three
 fresh agents, each seeing only its own block of 150 items and nothing else: **368 `y`,
-26 `n`, 56 `unsure`** over all 450. Removing the 26 flagged items moves the primary from
-+9.1pp to +9.2pp. Raw verdicts with reasons are in
+26 `n`, 56 `unsure`** over all 450. Excluding the flagged items **raises** the primary
+rather than lowering it, on both exclusion levels (target judge, N8 − N1):
+
+| analysis | items | delta | 95% CI |
+| --- | --- | --- | --- |
+| frozen, as preregistered | 450 | **+9.1pp** | [6.4, 11.9] |
+| flagged indefensible removed | 424 | +9.4pp | [6.5, 12.4] |
+| indefensible and unsure removed | 368 | +10.1pp | [6.8, 13.2] |
+
+So the detected label problems are not what produces the result: dropping them moves
+the estimate up by 0.3–1.0pp, well inside the interval, and every interval excludes
+zero. The frozen row is the preregistered one; the other two are a robustness check on
+a smaller set of items. Raw verdicts with reasons are in
 `review/full_audit_agent_verdicts.csv`. This session did not fill either sheet: having
 seen the outcomes, it cannot be blind to them.
 
@@ -574,6 +589,10 @@ by hand.
     **26 `indefensible_label`** (8, 8 and 10 across the three agents' blocks),
     **39 `ambiguous_criteria`** and **17 `insufficient_context`** — so more items were
     judged hard to decide on the information shown than were judged wrongly labelled.
+    Excluding the flagged items **raises** the primary rather than lowering it — +9.1pp
+    over all 450, +9.4pp [6.5, 12.4] over the 424 that survive dropping the flagged, and
+    +10.1pp [6.8, 13.2] over the 368 that survive dropping `unsure` as well — so the
+    detected label problems are not what produces the result.
     The only reliability evidence is the overlap with the earlier 40-item audit:
     **37/40 exact agreement**, with every disagreement one step between `unsure` and a
     decision and no straight `y`/`n` reversal. That rests on 40 items. The 2f bound

@@ -276,3 +276,26 @@ Reporting only; the frozen design and the preregistered result are unchanged.
   `review/label_audit_haleema_review.md`. `--analyse` now reads its final column in
   preference to the agent verdict (`agree` leaves the agent's standing), and reports how
   many verdicts were overridden. Until it is filled, the audit has had no human check.
+
+
+### 2026-10-31T14:47:01+0500 — numerical correction to the write-up
+
+Reporting only; no analysis re-run and no design change.
+
+The entry above dated 2026-10-31T14:29 states that excluding the flagged items moves
+the primary from +9.1pp to +9.2pp. That was computed when only the 40-item audit
+existed and 4 items were excluded, and it was correct for that exclusion (446 items).
+It is **not** the figure for the full-pool audit, and a later README passage repeated
++9.2pp while describing the 26 flagged items. The entry above is left as written,
+because this section is an append-only log; the correct current figures, taken from
+`results/label_sensitivity.csv`, are:
+
+| analysis | items | delta | 95% CI |
+| --- | --- | --- | --- |
+| frozen, as preregistered | 450 | +9.1pp | [6.4, 11.9] |
+| flagged indefensible removed | 424 | +9.4pp | [6.5, 12.4] |
+| indefensible and unsure removed | 368 | +10.1pp | [6.8, 13.2] |
+
+Excluding flagged items **raises** the estimate rather than lowering it, by 0.3–1.0pp,
+well inside the interval, with every interval excluding zero. `README.md` now quotes
+these and the stale 40-item framing around them has been replaced.
