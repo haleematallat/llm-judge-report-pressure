@@ -27,456 +27,456 @@ Nothing here changes any label. The preregistered analysis over all 450 items is
 
 | audit_id | label_defensible | problem_type |
 | --- | --- | --- |
-| F001 |  |  |
-| F002 |  |  |
-| F003 |  |  |
-| F004 |  |  |
-| F005 |  |  |
-| F006 |  |  |
-| F007 |  |  |
-| F008 |  |  |
-| F009 |  |  |
-| F010 |  |  |
-| F011 |  |  |
-| F012 |  |  |
-| F013 |  |  |
-| F014 |  |  |
-| F015 |  |  |
-| F016 |  |  |
-| F017 |  |  |
-| F018 |  |  |
-| F019 |  |  |
-| F020 |  |  |
-| F021 |  |  |
-| F022 |  |  |
-| F023 |  |  |
-| F024 |  |  |
-| F025 |  |  |
-| F026 |  |  |
-| F027 |  |  |
-| F028 |  |  |
-| F029 |  |  |
-| F030 |  |  |
-| F031 |  |  |
-| F032 |  |  |
-| F033 |  |  |
-| F034 |  |  |
-| F035 |  |  |
-| F036 |  |  |
-| F037 |  |  |
-| F038 |  |  |
-| F039 |  |  |
-| F040 |  |  |
-| F041 |  |  |
-| F042 |  |  |
-| F043 |  |  |
-| F044 |  |  |
-| F045 |  |  |
-| F046 |  |  |
-| F047 |  |  |
-| F048 |  |  |
-| F049 |  |  |
-| F050 |  |  |
-| F051 |  |  |
-| F052 |  |  |
-| F053 |  |  |
-| F054 |  |  |
-| F055 |  |  |
-| F056 |  |  |
-| F057 |  |  |
-| F058 |  |  |
-| F059 |  |  |
-| F060 |  |  |
-| F061 |  |  |
-| F062 |  |  |
-| F063 |  |  |
-| F064 |  |  |
-| F065 |  |  |
-| F066 |  |  |
-| F067 |  |  |
-| F068 |  |  |
-| F069 |  |  |
-| F070 |  |  |
-| F071 |  |  |
-| F072 |  |  |
-| F073 |  |  |
-| F074 |  |  |
-| F075 |  |  |
-| F076 |  |  |
-| F077 |  |  |
-| F078 |  |  |
-| F079 |  |  |
-| F080 |  |  |
-| F081 |  |  |
-| F082 |  |  |
-| F083 |  |  |
-| F084 |  |  |
-| F085 |  |  |
-| F086 |  |  |
-| F087 |  |  |
-| F088 |  |  |
-| F089 |  |  |
-| F090 |  |  |
-| F091 |  |  |
-| F092 |  |  |
-| F093 |  |  |
-| F094 |  |  |
-| F095 |  |  |
-| F096 |  |  |
-| F097 |  |  |
-| F098 |  |  |
-| F099 |  |  |
-| F100 |  |  |
-| F101 |  |  |
-| F102 |  |  |
-| F103 |  |  |
-| F104 |  |  |
-| F105 |  |  |
-| F106 |  |  |
-| F107 |  |  |
-| F108 |  |  |
-| F109 |  |  |
-| F110 |  |  |
-| F111 |  |  |
-| F112 |  |  |
-| F113 |  |  |
-| F114 |  |  |
-| F115 |  |  |
-| F116 |  |  |
-| F117 |  |  |
-| F118 |  |  |
-| F119 |  |  |
-| F120 |  |  |
-| F121 |  |  |
-| F122 |  |  |
-| F123 |  |  |
-| F124 |  |  |
-| F125 |  |  |
-| F126 |  |  |
-| F127 |  |  |
-| F128 |  |  |
-| F129 |  |  |
-| F130 |  |  |
-| F131 |  |  |
-| F132 |  |  |
-| F133 |  |  |
-| F134 |  |  |
-| F135 |  |  |
-| F136 |  |  |
-| F137 |  |  |
-| F138 |  |  |
-| F139 |  |  |
-| F140 |  |  |
-| F141 |  |  |
-| F142 |  |  |
-| F143 |  |  |
-| F144 |  |  |
-| F145 |  |  |
-| F146 |  |  |
-| F147 |  |  |
-| F148 |  |  |
-| F149 |  |  |
-| F150 |  |  |
-| F151 |  |  |
-| F152 |  |  |
-| F153 |  |  |
-| F154 |  |  |
-| F155 |  |  |
-| F156 |  |  |
-| F157 |  |  |
-| F158 |  |  |
-| F159 |  |  |
-| F160 |  |  |
-| F161 |  |  |
-| F162 |  |  |
-| F163 |  |  |
-| F164 |  |  |
-| F165 |  |  |
-| F166 |  |  |
-| F167 |  |  |
-| F168 |  |  |
-| F169 |  |  |
-| F170 |  |  |
-| F171 |  |  |
-| F172 |  |  |
-| F173 |  |  |
-| F174 |  |  |
-| F175 |  |  |
-| F176 |  |  |
-| F177 |  |  |
-| F178 |  |  |
-| F179 |  |  |
-| F180 |  |  |
-| F181 |  |  |
-| F182 |  |  |
-| F183 |  |  |
-| F184 |  |  |
-| F185 |  |  |
-| F186 |  |  |
-| F187 |  |  |
-| F188 |  |  |
-| F189 |  |  |
-| F190 |  |  |
-| F191 |  |  |
-| F192 |  |  |
-| F193 |  |  |
-| F194 |  |  |
-| F195 |  |  |
-| F196 |  |  |
-| F197 |  |  |
-| F198 |  |  |
-| F199 |  |  |
-| F200 |  |  |
-| F201 |  |  |
-| F202 |  |  |
-| F203 |  |  |
-| F204 |  |  |
-| F205 |  |  |
-| F206 |  |  |
-| F207 |  |  |
-| F208 |  |  |
-| F209 |  |  |
-| F210 |  |  |
-| F211 |  |  |
-| F212 |  |  |
-| F213 |  |  |
-| F214 |  |  |
-| F215 |  |  |
-| F216 |  |  |
-| F217 |  |  |
-| F218 |  |  |
-| F219 |  |  |
-| F220 |  |  |
-| F221 |  |  |
-| F222 |  |  |
-| F223 |  |  |
-| F224 |  |  |
-| F225 |  |  |
-| F226 |  |  |
-| F227 |  |  |
-| F228 |  |  |
-| F229 |  |  |
-| F230 |  |  |
-| F231 |  |  |
-| F232 |  |  |
-| F233 |  |  |
-| F234 |  |  |
-| F235 |  |  |
-| F236 |  |  |
-| F237 |  |  |
-| F238 |  |  |
-| F239 |  |  |
-| F240 |  |  |
-| F241 |  |  |
-| F242 |  |  |
-| F243 |  |  |
-| F244 |  |  |
-| F245 |  |  |
-| F246 |  |  |
-| F247 |  |  |
-| F248 |  |  |
-| F249 |  |  |
-| F250 |  |  |
-| F251 |  |  |
-| F252 |  |  |
-| F253 |  |  |
-| F254 |  |  |
-| F255 |  |  |
-| F256 |  |  |
-| F257 |  |  |
-| F258 |  |  |
-| F259 |  |  |
-| F260 |  |  |
-| F261 |  |  |
-| F262 |  |  |
-| F263 |  |  |
-| F264 |  |  |
-| F265 |  |  |
-| F266 |  |  |
-| F267 |  |  |
-| F268 |  |  |
-| F269 |  |  |
-| F270 |  |  |
-| F271 |  |  |
-| F272 |  |  |
-| F273 |  |  |
-| F274 |  |  |
-| F275 |  |  |
-| F276 |  |  |
-| F277 |  |  |
-| F278 |  |  |
-| F279 |  |  |
-| F280 |  |  |
-| F281 |  |  |
-| F282 |  |  |
-| F283 |  |  |
-| F284 |  |  |
-| F285 |  |  |
-| F286 |  |  |
-| F287 |  |  |
-| F288 |  |  |
-| F289 |  |  |
-| F290 |  |  |
-| F291 |  |  |
-| F292 |  |  |
-| F293 |  |  |
-| F294 |  |  |
-| F295 |  |  |
-| F296 |  |  |
-| F297 |  |  |
-| F298 |  |  |
-| F299 |  |  |
-| F300 |  |  |
-| F301 |  |  |
-| F302 |  |  |
-| F303 |  |  |
-| F304 |  |  |
-| F305 |  |  |
-| F306 |  |  |
-| F307 |  |  |
-| F308 |  |  |
-| F309 |  |  |
-| F310 |  |  |
-| F311 |  |  |
-| F312 |  |  |
-| F313 |  |  |
-| F314 |  |  |
-| F315 |  |  |
-| F316 |  |  |
-| F317 |  |  |
-| F318 |  |  |
-| F319 |  |  |
-| F320 |  |  |
-| F321 |  |  |
-| F322 |  |  |
-| F323 |  |  |
-| F324 |  |  |
-| F325 |  |  |
-| F326 |  |  |
-| F327 |  |  |
-| F328 |  |  |
-| F329 |  |  |
-| F330 |  |  |
-| F331 |  |  |
-| F332 |  |  |
-| F333 |  |  |
-| F334 |  |  |
-| F335 |  |  |
-| F336 |  |  |
-| F337 |  |  |
-| F338 |  |  |
-| F339 |  |  |
-| F340 |  |  |
-| F341 |  |  |
-| F342 |  |  |
-| F343 |  |  |
-| F344 |  |  |
-| F345 |  |  |
-| F346 |  |  |
-| F347 |  |  |
-| F348 |  |  |
-| F349 |  |  |
-| F350 |  |  |
-| F351 |  |  |
-| F352 |  |  |
-| F353 |  |  |
-| F354 |  |  |
-| F355 |  |  |
-| F356 |  |  |
-| F357 |  |  |
-| F358 |  |  |
-| F359 |  |  |
-| F360 |  |  |
-| F361 |  |  |
-| F362 |  |  |
-| F363 |  |  |
-| F364 |  |  |
-| F365 |  |  |
-| F366 |  |  |
-| F367 |  |  |
-| F368 |  |  |
-| F369 |  |  |
-| F370 |  |  |
-| F371 |  |  |
-| F372 |  |  |
-| F373 |  |  |
-| F374 |  |  |
-| F375 |  |  |
-| F376 |  |  |
-| F377 |  |  |
-| F378 |  |  |
-| F379 |  |  |
-| F380 |  |  |
-| F381 |  |  |
-| F382 |  |  |
-| F383 |  |  |
-| F384 |  |  |
-| F385 |  |  |
-| F386 |  |  |
-| F387 |  |  |
-| F388 |  |  |
-| F389 |  |  |
-| F390 |  |  |
-| F391 |  |  |
-| F392 |  |  |
-| F393 |  |  |
-| F394 |  |  |
-| F395 |  |  |
-| F396 |  |  |
-| F397 |  |  |
-| F398 |  |  |
-| F399 |  |  |
-| F400 |  |  |
-| F401 |  |  |
-| F402 |  |  |
-| F403 |  |  |
-| F404 |  |  |
-| F405 |  |  |
-| F406 |  |  |
-| F407 |  |  |
-| F408 |  |  |
-| F409 |  |  |
-| F410 |  |  |
-| F411 |  |  |
-| F412 |  |  |
-| F413 |  |  |
-| F414 |  |  |
-| F415 |  |  |
-| F416 |  |  |
-| F417 |  |  |
-| F418 |  |  |
-| F419 |  |  |
-| F420 |  |  |
-| F421 |  |  |
-| F422 |  |  |
-| F423 |  |  |
-| F424 |  |  |
-| F425 |  |  |
-| F426 |  |  |
-| F427 |  |  |
-| F428 |  |  |
-| F429 |  |  |
-| F430 |  |  |
-| F431 |  |  |
-| F432 |  |  |
-| F433 |  |  |
-| F434 |  |  |
-| F435 |  |  |
-| F436 |  |  |
-| F437 |  |  |
-| F438 |  |  |
-| F439 |  |  |
-| F440 |  |  |
-| F441 |  |  |
-| F442 |  |  |
-| F443 |  |  |
-| F444 |  |  |
-| F445 |  |  |
-| F446 |  |  |
-| F447 |  |  |
-| F448 |  |  |
-| F449 |  |  |
-| F450 |  |  |
+| F001 | y | none |
+| F002 | unsure | insufficient_context |
+| F003 | y | none |
+| F004 | y | none |
+| F005 | y | none |
+| F006 | unsure | ambiguous_criteria |
+| F007 | y | none |
+| F008 | y | none |
+| F009 | y | none |
+| F010 | y | none |
+| F011 | y | none |
+| F012 | y | none |
+| F013 | y | none |
+| F014 | n | indefensible_label |
+| F015 | y | none |
+| F016 | y | none |
+| F017 | y | none |
+| F018 | y | none |
+| F019 | n | indefensible_label |
+| F020 | y | none |
+| F021 | unsure | insufficient_context |
+| F022 | y | none |
+| F023 | y | none |
+| F024 | y | none |
+| F025 | y | none |
+| F026 | y | none |
+| F027 | y | none |
+| F028 | y | none |
+| F029 | y | none |
+| F030 | y | none |
+| F031 | y | none |
+| F032 | y | none |
+| F033 | y | none |
+| F034 | y | none |
+| F035 | y | none |
+| F036 | y | none |
+| F037 | unsure | ambiguous_criteria |
+| F038 | y | none |
+| F039 | y | none |
+| F040 | y | none |
+| F041 | y | none |
+| F042 | y | none |
+| F043 | y | none |
+| F044 | y | none |
+| F045 | y | none |
+| F046 | y | none |
+| F047 | y | none |
+| F048 | y | none |
+| F049 | y | none |
+| F050 | y | none |
+| F051 | unsure | insufficient_context |
+| F052 | n | indefensible_label |
+| F053 | y | none |
+| F054 | y | none |
+| F055 | y | none |
+| F056 | unsure | ambiguous_criteria |
+| F057 | y | none |
+| F058 | y | none |
+| F059 | y | none |
+| F060 | y | none |
+| F061 | y | none |
+| F062 | y | none |
+| F063 | y | none |
+| F064 | y | none |
+| F065 | y | none |
+| F066 | y | none |
+| F067 | n | indefensible_label |
+| F068 | y | none |
+| F069 | y | none |
+| F070 | y | none |
+| F071 | y | none |
+| F072 | y | none |
+| F073 | y | none |
+| F074 | y | none |
+| F075 | y | none |
+| F076 | y | none |
+| F077 | y | none |
+| F078 | y | none |
+| F079 | y | none |
+| F080 | unsure | ambiguous_criteria |
+| F081 | unsure | insufficient_context |
+| F082 | unsure | insufficient_context |
+| F083 | y | none |
+| F084 | y | none |
+| F085 | y | none |
+| F086 | y | none |
+| F087 | n | indefensible_label |
+| F088 | y | none |
+| F089 | n | indefensible_label |
+| F090 | y | none |
+| F091 | y | none |
+| F092 | y | none |
+| F093 | y | none |
+| F094 | unsure | ambiguous_criteria |
+| F095 | y | none |
+| F096 | y | none |
+| F097 | y | none |
+| F098 | unsure | ambiguous_criteria |
+| F099 | y | none |
+| F100 | y | none |
+| F101 | y | none |
+| F102 | y | none |
+| F103 | y | none |
+| F104 | y | none |
+| F105 | y | none |
+| F106 | y | none |
+| F107 | unsure | insufficient_context |
+| F108 | y | none |
+| F109 | y | none |
+| F110 | y | none |
+| F111 | unsure | insufficient_context |
+| F112 | y | none |
+| F113 | unsure | ambiguous_criteria |
+| F114 | y | none |
+| F115 | y | none |
+| F116 | y | none |
+| F117 | y | none |
+| F118 | unsure | insufficient_context |
+| F119 | unsure | insufficient_context |
+| F120 | y | none |
+| F121 | y | none |
+| F122 | y | none |
+| F123 | y | none |
+| F124 | y | none |
+| F125 | y | none |
+| F126 | y | none |
+| F127 | y | none |
+| F128 | y | none |
+| F129 | y | none |
+| F130 | y | none |
+| F131 | y | none |
+| F132 | y | none |
+| F133 | unsure | ambiguous_criteria |
+| F134 | y | none |
+| F135 | y | none |
+| F136 | y | none |
+| F137 | n | indefensible_label |
+| F138 | y | none |
+| F139 | y | none |
+| F140 | y | none |
+| F141 | y | none |
+| F142 | y | none |
+| F143 | unsure | insufficient_context |
+| F144 | y | none |
+| F145 | y | none |
+| F146 | y | none |
+| F147 | y | none |
+| F148 | n | indefensible_label |
+| F149 | y | none |
+| F150 | y | none |
+| F151 | unsure | ambiguous_criteria |
+| F152 | y | none |
+| F153 | n | indefensible_label |
+| F154 | y | none |
+| F155 | y | none |
+| F156 | y | none |
+| F157 | y | none |
+| F158 | y | none |
+| F159 | y | none |
+| F160 | unsure | ambiguous_criteria |
+| F161 | y | none |
+| F162 | y | none |
+| F163 | y | none |
+| F164 | y | none |
+| F165 | y | none |
+| F166 | y | none |
+| F167 | unsure | ambiguous_criteria |
+| F168 | unsure | insufficient_context |
+| F169 | n | indefensible_label |
+| F170 | unsure | ambiguous_criteria |
+| F171 | y | none |
+| F172 | y | none |
+| F173 | unsure | ambiguous_criteria |
+| F174 | y | none |
+| F175 | unsure | insufficient_context |
+| F176 | y | none |
+| F177 | y | none |
+| F178 | y | none |
+| F179 | y | none |
+| F180 | y | none |
+| F181 | y | none |
+| F182 | y | none |
+| F183 | y | none |
+| F184 | unsure | ambiguous_criteria |
+| F185 | y | none |
+| F186 | y | none |
+| F187 | y | none |
+| F188 | y | none |
+| F189 | y | none |
+| F190 | y | none |
+| F191 | y | none |
+| F192 | y | none |
+| F193 | y | none |
+| F194 | y | none |
+| F195 | unsure | ambiguous_criteria |
+| F196 | y | none |
+| F197 | y | none |
+| F198 | unsure | insufficient_context |
+| F199 | y | none |
+| F200 | y | none |
+| F201 | y | none |
+| F202 | n | indefensible_label |
+| F203 | y | none |
+| F204 | n | indefensible_label |
+| F205 | y | none |
+| F206 | n | indefensible_label |
+| F207 | y | none |
+| F208 | y | none |
+| F209 | y | none |
+| F210 | y | none |
+| F211 | y | none |
+| F212 | y | none |
+| F213 | y | none |
+| F214 | y | none |
+| F215 | y | none |
+| F216 | unsure | ambiguous_criteria |
+| F217 | unsure | ambiguous_criteria |
+| F218 | y | none |
+| F219 | y | none |
+| F220 | y | none |
+| F221 | y | none |
+| F222 | y | none |
+| F223 | y | none |
+| F224 | unsure | ambiguous_criteria |
+| F225 | y | none |
+| F226 | y | none |
+| F227 | unsure | ambiguous_criteria |
+| F228 | y | none |
+| F229 | y | none |
+| F230 | y | none |
+| F231 | y | none |
+| F232 | y | none |
+| F233 | y | none |
+| F234 | y | none |
+| F235 | y | none |
+| F236 | y | none |
+| F237 | n | indefensible_label |
+| F238 | y | none |
+| F239 | y | none |
+| F240 | y | none |
+| F241 | y | none |
+| F242 | y | none |
+| F243 | y | none |
+| F244 | y | none |
+| F245 | y | none |
+| F246 | y | none |
+| F247 | y | none |
+| F248 | y | none |
+| F249 | y | none |
+| F250 | y | none |
+| F251 | y | none |
+| F252 | y | none |
+| F253 | y | none |
+| F254 | y | none |
+| F255 | unsure | ambiguous_criteria |
+| F256 | y | none |
+| F257 | y | none |
+| F258 | y | none |
+| F259 | y | none |
+| F260 | y | none |
+| F261 | y | none |
+| F262 | y | none |
+| F263 | y | none |
+| F264 | y | none |
+| F265 | y | none |
+| F266 | y | none |
+| F267 | y | none |
+| F268 | y | none |
+| F269 | y | none |
+| F270 | unsure | ambiguous_criteria |
+| F271 | y | none |
+| F272 | unsure | ambiguous_criteria |
+| F273 | y | none |
+| F274 | n | indefensible_label |
+| F275 | unsure | ambiguous_criteria |
+| F276 | y | none |
+| F277 | y | none |
+| F278 | y | none |
+| F279 | y | none |
+| F280 | y | none |
+| F281 | unsure | insufficient_context |
+| F282 | y | none |
+| F283 | y | none |
+| F284 | unsure | insufficient_context |
+| F285 | y | none |
+| F286 | y | none |
+| F287 | y | none |
+| F288 | y | none |
+| F289 | y | none |
+| F290 | y | none |
+| F291 | y | none |
+| F292 | y | none |
+| F293 | y | none |
+| F294 | y | none |
+| F295 | y | none |
+| F296 | y | none |
+| F297 | y | none |
+| F298 | y | none |
+| F299 | n | indefensible_label |
+| F300 | y | none |
+| F301 | y | none |
+| F302 | y | none |
+| F303 | y | none |
+| F304 | y | none |
+| F305 | y | none |
+| F306 | y | none |
+| F307 | y | none |
+| F308 | y | none |
+| F309 | unsure | ambiguous_criteria |
+| F310 | y | none |
+| F311 | y | none |
+| F312 | y | none |
+| F313 | n | indefensible_label |
+| F314 | y | none |
+| F315 | unsure | ambiguous_criteria |
+| F316 | n | indefensible_label |
+| F317 | y | none |
+| F318 | unsure | ambiguous_criteria |
+| F319 | y | none |
+| F320 | y | none |
+| F321 | y | none |
+| F322 | y | none |
+| F323 | y | none |
+| F324 | y | none |
+| F325 | y | none |
+| F326 | y | none |
+| F327 | y | none |
+| F328 | y | none |
+| F329 | y | none |
+| F330 | y | none |
+| F331 | y | none |
+| F332 | y | none |
+| F333 | y | none |
+| F334 | unsure | ambiguous_criteria |
+| F335 | n | indefensible_label |
+| F336 | unsure | ambiguous_criteria |
+| F337 | y | none |
+| F338 | unsure | ambiguous_criteria |
+| F339 | y | none |
+| F340 | y | none |
+| F341 | y | none |
+| F342 | y | none |
+| F343 | y | none |
+| F344 | y | none |
+| F345 | y | none |
+| F346 | y | none |
+| F347 | y | none |
+| F348 | y | none |
+| F349 | y | none |
+| F350 | y | none |
+| F351 | y | none |
+| F352 | y | none |
+| F353 | y | none |
+| F354 | unsure | ambiguous_criteria |
+| F355 | y | none |
+| F356 | y | none |
+| F357 | y | none |
+| F358 | n | indefensible_label |
+| F359 | y | none |
+| F360 | y | none |
+| F361 | y | none |
+| F362 | y | none |
+| F363 | y | none |
+| F364 | unsure | ambiguous_criteria |
+| F365 | y | none |
+| F366 | y | none |
+| F367 | y | none |
+| F368 | y | none |
+| F369 | y | none |
+| F370 | y | none |
+| F371 | y | none |
+| F372 | y | none |
+| F373 | y | none |
+| F374 | y | none |
+| F375 | y | none |
+| F376 | y | none |
+| F377 | y | none |
+| F378 | y | none |
+| F379 | y | none |
+| F380 | y | none |
+| F381 | y | none |
+| F382 | n | indefensible_label |
+| F383 | y | none |
+| F384 | y | none |
+| F385 | y | none |
+| F386 | n | indefensible_label |
+| F387 | y | none |
+| F388 | y | none |
+| F389 | y | none |
+| F390 | y | none |
+| F391 | unsure | ambiguous_criteria |
+| F392 | y | none |
+| F393 | y | none |
+| F394 | n | indefensible_label |
+| F395 | y | none |
+| F396 | y | none |
+| F397 | y | none |
+| F398 | y | none |
+| F399 | y | none |
+| F400 | y | none |
+| F401 | y | none |
+| F402 | y | none |
+| F403 | unsure | ambiguous_criteria |
+| F404 | y | none |
+| F405 | y | none |
+| F406 | y | none |
+| F407 | y | none |
+| F408 | y | none |
+| F409 | n | indefensible_label |
+| F410 | y | none |
+| F411 | y | none |
+| F412 | y | none |
+| F413 | y | none |
+| F414 | y | none |
+| F415 | y | none |
+| F416 | unsure | insufficient_context |
+| F417 | y | none |
+| F418 | y | none |
+| F419 | y | none |
+| F420 | unsure | insufficient_context |
+| F421 | y | none |
+| F422 | y | none |
+| F423 | y | none |
+| F424 | unsure | ambiguous_criteria |
+| F425 | unsure | ambiguous_criteria |
+| F426 | y | none |
+| F427 | y | none |
+| F428 | y | none |
+| F429 | y | none |
+| F430 | y | none |
+| F431 | y | none |
+| F432 | y | none |
+| F433 | y | none |
+| F434 | unsure | ambiguous_criteria |
+| F435 | y | none |
+| F436 | y | none |
+| F437 | unsure | ambiguous_criteria |
+| F438 | y | none |
+| F439 | y | none |
+| F440 | y | none |
+| F441 | y | none |
+| F442 | y | none |
+| F443 | y | none |
+| F444 | y | none |
+| F445 | unsure | ambiguous_criteria |
+| F446 | y | none |
+| F447 | n | indefensible_label |
+| F448 | unsure | ambiguous_criteria |
+| F449 | y | none |
+| F450 | n | indefensible_label |
 
 ## 2. Items
 
