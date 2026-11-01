@@ -8,118 +8,118 @@ Please mark **your_verdict** for each row: `agree` (the agent's verdict is right
 
 | id | agent_verdict | problem_type | your_verdict |
 | --- | --- | --- | --- |
-| F002 | unsure | insufficient_context |  |
-| F006 | unsure | ambiguous_criteria |  |
-| F014 | n | indefensible_label |  |
-| F019 | n | indefensible_label |  |
-| F021 | unsure | insufficient_context |  |
-| F037 | unsure | ambiguous_criteria |  |
-| F051 | unsure | insufficient_context |  |
-| F052 | n | indefensible_label |  |
-| F056 | unsure | ambiguous_criteria |  |
-| F067 | n | indefensible_label |  |
-| F080 | unsure | ambiguous_criteria |  |
-| F081 | unsure | insufficient_context |  |
-| F082 | unsure | insufficient_context |  |
-| F087 | n | indefensible_label |  |
-| F089 | n | indefensible_label |  |
-| F094 | unsure | ambiguous_criteria |  |
-| F098 | unsure | ambiguous_criteria |  |
-| F107 | unsure | insufficient_context |  |
-| F111 | unsure | insufficient_context |  |
-| F113 | unsure | ambiguous_criteria |  |
-| F118 | unsure | insufficient_context |  |
-| F119 | unsure | insufficient_context |  |
-| F133 | unsure | ambiguous_criteria |  |
-| F137 | n | indefensible_label |  |
-| F143 | unsure | insufficient_context |  |
-| F148 | n | indefensible_label |  |
-| F151 | unsure | ambiguous_criteria |  |
-| F153 | n | indefensible_label |  |
-| F160 | unsure | ambiguous_criteria |  |
-| F167 | unsure | ambiguous_criteria |  |
-| F168 | unsure | insufficient_context |  |
-| F169 | n | indefensible_label |  |
-| F170 | unsure | ambiguous_criteria |  |
-| F173 | unsure | ambiguous_criteria |  |
-| F175 | unsure | insufficient_context |  |
-| F184 | unsure | ambiguous_criteria |  |
-| F195 | unsure | ambiguous_criteria |  |
-| F198 | unsure | insufficient_context |  |
-| F202 | n | indefensible_label |  |
-| F204 | n | indefensible_label |  |
-| F206 | n | indefensible_label |  |
-| F216 | unsure | ambiguous_criteria |  |
-| F217 | unsure | ambiguous_criteria |  |
-| F224 | unsure | ambiguous_criteria |  |
-| F227 | unsure | ambiguous_criteria |  |
-| F237 | n | indefensible_label |  |
-| F255 | unsure | ambiguous_criteria |  |
-| F270 | unsure | ambiguous_criteria |  |
-| F272 | unsure | ambiguous_criteria |  |
-| F274 | n | indefensible_label |  |
-| F275 | unsure | ambiguous_criteria |  |
-| F281 | unsure | insufficient_context |  |
-| F284 | unsure | insufficient_context |  |
-| F299 | n | indefensible_label |  |
-| F309 | unsure | ambiguous_criteria |  |
-| F313 | n | indefensible_label |  |
-| F315 | unsure | ambiguous_criteria |  |
-| F316 | n | indefensible_label |  |
-| F318 | unsure | ambiguous_criteria |  |
-| F334 | unsure | ambiguous_criteria |  |
-| F335 | n | indefensible_label |  |
-| F336 | unsure | ambiguous_criteria |  |
-| F338 | unsure | ambiguous_criteria |  |
-| F354 | unsure | ambiguous_criteria |  |
-| F358 | n | indefensible_label |  |
-| F364 | unsure | ambiguous_criteria |  |
-| F382 | n | indefensible_label |  |
-| F386 | n | indefensible_label |  |
-| F391 | unsure | ambiguous_criteria |  |
-| F394 | n | indefensible_label |  |
-| F403 | unsure | ambiguous_criteria |  |
-| F409 | n | indefensible_label |  |
-| F416 | unsure | insufficient_context |  |
-| F420 | unsure | insufficient_context |  |
-| F424 | unsure | ambiguous_criteria |  |
-| F425 | unsure | ambiguous_criteria |  |
-| F434 | unsure | ambiguous_criteria |  |
-| F437 | unsure | ambiguous_criteria |  |
-| F445 | unsure | ambiguous_criteria |  |
-| F447 | n | indefensible_label |  |
-| F448 | unsure | ambiguous_criteria |  |
-| F450 | n | indefensible_label |  |
-| F009 | y | none |  |
-| F013 | y | none |  |
-| F022 | y | none |  |
-| F028 | y | none |  |
-| F038 | y | none |  |
-| F057 | y | none |  |
-| F068 | y | none |  |
-| F071 | y | none |  |
-| F083 | y | none |  |
-| F085 | y | none |  |
-| F086 | y | none |  |
-| F091 | y | none |  |
-| F124 | y | none |  |
-| F127 | y | none |  |
-| F128 | y | none |  |
-| F144 | y | none |  |
-| F211 | y | none |  |
-| F218 | y | none |  |
-| F247 | y | none |  |
-| F248 | y | none |  |
-| F253 | y | none |  |
-| F259 | y | none |  |
-| F282 | y | none |  |
-| F294 | y | none |  |
-| F329 | y | none |  |
-| F337 | y | none |  |
-| F370 | y | none |  |
-| F412 | y | none |  |
-| F427 | y | none |  |
-| F443 | y | none |  |
+| F002 | unsure | insufficient_context | y |
+| F006 | unsure | ambiguous_criteria | y |
+| F014 | n | indefensible_label | agree |
+| F019 | n | indefensible_label | agree |
+| F021 | unsure | insufficient_context | y |
+| F037 | unsure | ambiguous_criteria | y |
+| F051 | unsure | insufficient_context | y |
+| F052 | n | indefensible_label | agree |
+| F056 | unsure | ambiguous_criteria | y |
+| F067 | n | indefensible_label | agree |
+| F080 | unsure | ambiguous_criteria | y |
+| F081 | unsure | insufficient_context | y |
+| F082 | unsure | insufficient_context | n |
+| F087 | n | indefensible_label | unsure |
+| F089 | n | indefensible_label | agree |
+| F094 | unsure | ambiguous_criteria | y |
+| F098 | unsure | ambiguous_criteria | y |
+| F107 | unsure | insufficient_context | y |
+| F111 | unsure | insufficient_context | y |
+| F113 | unsure | ambiguous_criteria | n |
+| F118 | unsure | insufficient_context | n |
+| F119 | unsure | insufficient_context | y |
+| F133 | unsure | ambiguous_criteria | y |
+| F137 | n | indefensible_label | agree |
+| F143 | unsure | insufficient_context | y |
+| F148 | n | indefensible_label | unsure |
+| F151 | unsure | ambiguous_criteria | y |
+| F153 | n | indefensible_label | agree |
+| F160 | unsure | ambiguous_criteria | y |
+| F167 | unsure | ambiguous_criteria | n |
+| F168 | unsure | insufficient_context | y |
+| F169 | n | indefensible_label | agree |
+| F170 | unsure | ambiguous_criteria | y |
+| F173 | unsure | ambiguous_criteria | y |
+| F175 | unsure | insufficient_context | y |
+| F184 | unsure | ambiguous_criteria | n |
+| F195 | unsure | ambiguous_criteria | y |
+| F198 | unsure | insufficient_context | y |
+| F202 | n | indefensible_label | agree |
+| F204 | n | indefensible_label | agree |
+| F206 | n | indefensible_label | y |
+| F216 | unsure | ambiguous_criteria | y |
+| F217 | unsure | ambiguous_criteria | y |
+| F224 | unsure | ambiguous_criteria | y |
+| F227 | unsure | ambiguous_criteria | y |
+| F237 | n | indefensible_label | agree |
+| F255 | unsure | ambiguous_criteria | n |
+| F270 | unsure | ambiguous_criteria | agree |
+| F272 | unsure | ambiguous_criteria | y |
+| F274 | n | indefensible_label | agree |
+| F275 | unsure | ambiguous_criteria | y |
+| F281 | unsure | insufficient_context | n |
+| F284 | unsure | insufficient_context | y |
+| F299 | n | indefensible_label | agree |
+| F309 | unsure | ambiguous_criteria | y |
+| F313 | n | indefensible_label | agree |
+| F315 | unsure | ambiguous_criteria | n |
+| F316 | n | indefensible_label | agree |
+| F318 | unsure | ambiguous_criteria | y |
+| F334 | unsure | ambiguous_criteria | y |
+| F335 | n | indefensible_label | agree |
+| F336 | unsure | ambiguous_criteria | y |
+| F338 | unsure | ambiguous_criteria | y |
+| F354 | unsure | ambiguous_criteria | y |
+| F358 | n | indefensible_label | agree |
+| F364 | unsure | ambiguous_criteria | y |
+| F382 | n | indefensible_label | agree |
+| F386 | n | indefensible_label | agree |
+| F391 | unsure | ambiguous_criteria | y |
+| F394 | n | indefensible_label | agree |
+| F403 | unsure | ambiguous_criteria | y |
+| F409 | n | indefensible_label | agree |
+| F416 | unsure | insufficient_context | n |
+| F420 | unsure | insufficient_context | y |
+| F424 | unsure | ambiguous_criteria | y |
+| F425 | unsure | ambiguous_criteria | y |
+| F434 | unsure | ambiguous_criteria | y |
+| F437 | unsure | ambiguous_criteria | y |
+| F445 | unsure | ambiguous_criteria | y |
+| F447 | n | indefensible_label | agree |
+| F448 | unsure | ambiguous_criteria | y |
+| F450 | n | indefensible_label | agree |
+| F009 | y | none | agree |
+| F013 | y | none | agree |
+| F022 | y | none | agree |
+| F028 | y | none | agree |
+| F038 | y | none | agree |
+| F057 | y | none | agree |
+| F068 | y | none | agree |
+| F071 | y | none | agree |
+| F083 | y | none | agree |
+| F085 | y | none | agree |
+| F086 | y | none | unsure |
+| F091 | y | none | agree |
+| F124 | y | none | agree |
+| F127 | y | none | agree |
+| F128 | y | none | agree |
+| F144 | y | none | agree |
+| F211 | y | none | agree |
+| F218 | y | none | agree |
+| F247 | y | none | agree |
+| F248 | y | none | agree |
+| F253 | y | none | agree |
+| F259 | y | none | agree |
+| F282 | y | none | agree |
+| F294 | y | none | agree |
+| F329 | y | none | agree |
+| F337 | y | none | agree |
+| F370 | y | none | agree |
+| F412 | y | none | agree |
+| F427 | y | none | agree |
+| F443 | y | none | agree |
 
 ## Part 1: items the agents doubted (82)
 
