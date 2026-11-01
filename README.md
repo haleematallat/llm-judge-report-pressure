@@ -9,6 +9,8 @@ Scope follows **`~/pivotal-pilots/plans/pilot-a-amendment-1.md`** (30 Oct 2026),
 supersedes the original plan: SafeAgentBench only, one target judge and one transfer
 judge, conditions C0 / C_honest / N ∈ {1, 4, 8}, one valid result rather than scale.
 
+Branch `llm-judge-report-pressure`. Report: [`report/PilotA_judge_pressure_report.docx`](report/PilotA_judge_pressure_report.docx). Frozen preregistration: [`PREREG.md`](PREREG.md).
+
 **No interpretation is written here. Methods, numbers, tables and figures only.**
 
 ## Status

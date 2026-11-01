@@ -1,25 +1,25 @@
 judge,subset,contrast,analysis,n_items,n_groups,error_rate_a,error_rate_b,delta_pp,ci_lo,ci_hi,p_group_boot
 qwen/qwen3.7-flash,all items,N8 - N1,"FROZEN: all items, as preregistered",450,224,93.3,84.2,9.1,6.4,11.9,0.0001
-qwen/qwen3.7-flash,all items,N8 - N1,defensible subset: flagged indefensible removed,424,223,92.9,83.5,9.4,6.5,12.4,0.0001
-qwen/qwen3.7-flash,all items,N8 - N1,defensible subset: indefensible and unsure removed,368,222,91.8,81.8,10.1,6.8,13.2,0.0001
+qwen/qwen3.7-flash,all items,N8 - N1,defensible subset: flagged indefensible removed,418,223,92.8,83.3,9.6,6.6,12.6,0.0001
+qwen/qwen3.7-flash,all items,N8 - N1,defensible subset: indefensible and unsure removed,414,222,92.8,83.1,9.7,6.7,12.7,0.0001
 qwen/qwen3.7-flash,all items,N1 - C0,"FROZEN: all items, as preregistered",450,224,84.2,36.7,47.6,43.0,52.2,0.0001
-qwen/qwen3.7-flash,all items,N1 - C0,defensible subset: flagged indefensible removed,424,223,83.5,35.6,47.9,43.0,52.7,0.0001
-qwen/qwen3.7-flash,all items,N1 - C0,defensible subset: indefensible and unsure removed,368,222,81.8,31.8,50.0,44.7,55.2,0.0001
+qwen/qwen3.7-flash,all items,N1 - C0,defensible subset: flagged indefensible removed,418,223,83.3,35.6,47.6,42.7,52.5,0.0001
+qwen/qwen3.7-flash,all items,N1 - C0,defensible subset: indefensible and unsure removed,414,222,83.1,35.3,47.8,42.9,52.7,0.0001
 qwen/qwen3.7-flash,benchmark-labelled unsafe only,N8 - N1,"FROZEN: all items, as preregistered",226,221,86.7,69.9,16.8,11.5,22.3,0.0001
-qwen/qwen3.7-flash,benchmark-labelled unsafe only,N8 - N1,defensible subset: flagged indefensible removed,203,198,85.2,67.0,18.2,12.4,24.3,0.0001
-qwen/qwen3.7-flash,benchmark-labelled unsafe only,N8 - N1,defensible subset: indefensible and unsure removed,159,155,81.1,59.7,21.4,14.5,28.7,0.0001
+qwen/qwen3.7-flash,benchmark-labelled unsafe only,N8 - N1,defensible subset: flagged indefensible removed,205,200,85.4,67.3,18.0,12.3,24.0,0.0001
+qwen/qwen3.7-flash,benchmark-labelled unsafe only,N8 - N1,defensible subset: indefensible and unsure removed,202,197,85.1,66.8,18.3,12.4,24.4,0.0001
 qwen/qwen3.7-flash,benchmark-labelled unsafe only,N1 - C0,"FROZEN: all items, as preregistered",226,221,69.9,42.0,27.9,21.1,34.8,0.0001
-qwen/qwen3.7-flash,benchmark-labelled unsafe only,N1 - C0,defensible subset: flagged indefensible removed,203,198,67.0,40.9,26.1,19.0,33.2,0.0001
-qwen/qwen3.7-flash,benchmark-labelled unsafe only,N1 - C0,defensible subset: indefensible and unsure removed,159,155,59.7,34.0,25.8,17.6,34.0,0.0001
+qwen/qwen3.7-flash,benchmark-labelled unsafe only,N1 - C0,defensible subset: flagged indefensible removed,205,200,67.3,40.5,26.8,19.8,34.0,0.0001
+qwen/qwen3.7-flash,benchmark-labelled unsafe only,N1 - C0,defensible subset: indefensible and unsure removed,202,197,66.8,40.1,26.7,19.5,34.0,0.0001
 openai/gpt-5-nano,all items,N8 - N1,"FROZEN: all items, as preregistered",450,224,84.0,83.1,0.9,-1.5,3.3,0.5226
-openai/gpt-5-nano,all items,N8 - N1,defensible subset: flagged indefensible removed,424,223,83.3,82.3,0.9,-1.4,3.4,0.5178
-openai/gpt-5-nano,all items,N8 - N1,defensible subset: indefensible and unsure removed,368,222,82.6,81.2,1.4,-1.3,4.1,0.371
+openai/gpt-5-nano,all items,N8 - N1,defensible subset: flagged indefensible removed,418,223,83.0,82.1,1.0,-1.4,3.4,0.5178
+openai/gpt-5-nano,all items,N8 - N1,defensible subset: indefensible and unsure removed,414,222,82.9,81.9,1.0,-1.5,3.5,0.5066
 openai/gpt-5-nano,all items,N1 - C0,"FROZEN: all items, as preregistered",450,224,83.1,47.6,35.6,32.1,39.0,0.0001
-openai/gpt-5-nano,all items,N1 - C0,defensible subset: flagged indefensible removed,424,223,82.3,49.5,32.8,29.0,36.5,0.0001
-openai/gpt-5-nano,all items,N1 - C0,defensible subset: indefensible and unsure removed,368,222,81.2,53.8,27.4,23.3,31.5,0.0001
+openai/gpt-5-nano,all items,N1 - C0,defensible subset: flagged indefensible removed,418,223,82.1,48.3,33.7,30.0,37.5,0.0001
+openai/gpt-5-nano,all items,N1 - C0,defensible subset: indefensible and unsure removed,414,222,81.9,48.6,33.3,29.6,37.1,0.0001
 openai/gpt-5-nano,benchmark-labelled unsafe only,N8 - N1,"FROZEN: all items, as preregistered",226,221,68.1,67.3,0.9,-3.6,5.4,0.7746
-openai/gpt-5-nano,benchmark-labelled unsafe only,N8 - N1,defensible subset: flagged indefensible removed,203,198,65.0,64.0,1.0,-3.9,5.9,0.7884
-openai/gpt-5-nano,benchmark-labelled unsafe only,N8 - N1,defensible subset: indefensible and unsure removed,159,155,59.7,57.9,1.9,-3.8,7.7,0.5968
+openai/gpt-5-nano,benchmark-labelled unsafe only,N8 - N1,defensible subset: flagged indefensible removed,205,200,65.4,64.4,1.0,-3.9,5.9,0.7838
+openai/gpt-5-nano,benchmark-labelled unsafe only,N8 - N1,defensible subset: indefensible and unsure removed,202,197,64.9,63.9,1.0,-3.9,6.0,0.7834
 openai/gpt-5-nano,benchmark-labelled unsafe only,N1 - C0,"FROZEN: all items, as preregistered",226,221,67.3,0.4,66.8,60.6,72.9,0.0001
-openai/gpt-5-nano,benchmark-labelled unsafe only,N1 - C0,defensible subset: flagged indefensible removed,203,198,64.0,0.0,64.0,57.2,70.6,0.0001
-openai/gpt-5-nano,benchmark-labelled unsafe only,N1 - C0,defensible subset: indefensible and unsure removed,159,155,57.9,0.0,57.9,50.0,65.6,0.0001
+openai/gpt-5-nano,benchmark-labelled unsafe only,N1 - C0,defensible subset: flagged indefensible removed,205,200,64.4,0.0,64.4,57.6,71.0,0.0001
+openai/gpt-5-nano,benchmark-labelled unsafe only,N1 - C0,defensible subset: indefensible and unsure removed,202,197,63.9,0.0,63.9,56.9,70.6,0.0001
