@@ -5,3 +5,4 @@ data/raw/
 logs/
 .cache/
 logs_archive/
+.DS_Store
