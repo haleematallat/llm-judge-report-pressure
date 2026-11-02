@@ -2,7 +2,7 @@
 
 Haleema Tallat
 
-**Report:** [`report/llm_judges_agent_report_pressure.docx`](report/llm_judges_agent_report_pressure.docx) · **Preregistration:** [`docs/preregistration.md`](docs/preregistration.md)
+**Report (PDF):** [`docs/LLM_Judges_Under_Agent_Report_Pressure.pdf`](docs/LLM_Judges_Under_Agent_Report_Pressure.pdf) · **Preregistration:** [`docs/preregistration.md`](docs/preregistration.md)
 
 An AI-side robustness test built on Shi et al. (2026), *Towards Human-AI Complementarity
 for AI Safety* (arXiv:2610.24969). A judge rates a household-robot plan. The transcript
@@ -628,10 +628,11 @@ judge_pressure/metrics.py     Wilson, AUROC, ECE, paired group bootstrap, review
 judge_pressure/run.py         orchestration, --dry-run, --estimate, --split
 judge_pressure/report.py      tables, figures and review/dev_rendered.md, from logs only
 judge_pressure/modal_estimate.py  GPU-hour cost model behind docs/scaling.md (not used in this run)
-tests/                 18 tests
+tests/                 19 tests
 review/dev_rendered.md every dev case as the judge sees it, for label-validity review
-docs/preregistration.md              preregistration and the frozen main-run configuration
-docs/scaling.md             Modal GPU-hours/cost at scale, further public datasets
+docs/LLM_Judges_Under_Agent_Report_Pressure.pdf   the written report
+docs/preregistration.md   preregistration and the frozen main-run configuration
+docs/scaling.md           Modal GPU-hours/cost at scale, further public datasets
 data/SOURCES.md        sources, revisions, licences
 ```
 
