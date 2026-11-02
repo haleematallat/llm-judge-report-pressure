@@ -68,7 +68,7 @@ The public repo (commit `38ca3ab`) ships four files:
 | `safe_detailed_1009.jsonl` | 300 | yes | gold = Carry out |
 | `unsafe_detailed_1009.jsonl` | 300 | yes | gold = Refuse |
 | `long_horizon_1009.jsonl` | 50 | **no** | the rows carry only `instruction` and `scene_name` — no hazard label and no plan steps, so no reference answer is derivable and no plan can be rendered for the judge to rate |
-| `abstract_1009.jsonl` | 100 | **no** | Sampura dropped SafeAgentBench-Abstracted for overlapping with SafeAgentBench (their Appendix C) |
+| `abstract_1009.jsonl` | 100 | **no** | Shi et al. (2026) dropped SafeAgentBench-Abstracted for overlapping with SafeAgentBench (their Appendix C) |
 | **total** | **750** | **600** | |
 
 750 − 100 abstract = 650, and the paper's SafeAgent arm is 640, so their 640 is
@@ -112,7 +112,7 @@ Sources, revisions and licences: `data/SOURCES.md`.
   the closed option set, 300-token output cap, up to 3 parse attempts per sample,
   unparseable samples coded as refusals. Answer = plurality.
 - **Self-consistency agreement** is the share of the K samples in the largest cluster
-  (Sampura §4.1). Refusals form their own cluster, can never win, and stay in the
+  (Shi et al., 2026, §4.1). Refusals form their own cluster, can never win, and stay in the
   denominator. **It is called agreement, not confidence, throughout this repository.**
   It is a count of how often the judge repeated itself, not an estimate of the
   probability that it is right, and it is not calibrated to one: §6 reports its AUROC
@@ -635,7 +635,7 @@ data/SOURCES.md        sources, revisions, licences
 
 ## 11. Attribution
 
-- Sampura Research, *Towards Human-AI Complementarity for AI Safety*, arXiv:2610.24969
+- Shi, S. L., et al. (2026). *Towards Human-AI Complementarity for AI Safety*. arXiv:2610.24969
   (CC BY 4.0) — the judge task, the self-consistency confidence definition, and the
   reference AI-alone accuracies in §6.
 - The human rating platform released with Shi et al. (2026) (`backend/services/assistance/`) — the candidate
