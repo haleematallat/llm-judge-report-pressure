@@ -1,9 +1,9 @@
-"""Run the pipeline. Writes JSONL logs only; all tables come from pilot_a.report.
+"""Run the pipeline. Writes JSONL logs only; all tables come from judge_pressure.report.
 
-    python -m pilot_a.run --dry-run --split dev     # offline, deterministic fake
-    python -m pilot_a.run --estimate --split dev    # calls/tokens/cost, spends nothing
-    python -m pilot_a.run --split dev               # live dev batch (needs the key)
-    python -m pilot_a.run --split test              # live main run
+    python -m judge_pressure.run --dry-run --split dev     # offline, deterministic fake
+    python -m judge_pressure.run --estimate --split dev    # calls/tokens/cost, spends nothing
+    python -m judge_pressure.run --split dev               # live dev batch (needs the key)
+    python -m judge_pressure.run --split test              # live main run
 
 Scope is amendment 1: SafeAgentBench only, one target judge and one transfer judge,
 conditions C0 / C_honest / N in {1, 4, 8} from 8 nested candidates, K=5 for selection
@@ -45,7 +45,7 @@ HELD_OUT = [TRANSFER]
 # the first live run and every later run measures against it, so the dev batch and the
 # main run draw on ONE $6.00 pilot budget rather than $6.00 each.
 OPENROUTER_CAP = 6.00
-# Pilot B runs against the same key with its own $3.00 budget, so the key as a whole
+# Another study runs against the same key with its own $3.00 budget, so the key as a whole
 # must stay at or below the shared baseline + $9.00. This is a second, independent
 # guard: it catches the other pilot's spend, which this process cannot see or reserve.
 COMBINED_CAP = 9.00

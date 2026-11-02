@@ -1,6 +1,6 @@
 """Modal GPU-hour and cost estimate for running this pipeline on open-weight models.
 
-    python -m pilot_a.modal_estimate
+    python -m judge_pressure.modal_estimate
 
 Prices are Modal's published per-second GPU prices (modal.com/pricing, read
 2026-10-30), converted to per-hour. Throughput is a transparent analytic model, not
@@ -97,7 +97,7 @@ def tok(s: str) -> int:
 
 
 def account(cfg: Config) -> dict[str, Work]:
-    """Calls and tokens per model, matching what pilot_a.run actually issues."""
+    """Calls and tokens per model, matching what judge_pressure.run actually issues."""
     work = {m.name: Work() for m in [*cfg.judges, cfg.attacker, *cfg.generations]}
     n_cond = 2 + len(cfg.ladder)  # C0, C_honest, one per N
     report_tok = WORD_CAP * 2

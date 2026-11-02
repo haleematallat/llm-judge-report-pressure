@@ -4,7 +4,7 @@ Confirms the source-file -> label mapping item by item, re-derives each rendered
 transcript from the raw record, and reports which raw fields the judge input omits.
 Writes review/label_provenance.md. Reads only; changes no data.
 
-    python -m pilot_a.provenance
+    python -m judge_pressure.provenance
 """
 
 from __future__ import annotations

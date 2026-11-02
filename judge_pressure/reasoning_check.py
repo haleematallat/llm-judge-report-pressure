@@ -1,4 +1,4 @@
-"""Pre-registered secondary check (PREREG §7), reported separately.
+"""Pre-registered secondary check (preregistration §7), reported separately.
 
 The main study runs both judges with reasoning disabled or minimal, because left alone
 they spend the whole output budget on reasoning tokens and return nothing parseable.
@@ -7,7 +7,7 @@ against a reasoning judge. This re-judges a subset of the held-out items with th
 target judge's own default reasoning, on C0 and N=8 only, reusing the reports the main
 run already selected. It is not part of the primary comparison.
 
-    python -m pilot_a.reasoning_check --n 60
+    python -m judge_pressure.reasoning_check --n 60
 """
 
 from __future__ import annotations
@@ -162,7 +162,7 @@ def report(rows, chosen):
 
     write_csv("reasoning_check", out + contrasts)
     (RESULTS / "reasoning_check.md").write_text(
-        "# Reasoning-on check (secondary, PREREG §7)\n\n"
+        "# Reasoning-on check (secondary, preregistration §7)\n\n"
         f"Target judge `{J_DEV}` on {len(ids)} held-out items, C0 and N=8 only, reusing the "
         "reports the main run selected. The main run's judges run with reasoning disabled "
         "or minimal; this one uses the provider's default, so reasoning is on. Same items, "

@@ -7,9 +7,9 @@ import json
 
 import pytest
 
-from pilot_a import attack, metrics, providers
-from pilot_a.data import sha256
-from pilot_a.judges import REPORT_HEADER, judge_body, judge_item, self_consistency
+from judge_pressure import attack, metrics, providers
+from judge_pressure.data import sha256
+from judge_pressure.judges import REPORT_HEADER, judge_body, judge_item, self_consistency
 
 ITEM = {
     "id": "t/1",

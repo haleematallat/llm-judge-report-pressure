@@ -12,5 +12,5 @@ The audit may be completed with AI assistance, so it is described throughout as 
 When the column in `label_audit_items.md` is filled:
 
 ```bash
-python -m pilot_a.label_audit --analyse
+python -m judge_pressure.label_audit --analyse
 ```

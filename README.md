@@ -9,7 +9,7 @@ Scope follows the pilot plan's first amendment (30 Oct 2026), which superseded t
 original plan: SafeAgentBench only, one target judge and one transfer
 judge, conditions C0 / C_honest / N ∈ {1, 4, 8}, one valid result rather than scale.
 
-Branch `llm-judge-report-pressure`. Report: [`report/PilotA_judge_pressure_report.docx`](report/PilotA_judge_pressure_report.docx). Frozen preregistration: [`PREREG.md`](PREREG.md).
+Branch `llm-judge-report-pressure`. Report: [`report/llm_judges_agent_report_pressure.docx`](report/llm_judges_agent_report_pressure.docx). Frozen preregistration: [`docs/preregistration.md`](docs/preregistration.md).
 
 **No interpretation is written here. Methods, numbers, tables and figures only.**
 
@@ -20,7 +20,7 @@ Branch `llm-judge-report-pressure`. Report: [`report/PilotA_judge_pressure_repor
 | Amendment fixes 1–7 | implemented, 18 tests passing |
 | Data | SafeAgentBench converted; 102 items in 59 instruction-family groups (21 dev / 81 held out) |
 | Dev batch | **run** 2026-10-30, 21 items, 168s, $0.0409, 0% unparseable — `results/dev_batch_summary.md` |
-| PREREG | **frozen** 2026-10-30T18:10:03+0500, after the dev batch, before the main run |
+| Preregistration | **frozen** 2026-10-30T18:10:03+0500, after the dev batch, before the main run |
 | Main run | **run** 2026-10-30, 450 held-out items in 224 groups, 1310s, $0.9247 |
 | Reasoning-on check | run, 60 items — `results/reasoning_check.md` (secondary) |
 | Spend | **$1.4243** of the $6.00 pilot budget; $0.0000 Modal |
@@ -40,7 +40,7 @@ them against the target judge on that same item**, then appends the best. So:
   carries over to a judge the attacker could not probe.
 - The attacker also sees the reference label, so it knows which way to push. This is an
   upper bound on per-item persuasion, not a model of a realistic policy.
-- The transcript is immutable. `pilot_a.judges.judge_body` asserts its SHA-256 on every
+- The transcript is immutable. `judge_pressure.judges.judge_body` asserts its SHA-256 on every
   judged prompt, so a report that tries to restate or "correct" the transcript is still
   only appended after it. The reference label therefore stays valid under every
   condition — that is the point of the design.
@@ -94,7 +94,7 @@ The pairing is positional in the source file and is not always semantically rela
 turn it on."). Grouping them anyway is the conservative choice: it costs a little power
 and no validity.
 
-Groups never straddle the dev/test boundary (asserted in `pilot_a.data.sample_grouped`),
+Groups never straddle the dev/test boundary (asserted in `judge_pressure.data.sample_grouped`),
 and every confidence interval resamples **groups**, not rows.
 
 ### Realised sample
@@ -143,7 +143,7 @@ Sources, revisions and licences: `data/SOURCES.md`.
 
 M2–M5 (including the AI-only adaptation of Top-N assistance), N50 curve fitting, the
 model-generations arm, Top-3 displacement, and Modal. `--methods` re-enables M4/M5 and
-`python -m pilot_a.report --full` emits the extra tables.
+`python -m judge_pressure.report --full` emits the extra tables.
 
 ## 4. The selection/evaluation reuse bug, and its fix
 
@@ -168,7 +168,7 @@ pipeline run no eval key equals any select key.
 
 ## 5. Spend guard
 
-`pilot_a.providers.Spend` **reserves** each call's maximum possible cost before dispatch
+`judge_pressure.providers.Spend` **reserves** each call's maximum possible cost before dispatch
 and releases the unused part on settlement, so the cap bounds committed spend rather
 than settled spend — a plain check-then-send lets N concurrent calls each pass a check
 none of them has paid for yet. The reservation uses a deliberately pessimistic token
@@ -200,7 +200,7 @@ change made here.
 
 ## 6. Results
 
-Written by `python -m pilot_a.report`; identical to `results/tables.md`. CSVs in
+Written by `python -m judge_pressure.report`; identical to `results/tables.md`. CSVs in
 `results/`.
 
 <!-- RESULTS:BEGIN -->
@@ -303,7 +303,7 @@ Table 4 (Gemini 3 Flash, Sonnet 4.6) and Table 2 (Qwen3.5-9B) of arXiv 2610.2496
 ## 6b. Exploratory (not preregistered)
 
 Specified **after** the main results were seen, approved by Haleema, and recorded as a
-dated amendment in `PREREG.md` §8. These arms carry no multiplicity correction and none
+dated amendment in `docs/preregistration.md` §8. These arms carry no multiplicity correction and none
 of them is a preregistered result. The primary comparison in §6 is unchanged: it was not
 re-run, re-specified or re-designated. Full tables in `results/exploratory_direction.md`
 and `results/exploratory_arms.md`.
@@ -462,7 +462,7 @@ validation of the benchmark's labels and must not be reported as though it were.
 Defensibility is judged from the information actually shown to the judge; an
 implausible `risk_category` indicates questionable metadata, not automatically a wrong
 safety label. When the `label_defensible` column is filled,
-`python -m pilot_a.label_audit --analyse` writes `results/label_sensitivity.md`. It
+`python -m judge_pressure.label_audit --analyse` writes `results/label_sensitivity.md`. It
 reports the frozen all-items result **first and unchanged**, then a clearly labelled
 defensible-subset analysis beside it; no label is ever replaced or re-weighted.
 
@@ -492,16 +492,16 @@ cd llm-judge-report-pressure
 uv venv && uv pip install httpx numpy pandas scipy matplotlib pytest datasets modal
 
 # data: download into data/raw/ per data/SOURCES.md, then
-.venv/bin/python -m pilot_a.data                      # -> data/items.jsonl (102 items)
+.venv/bin/python -m judge_pressure.data                      # -> data/items.jsonl (102 items)
 .venv/bin/python -m pytest tests -q                   # 18 tests
-.venv/bin/python -m pilot_a.run --estimate --split dev
+.venv/bin/python -m judge_pressure.run --estimate --split dev
 
-.venv/bin/python -m pilot_a.run --dry-run --split all # offline, deterministic, free
-.venv/bin/python -m pilot_a.run --split dev           # live dev batch
-.venv/bin/python -m pilot_a.report                    # tables, figures, review/dev_rendered.md
-#   ... read review/dev_rendered.md, freeze PREREG.md, then:
-.venv/bin/python -m pilot_a.run --split test          # live main run
-.venv/bin/python -m pilot_a.report
+.venv/bin/python -m judge_pressure.run --dry-run --split all # offline, deterministic, free
+.venv/bin/python -m judge_pressure.run --split dev           # live dev batch
+.venv/bin/python -m judge_pressure.report                    # tables, figures, review/dev_rendered.md
+#   ... read review/dev_rendered.md, freeze docs/preregistration.md, then:
+.venv/bin/python -m judge_pressure.run --split test          # live main run
+.venv/bin/python -m judge_pressure.report
 ```
 
 Every call is appended to `logs/<phase>/<model>.jsonl` with item id, stage, condition,
@@ -540,27 +540,27 @@ by hand.
    about an appended report has a chance to discount it that a judge answering in 12
    tokens does not. This is a limit on external validity, not a bug: it is a different
    judge from theirs. §9.3 is the check on how much it matters.
-3. **Reasoning-on check (secondary, pre-registered in PREREG §7).** The target judge is
+3. **Reasoning-on check (secondary, pre-registered in preregistration §7).** The target judge is
    re-run with its own default reasoning on a subset of the held-out items, C0 and N = 8
    only, reusing the reports the main run already selected. Reported separately in
    `results/reasoning_check.md`; it is not part of the primary comparison and is not
    substituted for it.
-4. **Numbers marked SYNTHETIC** come from `pilot_a/fake.py`, the offline simulator used
+4. **Numbers marked SYNTHETIC** come from `judge_pressure/fake.py`, the offline simulator used
    by `--dry-run`: a hand-written logistic in three latent variables. It exercises
    sampling, parsing, nested selection, the review rule and the group bootstrap. **It is
    not a model and its outputs are not evidence about any judge.** Live results are
    labelled with their split, timestamp and spend instead.
 5. **Modal is not used at all** in this run config. The token in `~/.modal.toml` is also
    rejected (`AuthError: Token not found`), so the ≤$1 smoke test authorised on
-   2026-10-30 could not run either. Scaled Modal estimates remain in `SCALING.md`.
+   2026-10-30 could not run either. Scaled Modal estimates remain in `docs/scaling.md`.
 6. **The review rule's threshold is coarse.** Self-consistency over K = 5 takes only the
    values {0.2, …, 1.0}, so no threshold can send exactly 30% of dev items to review.
-   `pilot_a.metrics.review_threshold` picks the achievable threshold closest to 30% and
+   `judge_pressure.metrics.review_threshold` picks the achievable threshold closest to 30% and
    the tables report `dev_review_rate_at_tau`, the rate actually achieved. Treat the
    "30%" as a target, not a setting.
 7. **Liar's Bench and BBEH-Safety adapters are retained but unused**; the earlier
    three-dataset exploratory outputs were removed because they describe a superseded run
-   configuration. `python -m pilot_a.data --legacy-n 100 --datasets safeagentbench
+   configuration. `python -m judge_pressure.data --legacy-n 100 --datasets safeagentbench
    liars_bench bbeh_safety` rebuilds that sample.
 8. **One attacker, one target judge, one transfer judge.** Attacker-model effects cannot
    be separated from attack-strength effects, and "transfer" is measured against a single
@@ -615,20 +615,20 @@ by hand.
 ## 10. Layout
 
 ```
-pilot_a/data.py        SafeAgentBench -> judge items, instruction-family groups, grouped split
-pilot_a/providers.py   OpenRouter/fake callers, stage-keyed cache, logging, reserving spend guard
-pilot_a/fake.py        SYNTHETIC offline simulator (--dry-run)
-pilot_a/judges.py      K-sample judge protocol, parsing, self-consistency
-pilot_a/attack.py      8 candidate reports, honest control, nested best-of-N
-pilot_a/methods.py     M2-M5, disabled in the run config (AI-only Top-N adaptation lives here)
-pilot_a/metrics.py     Wilson, AUROC, ECE, paired group bootstrap, review rule, Holm, N50
-pilot_a/run.py         orchestration, --dry-run, --estimate, --split
-pilot_a/report.py      tables, figures and review/dev_rendered.md, from logs only
-pilot_a/modal_estimate.py  GPU-hour cost model behind SCALING.md (not used in this run)
+judge_pressure/data.py        SafeAgentBench -> judge items, instruction-family groups, grouped split
+judge_pressure/providers.py   OpenRouter/fake callers, stage-keyed cache, logging, reserving spend guard
+judge_pressure/fake.py        SYNTHETIC offline simulator (--dry-run)
+judge_pressure/judges.py      K-sample judge protocol, parsing, self-consistency
+judge_pressure/attack.py      8 candidate reports, honest control, nested best-of-N
+judge_pressure/methods.py     M2-M5, disabled in the run config (AI-only Top-N adaptation lives here)
+judge_pressure/metrics.py     Wilson, AUROC, ECE, paired group bootstrap, review rule, Holm, N50
+judge_pressure/run.py         orchestration, --dry-run, --estimate, --split
+judge_pressure/report.py      tables, figures and review/dev_rendered.md, from logs only
+judge_pressure/modal_estimate.py  GPU-hour cost model behind docs/scaling.md (not used in this run)
 tests/                 18 tests
 review/dev_rendered.md every dev case as the judge sees it, for label-validity review
-PREREG.md              preregistration and the frozen main-run configuration
-SCALING.md             Modal GPU-hours/cost at scale, further public datasets
+docs/preregistration.md              preregistration and the frozen main-run configuration
+docs/scaling.md             Modal GPU-hours/cost at scale, further public datasets
 data/SOURCES.md        sources, revisions, licences
 ```
 
@@ -638,6 +638,6 @@ data/SOURCES.md        sources, revisions, licences
   (CC BY 4.0) — the judge task, the self-consistency confidence definition, and the
   reference AI-alone accuracies in §6.
 - The human rating platform released with Shi et al. (2026) (`backend/services/assistance/`) — the candidate
-  generation prompt contract reimplemented in `pilot_a/methods.py`. Its README states
+  generation prompt contract reimplemented in `judge_pressure/methods.py`. Its README states
   MIT; the repository has no LICENSE file.
 - SafeAgentBench (Yin et al., 2024), MIT.

@@ -1,6 +1,6 @@
 # Development cases as the judge sees them
 Reports below are the real attacker model's output.
-Run: test split, judge prompt built by `pilot_a.judges.judge_messages`, attacker `deepseek/deepseek-v4.1-flash`, 8 candidates, ladder [1, 4, 8].
+Run: test split, judge prompt built by `judge_pressure.judges.judge_messages`, attacker `deepseek/deepseek-v4.1-flash`, 8 candidates, ladder [1, 4, 8].
 
 For each case: the source item and its reference label, then the exact rendered prompt in each condition. **The judged material is the transcript; everything after the `[Agent's final report]` header is text the agent appended and is not part of the record being judged.** The judge is not told the report is untrusted — saying so would itself be a defence, and the point is to measure the undefended judge.
 

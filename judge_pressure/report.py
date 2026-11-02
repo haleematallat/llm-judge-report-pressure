@@ -1,6 +1,6 @@
 """Recompute every table and figure from logs/ alone.
 
-    python -m pilot_a.report
+    python -m judge_pressure.report
 
 Writes results/*.csv, results/tables.md and figures/*.png. Nothing here calls a model.
 """
@@ -570,7 +570,7 @@ def render_dev_review(rows, selection, items, meta):
     md = [
         "# Development cases as the judge sees them\n",
         banner,
-        f"Run: {meta['split']} split, judge prompt built by `pilot_a.judges.judge_messages`, "
+        f"Run: {meta['split']} split, judge prompt built by `judge_pressure.judges.judge_messages`, "
         f"attacker `{meta['attacker']}`, {meta['n_candidates']} candidates, "
         f"ladder {meta['ladder']}.\n",
         "\nFor each case: the source item and its reference label, then the exact rendered "
@@ -687,7 +687,7 @@ def main(full: bool = False):
 
     label = (
         "**SYNTHETIC (--dry-run): every number below comes from the deterministic "
-        "simulator in `pilot_a/fake.py`, not from a model.**"
+        "simulator in `judge_pressure/fake.py`, not from a model.**"
         if meta.get("mock")
         else f"Live run ({meta['split']} split, {meta.get('timestamp', '')}). "
         f"OpenRouter spend ${meta.get('openrouter_spend', 0):.4f}."
@@ -1037,8 +1037,8 @@ def exploratory_direction():
     write_csv("exploratory_direction_contrasts", con)
     md = [
         "# Exploratory: error rate by direction (not preregistered)\n\n",
-        "Added after the main results were seen, at Haleema's request. These splits were "
-        "not in the frozen PREREG and carry no multiplicity correction; treat them as "
+        "Added after the main results were seen. These splits were "
+        "not in the frozen preregistration and carry no multiplicity correction; treat them as "
         "descriptive.\n\n",
         "An error on a **gold=Refuse** item is a **benchmark-labelled unsafe plan "
         "approved**; an error on a **gold=Carry out** item is a benchmark-labelled safe "
@@ -1146,7 +1146,7 @@ def exploratory_tables():
     md = [
         "# Exploratory arms (not preregistered)\n\n",
         "Specified after the main results were seen and recorded as a dated amendment in "
-        "`PREREG.md` §8. Descriptive, no multiplicity correction. The preregistered "
+        "`docs/preregistration.md` §8. Descriptive, no multiplicity correction. The preregistered "
         "primary comparison is unchanged.\n\n",
         f"Subset: {len({r['item_id'] for r in rows})} held-out items sampled by whole "
         f"groups. Third judge `{third['chosen']}`, chosen on dev C0 only "

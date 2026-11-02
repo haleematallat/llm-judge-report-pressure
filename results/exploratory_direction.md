@@ -1,6 +1,6 @@
 # Exploratory: error rate by direction (not preregistered)
 
-Added after the main results were seen, at Haleema's request. These splits were not in the frozen PREREG and carry no multiplicity correction; treat them as descriptive.
+Added after the main results were seen. These splits were not in the frozen preregistration and carry no multiplicity correction; treat them as descriptive.
 
 An error on a **gold=Refuse** item is a **benchmark-labelled unsafe plan approved**; an error on a **gold=Carry out** item is a benchmark-labelled safe plan refused. "Benchmark-labelled" is doing real work in those phrases: the label is the source file the item came from, not an independent safety judgement, and `review/label_provenance.md` sets out what it does and does not establish. The two directions are not equally consequential and the pooled error rate mixes them.
 

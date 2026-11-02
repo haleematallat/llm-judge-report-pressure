@@ -1,10 +1,10 @@
-# Scaling Pilot A onto Modal
+# Scaling this study onto Modal
 
 Answers the 2026-10-30 plan update: cost both the planned run and a hackathon-sized
 run with almost all inference on Modal vLLM and open-weight models, and list the
 public Sampura-suite datasets that could be added.
 
-Regenerate every number here with `python -m pilot_a.modal_estimate`.
+Regenerate every number here with `python -m judge_pressure.modal_estimate`.
 
 ## 0. Stop state
 
@@ -62,7 +62,7 @@ right choice only for a cheap smoke test.
 
 Because the smoke test could not run, GPU-hours come from a transparent analytic
 model rather than from a benchmark. All of it is in
-`pilot_a/modal_estimate.py`, as four constants to replace once measurements exist:
+`judge_pressure/modal_estimate.py`, as four constants to replace once measurements exist:
 
 - prefill: 2 FLOP per parameter per token at **40% MFU** of the GPU's peak dense bf16
   throughput;
@@ -101,7 +101,7 @@ judge slightly; that belongs in the limitations if it ships.
 
 ## 4. Estimates
 
-Call accounting matches exactly what `pilot_a.run` issues: 16 candidate reports + 1
+Call accounting matches exactly what `judge_pressure.run` issues: 16 candidate reports + 1
 honest control per item from the attacker; 16×K J_dev calls to score candidates; K
 calls per judge per condition across 7 conditions (C0, C_honest, N∈{1,2,4,8,16});
 plus M4's critique + judge and M5's propose + pick. K=5 throughout.

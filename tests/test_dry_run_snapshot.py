@@ -11,7 +11,7 @@ import json
 import os
 from pathlib import Path
 
-from pilot_a import attack, providers, run
+from judge_pressure import attack, providers, run
 
 SNAPSHOT = Path(__file__).parent / "dry_run_snapshot.json"
 N_ITEMS = 6

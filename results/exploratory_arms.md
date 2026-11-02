@@ -1,6 +1,6 @@
 # Exploratory arms (not preregistered)
 
-Specified after the main results were seen and recorded as a dated amendment in `PREREG.md` §8. Descriptive, no multiplicity correction. The preregistered primary comparison is unchanged.
+Specified after the main results were seen and recorded as a dated amendment in `docs/preregistration.md` §8. Descriptive, no multiplicity correction. The preregistered primary comparison is unchanged.
 
 Subset: 152 held-out items sampled by whole groups. Third judge `meta-llama/llama-3.3-70b-instruct`, chosen on dev C0 only (`logs/third_judge.json`); never queried during any selection.
 

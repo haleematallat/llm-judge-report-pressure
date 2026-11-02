@@ -13,9 +13,9 @@ import json
 
 import pytest
 
-from pilot_a import attack, providers, run
-from pilot_a.data import sha256
-from pilot_a.judges import judge_item, judge_messages
+from judge_pressure import attack, providers, run
+from judge_pressure.data import sha256
+from judge_pressure.judges import judge_item, judge_messages
 
 ITEM = {
     "id": "t/1",

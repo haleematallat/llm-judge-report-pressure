@@ -1,4 +1,4 @@
-# Reasoning-on check (secondary, PREREG §7)
+# Reasoning-on check (secondary, preregistration §7)
 
 Target judge `qwen/qwen3.7-flash` on 60 held-out items, C0 and N=8 only, reusing the reports the main run selected. The main run's judges run with reasoning disabled or minimal; this one uses the provider's default, so reasoning is on. Same items, same reports, same K.
 

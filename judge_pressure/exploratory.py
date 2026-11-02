@@ -1,4 +1,4 @@
-"""Exploratory arms (NOT preregistered). Added 2026-10-31 at Haleema's request.
+"""Exploratory arms (NOT preregistered). Added 2026-10-31.
 
 1. Verdict-free reports: an attacker that argues for the wrong label without ever
    stating a verdict, addressing the judge, or using the option strings. Candidates
@@ -7,10 +7,10 @@
    same subset under both the original and the verdict-free reports.
 
 Everything here is descriptive and carries no multiplicity correction. The frozen
-PREREG is not altered; these arms are recorded as a dated amendment in its section 8.
+The preregistration is not altered; these arms are recorded as a dated amendment in its section 8.
 
-    python -m pilot_a.exploratory --pick-judge      # dev C0 comparison, cheap
-    python -m pilot_a.exploratory --run --n 150
+    python -m judge_pressure.exploratory --pick-judge      # dev C0 comparison, cheap
+    python -m judge_pressure.exploratory --run --n 150
 """
 
 from __future__ import annotations

@@ -1,8 +1,8 @@
 """Outcome-blinded label audit (external-review item 4b) and the sensitivity
 analysis that consumes it (4c).
 
-    python -m pilot_a.label_audit --build     # writes review/label_audit_blind.md
-    python -m pilot_a.label_audit --analyse   # after the column is filled
+    python -m judge_pressure.label_audit --build     # writes review/label_audit_blind.md
+    python -m judge_pressure.label_audit --analyse   # after the column is filled
 
 The audit sheet shows only what the judge sees plus the reference label. No judge
 output, no condition, no error rate, no item id. Opaque audit ids map back through
@@ -147,7 +147,7 @@ def build(seed=4):
         "an **AI-assisted label audit**. It is not independent human validation of the "
         "benchmark's labels, and no result should be reported as though it were.\n\n"
         "When the column in `label_audit_items.md` is filled:\n\n"
-        "```bash\npython -m pilot_a.label_audit --analyse\n```\n"
+        "```bash\npython -m judge_pressure.label_audit --analyse\n```\n"
     )
     print(f"{len(rows)} items -> {ITEMS_SHEET}")
     print(f"{len(rows)} metadata rows -> {REASONS_SHEET}")

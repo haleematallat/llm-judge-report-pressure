@@ -1,4 +1,4 @@
-# Preregistration — Pilot A
+# Preregistration
 
 **Status: FROZEN 2026-10-30T18:10:03+0500.** Written 2026-10-30 under
 the plan's first amendment. The real dev batch ran first, as the
@@ -101,7 +101,7 @@ reported with its interval rather than as a threshold decision.
   counts.
 - Refusals are never silently dropped: they are counted in the denominator and reported
   as a refusal rate.
-- Every table and figure is recomputed from the JSONL logs by `python -m pilot_a.report`.
+- Every table and figure is recomputed from the JSONL logs by `python -m judge_pressure.report`.
   No number is entered by hand.
 - Parse failures, retries and spend are reported from the logs, not estimated.
 
@@ -160,7 +160,7 @@ unchanged and was not re-run, re-specified or re-designated.
    under C0, C_honest, and N ∈ {1, 8} for both the original and the verdict-free
    reports. It was never queried during any selection.
 
-Also added, at Haleema's request and changing no data: `review/label_quality.md`, a note
+Also added, changing no data: `review/label_quality.md`, a note
 on development items whose reference label is hard to defend. No label was altered and
 no item was dropped.
 
@@ -194,7 +194,7 @@ changes made in the write-up after external review, and one new robustness check
   source-file to label mapping for all 450 held-out items and documents the raw fields
   withheld from the judge. `review/label_audit_blind.md` is an outcome-blinded sheet of
   40 held-out items for Haleema. When its column is filled,
-  `python -m pilot_a.label_audit --analyse` recomputes N8 − N1 and N1 − C0 with flagged
+  `python -m judge_pressure.label_audit --analyse` recomputes N8 − N1 and N1 − C0 with flagged
   items excluded. **It is a robustness check and does not replace the preregistered
   analysis**, whatever it shows.
 
@@ -208,7 +208,7 @@ Presentation only; no analysis, number or design changed.
   column and contains no dataset metadata; `review/label_audit_reasons.md` holds the
   withheld `risk_category`, `risk_instruction`, `feasible` and `final_state`, keyed by
   the same opaque ids. `review/label_audit_blind.md` is now a pointer to both.
-  `python -m pilot_a.label_audit --analyse` reads the filled column from the items
+  `python -m judge_pressure.label_audit --analyse` reads the filled column from the items
   sheet.
 - It is called an **AI-assisted label audit** throughout. It may be completed with AI
   assistance, so it is not independent human validation of the benchmark's labels and
@@ -242,7 +242,7 @@ was wrong and is withdrawn, and two things are added.
 - **Full-pool audit sheet (new).** `review/label_audit_full_items.md` carries all 450
   held-out items, shuffled, opaque ids F001-F450, judge-visible information plus the
   reference label only, with `label_defensible` and `problem_type` columns. Ids and
-  withheld metadata are in separate files. `python -m pilot_a.label_audit --analyse`
+  withheld metadata are in separate files. `python -m judge_pressure.label_audit --analyse`
   reads it, reports the frozen all-items result first and unchanged, and adds a
   clearly labelled defensible-subset analysis beside it. Labels are never replaced.
 - **On the 40-item audit already completed** (31 y / 4 n / 5 unsure): 4/40 is a sample
@@ -268,7 +268,7 @@ Reporting only; the frozen design and the preregistered result are unchanged.
 - The only reliability evidence is the overlap between the two independent blinded
   audits on the same 40 items: **37/40 exact agreement**, every disagreement one step
   between `unsure` and a decision, no `y`/`n` reversal. Computed in
-  `pilot_a.label_audit.inter_audit_agreement`, not transcribed.
+  `judge_pressure.label_audit.inter_audit_agreement`, not transcribed.
 - The 2f bound is retained and re-aimed at **undetected** mislabels: complete coverage
   removes the un-audited gap, not the possibility that the audit missed wrong labels,
   and such items are by construction absent from every exclusion.
