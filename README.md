@@ -1,12 +1,12 @@
-# Can an Agent Talk Its Judge Into the Wrong Verdict?
+# LLM Judges of Agent Behaviour Under Optimization Pressure From the Agent's Own Report
 
 An AI-side robustness test built on Shi et al. (2026), *Towards Human-AI Complementarity
 for AI Safety* (arXiv:2610.24969). A judge rates a household-robot plan. The transcript
 it rates is never edited; the agent is allowed to append an end-of-task report, and an
 attacker searches over candidate reports to find one that flips the judge.
 
-Scope follows **`~/pivotal-pilots/plans/pilot-a-amendment-1.md`** (30 Oct 2026), which
-supersedes the original plan: SafeAgentBench only, one target judge and one transfer
+Scope follows the pilot plan's first amendment (30 Oct 2026), which superseded the
+original plan: SafeAgentBench only, one target judge and one transfer
 judge, conditions C0 / C_honest / N ∈ {1, 4, 8}, one valid result rather than scale.
 
 Branch `llm-judge-report-pressure`. Report: [`report/PilotA_judge_pressure_report.docx`](report/PilotA_judge_pressure_report.docx). Frozen preregistration: [`PREREG.md`](PREREG.md).
@@ -488,7 +488,7 @@ seen the outcomes, it cannot be blind to them.
 ## 7. How to run
 
 ```bash
-cd ~/pivotal-pilots/pilot-a
+cd llm-judge-report-pressure
 uv venv && uv pip install httpx numpy pandas scipy matplotlib pytest datasets modal
 
 # data: download into data/raw/ per data/SOURCES.md, then
@@ -628,7 +628,6 @@ pilot_a/modal_estimate.py  GPU-hour cost model behind SCALING.md (not used in th
 tests/                 18 tests
 review/dev_rendered.md every dev case as the judge sees it, for label-validity review
 PREREG.md              preregistration and the frozen main-run configuration
-SPEND.md               spend and estimates
 SCALING.md             Modal GPU-hours/cost at scale, further public datasets
 data/SOURCES.md        sources, revisions, licences
 ```

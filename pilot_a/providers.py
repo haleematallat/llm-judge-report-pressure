@@ -8,7 +8,7 @@ appended to logs/<phase>/<model>.jsonl. Nothing is ever printed that could conta
 very samples that selected it (winner's curse). The provider seed is derived from
 the stage too, so a deterministic provider cannot hand back the selection draw either.
 
-Spend guard follows the pattern in ~/pivotal-pilots/Collusion_Sprint/betrayal/llm.py
+Spend guard follows the pattern in github.com/haleematallat/Collusion_Sprint (betrayal/llm.py)
 (key_usage/Spend), with one change required by amendment 1: each call's maximum
 possible cost is *reserved* before dispatch and the unused part released afterwards,
 so concurrent in-flight requests cannot overshoot the cap together.

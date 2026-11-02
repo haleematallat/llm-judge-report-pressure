@@ -119,7 +119,7 @@ plus M4's critique + judge and M5's propose + pick. K=5 throughout.
 
 $9.48 against the plan's $10 Modal cap: it fits, with no margin for a retry or a
 slower-than-assumed MFU. **For the planned version the OpenRouter route is cheaper
-and safer at $5.758** (`SPEND.md`); Modal is the right choice only from §4b onward.
+and safer at $5.758**; Modal is the right choice only from §4b onward.
 
 ### 4b. Scaled, balanced — the recommended hackathon configuration
 

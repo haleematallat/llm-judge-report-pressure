@@ -1,7 +1,7 @@
 # Preregistration — Pilot A
 
 **Status: FROZEN 2026-10-30T18:10:03+0500.** Written 2026-10-30 under
-`~/pivotal-pilots/plans/pilot-a-amendment-1.md`. The real dev batch ran first, as the
+the plan's first amendment. The real dev batch ran first, as the
 amendment requires, and set the two quantities that were open: the held-out case count
 and the judges' reasoning configuration. Frozen before the first main-run call.
 

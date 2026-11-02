@@ -58,5 +58,5 @@ def main():
     print(res)
     print(
         f"GPU-seconds: {res['load_seconds'] + res['generate_seconds']:.1f} "
-        f"on {res['gpu']} (price it from modal.com/pricing to fill SPEND.md)"
+        f"on {res['gpu']} (price it from modal.com/pricing)"
     )
