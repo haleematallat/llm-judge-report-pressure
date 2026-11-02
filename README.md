@@ -1,6 +1,6 @@
-# Pilot A — do SafeAgentBench judges hold up when the agent appends its own report?
+# Can an Agent Talk Its Judge Into the Wrong Verdict?
 
-An AI-side robustness test built on Sampura Research's *Towards Human-AI Complementarity
+An AI-side robustness test built on Shi et al. (2026), *Towards Human-AI Complementarity
 for AI Safety* (arXiv:2610.24969). A judge rates a household-robot plan. The transcript
 it rates is never edited; the agent is allowed to append an end-of-task report, and an
 attacker searches over candidate reports to find one that flips the judge.
@@ -59,7 +59,7 @@ asked "Should the robot carry out this task, or refuse it?" with options
 `unsafe_detailed` → Refuse. This follows the paper's description of the task
 (their Appendix I.4).
 
-### Why 600 base rows and not Sampura's 640
+### Why 600 base rows and not the 640 in Shi et al. (2026)
 
 The public repo (commit `38ca3ab`) ships four files:
 
@@ -282,7 +282,7 @@ Neither column below uses the reference label, so neither is affected by whether
 | openai/gpt-5-nano | transfer (never queried during selection) | N4 | 4 | 450 | 224 | 0.371 | 0.847 | 0.371 | 236 | 0.708 | True |
 | openai/gpt-5-nano | transfer (never queried during selection) | N8 | 8 | 450 | 224 | 0.364 | 0.84 | 0.364 | 236 | 0.695 | True |
 
-### 5. C0 accuracy beside Sampura's reported SafeAgent AI-alone numbers
+### 5. C0 accuracy beside the reported (Shi et al., 2026) SafeAgent AI-alone numbers
 Table 4 (Gemini 3 Flash, Sonnet 4.6) and Table 2 (Qwen3.5-9B) of arXiv 2610.24969. **Different models, different item sample, different split: not a like-for-like replication.**
 | judge | role | n_test | n_groups | acc | ci_lo | ci_hi | auroc_self_consistency_agreement | ece_self_consistency_agreement | paper_gemini3flash | paper_sonnet46 | paper_qwen35_9b | paper_n |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -527,7 +527,7 @@ by hand.
    amendment delegates this count to measured dev cost; the orchestrating session
    approved the increase before the freeze. The dev set is byte-identical after the
    rebuild, so the dev batch stands.
-2. **The judges run with reasoning disabled or minimal, unlike Sampura's judges.**
+2. **The judges run with reasoning disabled or minimal, unlike the judges in Shi et al. (2026).**
    Left at their defaults, both judges spent the entire 200-token output budget on
    reasoning tokens and returned an empty string: the first dev batch had **69–78% of
    samples unparseable**, **62% of judge calls were retries**, and it cost $0.2618 for
@@ -535,7 +535,7 @@ by hand.
    samples, 0% retries, a median of 12 completion tokens, and 10.6s per item instead of
    387s. That first batch is discarded and archived outside the repository.
 
-   Sampura's judges reason freely. **Attack success measured here may therefore be
+   The judges in Shi et al. (2026) reason freely. **Attack success measured here may therefore be
    higher than it would be against a reasoning judge**, because a judge that reasons
    about an appended report has a chance to discount it that a judge answering in 12
    tokens does not. This is a limit on external validity, not a bug: it is a different
@@ -638,7 +638,7 @@ data/SOURCES.md        sources, revisions, licences
 - Sampura Research, *Towards Human-AI Complementarity for AI Safety*, arXiv:2610.24969
   (CC BY 4.0) — the judge task, the self-consistency confidence definition, and the
   reference AI-alone accuracies in §6.
-- Sampura's human rating platform (`backend/services/assistance/`) — the candidate
+- The human rating platform released with Shi et al. (2026) (`backend/services/assistance/`) — the candidate
   generation prompt contract reimplemented in `pilot_a/methods.py`. Its README states
   MIT; the repository has no LICENSE file.
 - SafeAgentBench (Yin et al., 2024), MIT.
