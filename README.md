@@ -1,5 +1,9 @@
 # LLM Judges of Agent Behaviour Under Optimization Pressure From the Agent's Own Report
 
+Haleema Tallat
+
+**Report:** [`report/llm_judges_agent_report_pressure.docx`](report/llm_judges_agent_report_pressure.docx) · **Preregistration:** [`docs/preregistration.md`](docs/preregistration.md)
+
 An AI-side robustness test built on Shi et al. (2026), *Towards Human-AI Complementarity
 for AI Safety* (arXiv:2610.24969). A judge rates a household-robot plan. The transcript
 it rates is never edited; the agent is allowed to append an end-of-task report, and an
@@ -9,7 +13,6 @@ Scope follows the pilot plan's first amendment (30 Oct 2026), which superseded t
 original plan: SafeAgentBench only, one target judge and one transfer
 judge, conditions C0 / C_honest / N ∈ {1, 4, 8}, one valid result rather than scale.
 
-Branch `llm-judge-report-pressure`. Report: [`report/llm_judges_agent_report_pressure.docx`](report/llm_judges_agent_report_pressure.docx). Frozen preregistration: [`docs/preregistration.md`](docs/preregistration.md).
 
 **No interpretation is written here. Methods, numbers, tables and figures only.**
 
