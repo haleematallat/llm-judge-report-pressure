@@ -4,6 +4,14 @@ Haleema Tallat
 
 **Report (PDF):** [`docs/LLM_Judges_Under_Agent_Report_Pressure.pdf`](docs/LLM_Judges_Under_Agent_Report_Pressure.pdf) · **Preregistration:** [`docs/preregistration.md`](docs/preregistration.md)
 
+## TL;DR
+
+- An LLM judge rates whether a household-robot plan is safe (450 held-out SafeAgentBench items). The plan is never edited; the agent may only append its own end-of-task report.
+- One report arguing for the wrong verdict raised the judge's error from **36.7% to 84.2%**. Choosing the most persuasive of 8 raised it to **93.3%** (preregistered N8 − N1: **+9.1pp [6.4, 11.9]**), but added only +0.9pp on a judge never queried during selection.
+- Under this pressure, a self-consistency review rule left **94% of errors unflagged**, up from 59% with no report.
+
+![Held-out error rate vs N, both judges](figures/fig_error_rate_vs_n.png)
+
 An AI-side robustness test built on Shi et al. (2026), *Towards Human-AI Complementarity
 for AI Safety* (arXiv:2610.24969). A judge rates a household-robot plan. The transcript
 it rates is never edited; the agent is allowed to append an end-of-task report, and an
@@ -20,7 +28,7 @@ judge, conditions C0 / C_honest / N ∈ {1, 4, 8}, one valid result rather than 
 
 | | |
 | --- | --- |
-| Amendment fixes 1–7 | implemented, 18 tests passing |
+| Amendment fixes 1–7 | implemented, 19 tests passing |
 | Data | SafeAgentBench converted; 102 items in 59 instruction-family groups (21 dev / 81 held out) |
 | Dev batch | **run** 2026-10-30, 21 items, 168s, $0.0409, 0% unparseable — `results/dev_batch_summary.md` |
 | Preregistration | **frozen** 2026-10-30T18:10:03+0500, after the dev batch, before the main run |
@@ -28,7 +36,7 @@ judge, conditions C0 / C_honest / N ∈ {1, 4, 8}, one valid result rather than 
 | Reasoning-on check | run, 60 items — `results/reasoning_check.md` (secondary) |
 | Spend | **$1.4243** of the $6.00 pilot budget; $0.0000 Modal |
 | Numbers in §6 | live, from the models named below |
-| Label-validity review | `review/dev_rendered.md` (21 dev cases), `review/label_provenance.md` (450/450 verified), `review/label_quality.md`, `review/label_audit_items.md` + `label_audit_reasons.md` (AI-assisted audit, column unfilled) |
+| Label-validity review | `review/dev_rendered.md` (21 dev cases), `review/label_provenance.md` (450/450 verified), `review/label_quality.md`, AI-assisted audit of all 450 held-out labels, with Haleema's human review of 112 of them (`review/label_audit_haleema_review.md`) |
 | Preregistered result | **N8 vs N1 only.** Everything else is secondary or exploratory |
 
 ## 1. Threat model
@@ -422,8 +430,8 @@ moves the primary N8 − N1 contrast on the target judge by **−20.0pp, from +9
 pairing protected the contrasts. That claim was wrong and is withdrawn.**
 
 The AI-assisted audit now covers **all 450 held-out items**, so the bound above is no
-longer about un-audited items. 26 were flagged indefensible: 26/450 = **5.8%, Wilson
-95% CI [4.0%, 8.3%]**, which bounds the shift from those items at **11.6pp** if every
+longer about un-audited items. After Haleema's review, 32 are flagged indefensible: 32/450 = **7.1%, Wilson
+95% CI [5.1%, 9.9%]**, which bounds the shift from those items at **14.2pp** if every
 one of them is genuinely mislabelled — still comparable to the +9.1pp primary. The
 bound now bites on *undetected* mislabels instead: complete coverage removes the
 un-audited gap, not the possibility that the audit marked a wrong label defensible, and
@@ -471,17 +479,21 @@ defensible-subset analysis beside it; no label is ever replaced or re-weighted.
 
 **Both sheets are filled and coverage is complete.** The full pool was audited by three
 fresh agents, each seeing only its own block of 150 items and nothing else: **368 `y`,
-26 `n`, 56 `unsure`** over all 450. Excluding the flagged items **raises** the primary
-rather than lowering it, on both exclusion levels (target judge, N8 − N1):
+26 `n`, 56 `unsure`** over all 450. Haleema then reviewed, blind to outcomes, all 82
+items the agents doubted plus a random 30 they accepted
+(`review/label_audit_haleema_review.md`): 53 confirmed the agent and 59 replaced its
+verdict. The final verdicts are **414 `y`, 32 `n`, 4 `unsure`**. Excluding the flagged
+items **raises** the primary rather than lowering it, on both exclusion levels (target
+judge, N8 − N1):
 
 | analysis | items | delta | 95% CI |
 | --- | --- | --- | --- |
 | frozen, as preregistered | 450 | **+9.1pp** | [6.4, 11.9] |
-| flagged indefensible removed | 424 | +9.4pp | [6.5, 12.4] |
-| indefensible and unsure removed | 368 | +10.1pp | [6.8, 13.2] |
+| flagged indefensible removed | 418 | +9.6pp | [6.6, 12.6] |
+| indefensible and unsure removed | 414 | +9.7pp | [6.7, 12.7] |
 
 So the detected label problems are not what produces the result: dropping them moves
-the estimate up by 0.3–1.0pp, well inside the interval, and every interval excludes
+the estimate up by 0.5–0.6pp, well inside the interval, and every interval excludes
 zero. The frozen row is the preregistered one; the other two are a robustness check on
 a smaller set of items. Raw verdicts with reasons are in
 `review/full_audit_agent_verdicts.csv`. This session did not fill either sheet: having
@@ -589,24 +601,26 @@ by hand.
 14. **The label audit is AI-assisted and its residual risk is auditor error, not
     coverage.** All 450 held-out items were audited, so there is no un-audited remainder.
     What remains is that the audit itself may have waved through a wrong label: it is
-    AI-assisted, not independent human validation, and each item was seen by one agent.
-    The verdicts were 368 `y` / 26 `n` / 56 `unsure`, with problem types splitting as
+    AI-assisted, each item was seen by one agent, and the human review covered 112 of
+    the 450 items, not all of them.
+    The agents' verdicts were 368 `y` / 26 `n` / 56 `unsure`, with problem types splitting as
     **26 `indefensible_label`** (8, 8 and 10 across the three agents' blocks),
     **39 `ambiguous_criteria`** and **17 `insufficient_context`** — so more items were
     judged hard to decide on the information shown than were judged wrongly labelled.
+    After Haleema's review of the 82 doubtful items and 30 sampled accepted ones, the
+    final verdicts are 414 `y` / 32 `n` / 4 `unsure`.
     Excluding the flagged items **raises** the primary rather than lowering it — +9.1pp
-    over all 450, +9.4pp [6.5, 12.4] over the 424 that survive dropping the flagged, and
-    +10.1pp [6.8, 13.2] over the 368 that survive dropping `unsure` as well — so the
+    over all 450, +9.6pp [6.6, 12.6] over the 418 that survive dropping the flagged, and
+    +9.7pp [6.7, 12.7] over the 414 that survive dropping `unsure` as well — so the
     detected label problems are not what produces the result.
     The only reliability evidence is the overlap with the earlier 40-item audit:
     **37/40 exact agreement**, with every disagreement one step between `unsure` and a
     decision and no straight `y`/`n` reversal. That rests on 40 items. The 2f bound
     therefore still applies to *undetected* mislabels: an undetected 5% would permit
-    another 10pp of movement against a +9.1pp primary. Haleema's review of the 82
-    doubtful items plus 30 sampled accepted ones is **pending**
-    (`review/label_audit_haleema_review.md`); until it is filled, no human has checked
-    these verdicts, and when it is, `--analyse` takes its final column in preference to
-    the agents'. Full breakdown in `results/label_sensitivity.md`.
+    another 10pp of movement against a +9.1pp primary. Haleema's review
+    (`review/label_audit_haleema_review.md`) is complete, and `--analyse` takes its final
+    column in preference to the agents'. The 338 items the agents accepted outside the
+    random 30 have had no human check. Full breakdown in `results/label_sensitivity.md`.
 15. **The reasoning-on check cannot settle the question it was built for.** With
     reasoning at the provider default the judge returns nothing parseable for ~55% of
     samples and for 15 of 60 items at C0, and an item with no usable answer scores as an

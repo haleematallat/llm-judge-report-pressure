@@ -501,8 +501,9 @@ def analyse():
     n_doubtful = len(flagged) + len(unsure)
     if review["filled"]:
         md.append(
-            f"**Haleema's review is partly in.** `review/{HALEEMA_REVIEW.name}` has "
-            f"{review['filled']} of its rows filled: **{len(overrides)}** verdicts here "
+            f"**Haleema's review is {'complete' if review['filled'] >= 112 else 'partly in'}.** "
+            f"`review/{HALEEMA_REVIEW.name}` has "
+            f"{review['filled']} of its 112 rows filled: **{len(overrides)}** verdicts here "
             f"come from its final column and override the agent's, and "
             f"{len(review['confirmed'])} rows are marked `agree`, confirming the agent "
             "without changing anything.\n\n"

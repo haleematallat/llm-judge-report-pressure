@@ -299,3 +299,17 @@ because this section is an append-only log; the correct current figures, taken f
 Excluding flagged items **raises** the estimate rather than lowering it, by 0.3–1.0pp,
 well inside the interval, with every interval excluding zero. `README.md` now quotes
 these and the stale 40-item framing around them has been replaced.
+
+### 2026-11-01T11:43:40+0500 — human review of the audit complete (recorded 2026-11-10)
+
+- Haleema reviewed, blind to outcomes, all 82 items the agents doubted plus a random 30
+  they accepted (`review/label_audit_haleema_review.md`, commit 057ea42): 53 confirmed the
+  agent and 59 replaced its verdict. The "pending" note in the 14:44:26 entry above is
+  superseded.
+- Final verdicts: 414 `y` / 32 `n` / 4 `unsure`. Flagged indefensible: 32/450 = 7.1%
+  [5.1, 9.9]. Target judge N8 − N1: +9.1pp [6.4, 11.9] frozen, +9.6pp [6.6, 12.6] over the
+  418 that survive dropping the flagged, +9.7pp [6.7, 12.7] over the 414 that survive
+  dropping `unsure` as well. The 0.3–1.0pp and 424 / 368 figures in the 14:47:01 entry
+  are the agents' verdicts alone.
+- The audit stays AI-assisted: the 338 items the agents accepted outside the random 30
+  have had no human check.

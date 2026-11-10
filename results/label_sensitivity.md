@@ -22,7 +22,7 @@ With two options, a wrong reference label flips that item's correctness indicato
 
 **The 2f bound still applies, now to undetected mislabels.** Complete coverage removes the un-audited gap, not the possibility that the audit itself missed wrong labels. If a further fraction f of labels are wrong and were marked defensible, the aggregate paired difference can still move by up to 2f, and those items are by construction absent from every exclusion below: an undetected 5% would permit another 10pp of movement, against a primary contrast of +9.1pp. The 32 detected flags are 7.1% [5.1, 9.9] of the pool.
 
-**Haleema's review is partly in.** `review/label_audit_haleema_review.md` has 112 of its rows filled: **59** verdicts here come from its final column and override the agent's, and 53 rows are marked `agree`, confirming the agent without changing anything.
+**Haleema's review is complete.** `review/label_audit_haleema_review.md` has 112 of its 112 rows filled: **59** verdicts here come from its final column and override the agent's, and 53 rows are marked `agree`, confirming the agent without changing anything.
 
 ## By audit agent
 
