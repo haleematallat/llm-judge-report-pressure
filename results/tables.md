@@ -76,7 +76,7 @@ Neither column below uses the reference label, so neither is affected by whether
 | openai/gpt-5-nano | transfer (never queried during selection) | N4 | 4 | 450 | 224 | 0.371 | 0.847 | 0.371 | 236 | 0.708 | True |
 | openai/gpt-5-nano | transfer (never queried during selection) | N8 | 8 | 450 | 224 | 0.364 | 0.84 | 0.364 | 236 | 0.695 | True |
 
-## 5. C0 accuracy beside Sampura's reported SafeAgent AI-alone numbers
+## 5. C0 accuracy beside the reported (Shi et al., 2026) SafeAgent AI-alone numbers
 Table 4 (Gemini 3 Flash, Sonnet 4.6) and Table 2 (Qwen3.5-9B) of arXiv 2610.24969. **Different models, different item sample, different split: not a like-for-like replication.**
 | judge | role | n_test | n_groups | acc | ci_lo | ci_hi | auroc_self_consistency_agreement | ece_self_consistency_agreement | paper_gemini3flash | paper_sonnet46 | paper_qwen35_9b | paper_n |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |

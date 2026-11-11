@@ -129,7 +129,7 @@ class Spend:
                 )
 
 
-# Reasoning settings, decided from the dev batch (see README "Deviations").
+# Reasoning settings, decided from the dev batch (see docs/details.md, "Deviations").
 # Both judges are reasoning models: left alone they spend the entire max_tokens budget
 # on reasoning tokens and return an empty string, which the parser reads as a refusal.
 # The measured dev batch had 69-78% refused samples and 62% retry calls. Turning

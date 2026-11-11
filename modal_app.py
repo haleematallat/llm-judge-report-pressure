@@ -4,7 +4,7 @@
 
 NOT RUN in this pilot: the Modal token in ~/.modal.toml is rejected
 (modal.exception.AuthError: Token not found), so no Modal work could be submitted
-and Modal spend is $0.00. See README "Deviations". The exact HF id is
+and Modal spend is $0.00. See docs/details.md, "Deviations". The exact HF id is
 `Qwen/Qwen3.5-9B` (there is no `Qwen/Qwen3.5-9B-Instruct`).
 """
 

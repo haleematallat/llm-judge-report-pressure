@@ -629,8 +629,8 @@ README_END = "<!-- RESULTS:END -->"
 
 
 def _inject_readme(tables_md: str):
-    """Keep README's results section byte-identical to results/tables.md."""
-    readme = ROOT / "README.md"
+    """Keep the results section of docs/details.md byte-identical to results/tables.md."""
+    readme = ROOT / "docs" / "details.md"
     if not readme.exists():
         return
     text = readme.read_text()
@@ -638,7 +638,7 @@ def _inject_readme(tables_md: str):
         return
     head, _, rest = text.partition(README_BEGIN)
     _, _, tail = rest.partition(README_END)
-    body = tables_md.split("\n", 1)[1].lstrip("\n").replace("\n## ", "\n### ")  # demote under README section 5
+    body = tables_md.split("\n", 1)[1].lstrip("\n").replace("\n## ", "\n### ")  # demote under section 6
     readme.write_text(f"{head}{README_BEGIN}\n\n{body}\n{README_END}{tail}")
 
 
@@ -737,7 +737,7 @@ def main(full: bool = False):
         "base rate against which the rest should be read.\n\n"
         + MISLABEL_BOUND_NOTE + "\n\n",
         md_table(influence),
-        "\n## 5. C0 accuracy beside Sampura's reported SafeAgent AI-alone numbers\n",
+        "\n## 5. C0 accuracy beside the reported (Shi et al., 2026) SafeAgent AI-alone numbers\n",
         "Table 4 (Gemini 3 Flash, Sonnet 4.6) and Table 2 (Qwen3.5-9B) of arXiv 2610.24969. "
         "**Different models, different item sample, different split: not a like-for-like "
         "replication.**\n",
