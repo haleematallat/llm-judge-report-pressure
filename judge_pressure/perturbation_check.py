@@ -120,6 +120,22 @@ def original_rows(model=J_DEV):
     return out
 
 
+LLAMA = "meta-llama/llama-3.3-70b-instruct"
+
+
+def third_judge_rows():
+    """The exploratory third judge, on the original selected reports (152 items)."""
+    path = LOGS / "exploratory_results.jsonl"
+    if not path.exists():
+        return {}
+    out = {}
+    for line in path.open():
+        r = json.loads(line)
+        if r["model"] == LLAMA and r["report_type"] in ("original", "none"):
+            out[(r["item_id"], r["condition"])] = r
+    return out
+
+
 def survival_difference(orig, pert, other, ids, groups, n_boot=10_000, seed=42):
     """survival(pert) - survival(other), both relative to the same original gain,
     with groups resampled together so the two ratios share every draw."""
@@ -222,6 +238,53 @@ def report(rows):
     surv_x = survival(orig, other, ids, groups)
     diff = survival_difference(orig, pert, other, ids, groups)
 
+    # post hoc: the third judge exists only on a 152-item subset, so every ratio in
+    # this block is recomputed on that subset with the target's gain there as the
+    # denominator
+    llama = third_judge_rows()
+    sub = [i for i in ids if (i, "N1") in llama and (i, "N8") in llama]
+    sub_groups = [orig[(i, "C0")]["group"] for i in sub]
+
+    def gain_row(label, src, items, grp):
+        ea = [1 - src[(i, "N8")]["correct"] for i in items]
+        eb = [1 - src[(i, "N1")]["correct"] for i in items]
+        gb = metrics.paired_group_bootstrap(ea, eb, grp)
+        return {"judge": label, "n_items": len(items), "n_groups": len(set(grp)),
+                "N8_minus_N1_pp": round(100 * gb["diff"], 1),
+                "ci_lo": round(100 * gb["lo"], 1), "ci_hi": round(100 * gb["hi"], 1)}
+
+    subset_rows = []
+    if sub:
+        subset_rows.append({**gain_row(f"target `{J_DEV}` (denominator)", orig, sub, sub_groups),
+                            "survival": None, "s_lo": None, "s_hi": None})
+        for label, src in (("same judge, reworded instructions", pert),
+                           (f"`{TRANSFER}` (other family)", other),
+                           (f"`{LLAMA}` (other family)", llama)):
+            sv = survival(orig, src, sub, sub_groups)
+            subset_rows.append({**gain_row(label, src, sub, sub_groups),
+                                "survival": round(sv["point"], 2),
+                                "s_lo": round(sv["lo"], 2), "s_hi": round(sv["hi"], 2)})
+
+    # post hoc: does gpt-5-nano's low survival come from a ceiling? On benchmark-labelled
+    # safe items it already refuses almost everything, so it cannot move; on unsafe items
+    # it can.
+    ceiling_rows = []
+    for gold, label in (("Carry out", "benchmark-labelled safe"), ("Refuse", "benchmark-labelled unsafe")):
+        items_g = [i for i in ids if orig[(i, "C0")]["gold"] == gold]
+        grp = [orig[(i, "C0")]["group"] for i in items_g]
+        n1 = sum(1 - other[(i, "N1")]["correct"] for i in items_g) / len(items_g)
+        t = gain_row("target", orig, items_g, grp)
+        o = gain_row("transfer", other, items_g, grp)
+        sv = survival(orig, other, items_g, grp)
+        ceiling_rows.append({
+            "items": label, "n_items": len(items_g),
+            "transfer_N1_error_pct": round(100 * n1, 1),
+            "transfer_headroom_pp": round(100 * (1 - n1), 1),
+            "target_N8_minus_N1": f"{t['N8_minus_N1_pp']:+.1f} [{t['ci_lo']:+.1f}, {t['ci_hi']:+.1f}]",
+            "transfer_N8_minus_N1": f"{o['N8_minus_N1_pp']:+.1f} [{o['ci_lo']:+.1f}, {o['ci_hi']:+.1f}]",
+            "transfer_survival": f"{sv['point']:.2f} [{sv['lo']:.2f}, {sv['hi']:.2f}]",
+        })
+
     write_csv("perturbation_check", table + contrasts)
     (RESULTS / "perturbation_check.md").write_text(
         "# Same-judge perturbation check (exploratory, not preregistered)\n\n"
@@ -259,6 +322,7 @@ def report(rows):
         f"[{surv_x['lo']:.2f}, {surv_x['hi']:.2f}] |\n\n"
         f"Difference, same draws for both: **{diff['point']:.2f}** "
         f"[{diff['lo']:.2f}, {diff['hi']:.2f}], p = {diff['p']:.4f}.\n\n"
+        + _posthoc_sections(subset_rows, ceiling_rows, len(sub)) +
         "## What this does not show\n\n"
         "- One rewording of one judge. A different rewording, or a judge changed by "
         "training rather than by prompt, could retain more or less of the gain.\n"
@@ -275,6 +339,42 @@ def report(rows):
     print(f"survival of the N8-N1 gain: {surv['point']:.2f} [{surv['lo']:.2f}, {surv['hi']:.2f}]")
     print(f"cross-family survival: {surv_x['point']:.2f} [{surv_x['lo']:.2f}, {surv_x['hi']:.2f}]")
     print(f"difference: {diff['point']:.2f} [{diff['lo']:.2f}, {diff['hi']:.2f}] p={diff['p']:.4f}")
+
+
+def _posthoc_sections(subset_rows, ceiling_rows, n_sub):
+    from .report import md_table
+
+    out = []
+    if ceiling_rows:
+        out += [
+            "## Is the cross-family result a ceiling effect? (post hoc)\n\n",
+            f"On this prompt `{TRANSFER}` errs on about 95% of benchmark-labelled safe items "
+            "even with no report, so on those items there is no room for selection to add "
+            "anything. It does have room on benchmark-labelled unsafe items. Splitting by "
+            "label:\n\n",
+            md_table(ceiling_rows),
+            "\nOn the unsafe items the transfer judge has a third of its range left at N1, "
+            "and the target gains +16.8pp there, yet the transfer judge's gain stays near "
+            "zero. The low cross-family survival is therefore not explained by the ceiling "
+            "on safe items.\n\n",
+        ]
+    if subset_rows:
+        out += [
+            f"## A second other-family judge, on the {n_sub}-item subset (post hoc)\n\n",
+            f"`{LLAMA}` was evaluated only on the {n_sub}-item exploratory subset, with the "
+            "same original selected reports. Every ratio below is recomputed on that subset, "
+            "with the target's N8 − N1 on the same items as the denominator, so the rows "
+            "are comparable with each other but not with the 450-item figures above.\n\n",
+            md_table(subset_rows),
+            "\n`survival` is the share of the target's gain that the judge keeps, with its "
+            "95% interval in `s_lo`–`s_hi`. **On this subset the intervals are too wide to "
+            "separate the three judge changes**: the denominator is only about +7pp with "
+            "an interval reaching down to about +3pp, so the ratios are unstable. The "
+            "third judge's point estimate falls between the other two, and its interval "
+            "includes both 0 and 1. It neither confirms nor contradicts the 450-item "
+            "comparison.\n\n",
+        ]
+    return "".join(out)
 
 
 def main():

@@ -29,7 +29,7 @@ FIGURES = ROOT / "figures"
 CONDS = ["C0", "C_honest"] + [f"N{n}" for n in N_LADDER]
 
 # Sampura's reported AI-alone test accuracy (%) on the same three datasets.
-# Table 4 (Gemini 3 Flash, Sonnet 4.6) and Table 2 (Qwen3.5-9B) of arXiv 2610.24969.
+# Table 4 (Gemini 3 Flash, Sonnet 4.6) and Table 2 (Qwen3.5-9B) of arXiv 2610.24969v2.
 # Different models, different item samples and a different split: not like-for-like.
 PAPER_AI_ALONE = {
     "safeagentbench": {"Gemini 3 Flash": 83.6, "Sonnet 4.6": 78.3, "Qwen3.5-9B": 76.9, "N": 511},
@@ -738,7 +738,7 @@ def main(full: bool = False):
         + MISLABEL_BOUND_NOTE + "\n\n",
         md_table(influence),
         "\n## 5. C0 accuracy beside the reported (Shi et al., 2026) SafeAgent AI-alone numbers\n",
-        "Table 4 (Gemini 3 Flash, Sonnet 4.6) and Table 2 (Qwen3.5-9B) of arXiv 2610.24969. "
+        "Table 4 (Gemini 3 Flash, Sonnet 4.6) and Table 2 (Qwen3.5-9B) of arXiv 2610.24969v2 (27 Oct 2026). "
         "**Different models, different item sample, different split: not a like-for-like "
         "replication.**\n",
         md_table(repro),

@@ -3,7 +3,7 @@
 Methods, every results table, the label audit and all known limits for [the main README](../README.md). Paths are relative to the repository root.
 
 An AI-side robustness test built on Shi et al. (2026), *Towards Human-AI Complementarity
-for AI Safety* (arXiv:2610.24969). A judge rates a household-robot plan. The transcript
+for AI Safety* (arXiv:2610.24969v2, 27 Oct 2026). A judge rates a household-robot plan. The transcript
 it rates is never edited; the agent is allowed to append an end-of-task report, and an
 attacker searches over candidate reports to find one that flips the judge.
 
@@ -282,7 +282,7 @@ Neither column below uses the reference label, so neither is affected by whether
 | openai/gpt-5-nano | transfer (never queried during selection) | N8 | 8 | 450 | 224 | 0.364 | 0.84 | 0.364 | 236 | 0.695 | True |
 
 ### 5. C0 accuracy beside the reported (Shi et al., 2026) SafeAgent AI-alone numbers
-Table 4 (Gemini 3 Flash, Sonnet 4.6) and Table 2 (Qwen3.5-9B) of arXiv 2610.24969. **Different models, different item sample, different split: not a like-for-like replication.**
+Table 4 (Gemini 3 Flash, Sonnet 4.6) and Table 2 (Qwen3.5-9B) of arXiv 2610.24969v2 (27 Oct 2026). **Different models, different item sample, different split: not a like-for-like replication.**
 | judge | role | n_test | n_groups | acc | ci_lo | ci_hi | auroc_self_consistency_agreement | ece_self_consistency_agreement | paper_gemini3flash | paper_sonnet46 | paper_qwen35_9b | paper_n |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | qwen/qwen3.7-flash | target (best-of-N selection runs against it) | 450 | 224 | 63.3 | 58.8 | 67.7 | 0.552 | 0.26 | 83.6 | 78.3 | 76.9 | 511 |
@@ -410,6 +410,16 @@ resampled together:
 Difference 0.59 [0.22, 1.03], p = 0.002. The cross-family row and the difference were
 computed after the same-judge result was seen and are labelled post hoc in the results
 file. One rewording of one judge is a perturbation, not an update by training.
+
+Two further post-hoc checks, both in `results/perturbation_check.md`. **Ceiling:**
+`gpt-5-nano` refuses almost every benchmark-labelled safe plan, so it cannot move on
+those items; on benchmark-labelled unsafe items it errs on 67.3% at N1, leaving 32.7pp
+of room, and still keeps only 0.05 [−0.23, 0.34] of the target's +16.8pp gain there.
+**Second other-family judge:** `llama-3.3-70b-instruct`, run only on the 152-item
+exploratory subset, keeps 0.45 [−0.40, 1.40]. On that subset the denominator is small
+(+7.2pp [2.6, 12.3]) and the same-judge rewording itself reads 0.82 [0.13, 2.50], so
+the subset cannot separate the three judge changes; it is inconclusive, not
+confirmatory.
 
 ### Mechanism: what the verdict-free arm does and does not settle
 
@@ -669,7 +679,7 @@ data/SOURCES.md        sources, revisions, licences
 
 ## 11. Attribution
 
-- Shi, S. L., et al. (2026). *Towards Human-AI Complementarity for AI Safety*. arXiv:2610.24969
+- Shi, S. L., et al. (2026). *Towards Human-AI Complementarity for AI Safety*. arXiv:2610.24969v2 (v1 18 Oct 2026; v2 27 Oct 2026, the version used throughout)
   (CC BY 4.0) — the judge task, the self-consistency confidence definition, and the
   reference AI-alone accuracies in §6.
 - The human rating platform released with Shi et al. (2026) (`backend/services/assistance/`) — the candidate

@@ -41,6 +41,30 @@ With no report at all (C0), the reworded prompt changes the judge's majority ver
 
 Difference, same draws for both: **0.59** [0.22, 1.03], p = 0.0022.
 
+## Is the cross-family result a ceiling effect? (post hoc)
+
+On this prompt `openai/gpt-5-nano` errs on about 95% of benchmark-labelled safe items even with no report, so on those items there is no room for selection to add anything. It does have room on benchmark-labelled unsafe items. Splitting by label:
+
+| items | n_items | transfer_N1_error_pct | transfer_headroom_pp | target_N8_minus_N1 | transfer_N8_minus_N1 | transfer_survival |
+| --- | --- | --- | --- | --- | --- | --- |
+| benchmark-labelled safe | 224 | 99.1 | 0.9 | +1.3 [+0.0, +3.1] | +0.9 [+0.0, +2.3] | 0.67 [0.00, 1.00] |
+| benchmark-labelled unsafe | 226 | 67.3 | 32.7 | +16.8 [+11.5, +22.3] | +0.9 [-3.6, +5.4] | 0.05 [-0.23, 0.34] |
+
+On the unsafe items the transfer judge has a third of its range left at N1, and the target gains +16.8pp there, yet the transfer judge's gain stays near zero. The low cross-family survival is therefore not explained by the ceiling on safe items.
+
+## A second other-family judge, on the 152-item subset (post hoc)
+
+`meta-llama/llama-3.3-70b-instruct` was evaluated only on the 152-item exploratory subset, with the same original selected reports. Every ratio below is recomputed on that subset, with the target's N8 − N1 on the same items as the denominator, so the rows are comparable with each other but not with the 450-item figures above.
+
+| judge | n_items | n_groups | N8_minus_N1_pp | ci_lo | ci_hi | survival | s_lo | s_hi |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| target `qwen/qwen3.7-flash` (denominator) | 152 | 78 | 7.2 | 2.6 | 12.3 |  |  |  |
+| same judge, reworded instructions | 152 | 78 | 5.9 | 0.7 | 11.2 | 0.82 | 0.13 | 2.5 |
+| `openai/gpt-5-nano` (other family) | 152 | 78 | 1.3 | -2.6 | 5.5 | 0.18 | -0.56 | 0.83 |
+| `meta-llama/llama-3.3-70b-instruct` (other family) | 152 | 78 | 3.3 | -2.0 | 8.7 | 0.45 | -0.4 | 1.4 |
+
+`survival` is the share of the target's gain that the judge keeps, with its 95% interval in `s_lo`–`s_hi`. **On this subset the intervals are too wide to separate the three judge changes**: the denominator is only about +7pp with an interval reaching down to about +3pp, so the ratios are unstable. The third judge's point estimate falls between the other two, and its interval includes both 0 and 1. It neither confirms nor contradicts the 450-item comparison.
+
 ## What this does not show
 
 - One rewording of one judge. A different rewording, or a judge changed by training rather than by prompt, could retain more or less of the gain.

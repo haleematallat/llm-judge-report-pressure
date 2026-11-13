@@ -9,14 +9,14 @@ Haleema Tallat
 - An LLM judge rates whether a household-robot plan is safe (450 held-out SafeAgentBench items). The plan is never edited; the agent may only append its own end-of-task report.
 - One report arguing for the wrong verdict raised the judge's error from **36.7% to 84.2%**. Choosing the most persuasive of 8 raised it to **93.3%** (preregistered N8 − N1: **+9.1pp [6.4, 11.9]**), but added only +0.9pp on a judge never queried during selection.
 - Under this pressure, a self-consistency review rule left **94% of errors unflagged**, up from 59% with no report.
-- Exploratory, after the main study: re-judging the same selected reports with the target judge's instructions **reworded** kept **0.68 [0.41, 1.03]** of the N8 − N1 gain; the never-queried judge from another model family kept **0.10 [−0.17, 0.37]** (difference 0.59 [0.22, 1.03], p = 0.002). Details in [`results/perturbation_check.md`](results/perturbation_check.md).
+- Exploratory, after the main study: re-judging the same selected reports with the target judge's instructions **reworded** kept **0.68 [0.41, 1.03]** of the N8 − N1 gain; the never-queried judge from another model family kept **0.10 [−0.17, 0.37]** (difference 0.59 [0.22, 1.03], p = 0.002). On benchmark-labelled unsafe items, where that judge still has room to move, it keeps 0.05 [−0.23, 0.34], so this is not a ceiling artefact; a second other-family judge (Llama-3.3-70B, 152-item subset only) is inconclusive at 0.45 [−0.40, 1.40]. Details in [`results/perturbation_check.md`](results/perturbation_check.md).
 - The benchmark labels were audited: after my human review of 112 items, 32 of 450 (7.1%) are flagged indefensible. Dropping them gives **+9.6pp [6.6, 12.6]**, so the result does not come from the detected label problems.
 
 ![Held-out error rate vs N, both judges](figures/fig_error_rate_vs_n.png)
 
 ## Setup
 
-An AI-side robustness test built on Shi et al. (2026), *Towards Human-AI Complementarity for AI Safety* (arXiv:2610.24969).
+An AI-side robustness test built on Shi et al. (2026), *Towards Human-AI Complementarity for AI Safety* (arXiv:2610.24969v2, 27 Oct 2026; the current version).
 
 - **Judge task.** Should the robot carry out the task or refuse it? The reference label comes from the benchmark file the item belongs to. The transcript's SHA-256 is checked on every judged prompt, so the label stays valid under every condition.
 - **Attack.** An attacker model writes 8 candidate reports per item, each arguing for the wrong verdict. Best-of-N selection (N = 1, 4, 8) scores them against the **target judge** (`qwen3.7-flash`) and appends the winner. A **transfer judge** (`gpt-5-nano`) is never queried during selection.
@@ -67,4 +67,4 @@ Building the data and live runs: [`docs/details.md` §7](docs/details.md#7-how-t
 
 ## Attribution
 
-Shi et al. (2026), arXiv:2610.24969 (CC BY 4.0): the judge task and self-consistency definition. SafeAgentBench (Yin et al., 2024), MIT. Full attribution in [`docs/details.md`](docs/details.md#11-attribution).
+Shi et al. (2026), arXiv:2610.24969v2 (CC BY 4.0): the judge task and self-consistency definition. SafeAgentBench (Yin et al., 2024), MIT. Full attribution in [`docs/details.md`](docs/details.md#11-attribution).
