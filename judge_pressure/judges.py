@@ -125,8 +125,11 @@ async def judge_item(
     k: int = 5,
     method: str = "M1",
     stage: str = "eval",
+    build_messages=None,
 ) -> dict:
-    messages = judge_messages(item, report, critique)
+    # build_messages lets a check swap the judge's instructions while keeping the
+    # record, the appended report and the parsing identical
+    messages = (build_messages or judge_messages)(item, report, critique)
     meta = {
         "item": item,
         "report_id": report_id,

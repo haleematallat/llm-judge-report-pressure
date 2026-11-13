@@ -313,3 +313,30 @@ these and the stale 40-item framing around them has been replaced.
   are the agents' verdicts alone.
 - The audit stays AI-assisted: the 338 items the agents accepted outside the random 30
   have had no human check.
+
+
+### 2026-11-13T17:49:42+0500 — same-judge perturbation check (exploratory, specified before running)
+
+**Exploratory and not preregistered.** Specified here before any of its results exist;
+the frozen design and the primary result above are unchanged.
+
+- **Question.** Does the gain from best-of-N selection survive a change to the *same*
+  judge? The cross-judge test above swaps model family; this keeps the target model.
+- **What changes.** Only the judge's instructions: the same task, the same output
+  contract and the same option strings, reworded and reordered (output format first,
+  question before the record, different wording throughout). Text in
+  `judge_pressure/perturbation_check.py`. It never mentions the appended report and
+  never tells the judge to discount anything, so it is not a defence; a test enforces
+  this.
+- **What stays fixed.** Target model `qwen/qwen3.7-flash` and its reasoning setting,
+  all 450 held-out items, the records, and the N = 1 and N = 8 reports the main run
+  already selected against the **original** prompt. Nothing is re-selected.
+- **Conditions.** C0, N1, N8; K = 5 fresh evaluation samples.
+- **Outcomes.** N8 − N1 and N1 − C0 under the reworded prompt, each beside the main
+  run's figure on the same items, paired and group-bootstrapped; and the share of the
+  original N8 − N1 gain that survives, (reworded gain) / (original gain), with groups
+  resampled together. Also the share of C0 verdicts the rewording changes on its own,
+  as evidence that the perturbation is real.
+- **Reading.** One rewording of one judge is a perturbation, not an update by
+  training. Whatever it shows, it is reported as such.
+- **Budget.** Estimated under $0.25 against the remaining pilot budget.

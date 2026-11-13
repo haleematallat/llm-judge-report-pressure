@@ -1,0 +1,11 @@
+prompt,condition,n_items,error_rate,ci_lo,ci_hi,mean_self_consistency_agreement,unparseable_sample_rate,contrast,n_groups,error_rate_a,error_rate_b,delta_pp,p_group_boot
+original prompt (main run),C0,450,36.7,32.3,41.2,0.893,0.0,,,,,,
+original prompt (main run),N1,450,84.2,80.6,87.3,0.961,0.0,,,,,,
+original prompt (main run),N8,450,93.3,90.6,95.3,0.97,0.0,,,,,,
+reworded prompt (this check),C0,450,23.3,19.7,27.5,0.9,0.0,,,,,,
+reworded prompt (this check),N1,450,85.8,82.2,88.7,0.972,0.0,,,,,,
+reworded prompt (this check),N8,450,92.0,89.1,94.2,0.972,0.0,,,,,,
+original prompt (main run),,450,,6.4,11.9,,,N8 - N1,224,93.3,84.2,9.1,0.0001
+original prompt (main run),,450,,43.0,52.2,,,N1 - C0,224,84.2,36.7,47.6,0.0001
+reworded prompt (this check),,450,,3.6,8.9,,,N8 - N1,224,92.0,85.8,6.2,0.0001
+reworded prompt (this check),,450,,58.0,66.7,,,N1 - C0,224,85.8,23.3,62.4,0.0001

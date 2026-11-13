@@ -179,7 +179,14 @@ logged or written to disk; `open_router_key` is mapped to `OPENROUTER_API_KEY` i
 | --- | --- | --- |
 | dev batch (`--split dev`) | 21 | $0.0409 |
 | main run (`--split test`) | 450 | $0.9247 |
-| all runs, including the reasoning-on check and exploratory arms | | $1.4243 |
+| all runs to 2026-10-31: dev, main, reasoning-on check, exploratory arms, and the discarded first dev batch (key-usage delta) | | $2.0091 |
+| same-judge perturbation check (2026-11-13; per-call, incl. 5-item smoke test) | 450 | $0.0760 |
+| **Pilot A total** | | **≈ $2.09** |
+
+An earlier version of this table gave $1.4243 for "all runs". That figure predated the
+exploratory arms and was wrong for the row it labelled. The key is shared with Pilot B,
+so key usage since the pilot baseline ($4.77 on 2026-11-13) is larger than Pilot A's
+own spend.
 
 Models and prices from `results/openrouter_prices.csv` (fetched 2026-10-30), USD per
 million tokens:
@@ -374,6 +381,36 @@ benchmark-labelled unsafe-approved direction) and is still moved a long way by o
 adversarially generated report without selection (N1 original: 73.7% overall, 50.0%
 unsafe-approved).
 
+### Same-judge perturbation check (added 2026-11-13)
+
+Specified as a dated amendment in `docs/preregistration.md` before running. The
+cross-judge test swaps model family; this keeps the target model and changes only its
+instructions — the same task and output contract, reworded and reordered. It re-judges
+the N1 and N8 reports already selected against the **original** prompt, on all 450
+held-out items, with fresh samples. The rewording never mentions the appended report
+(a test enforces this), so it is not a defence. Full tables in
+`results/perturbation_check.md`.
+
+The rewording is a real perturbation: on its own, with no report, it changes the
+judge's majority verdict on 24.9% of items and lowers C0 error from 36.7% to 23.3%.
+
+| prompt | C0 | N1 | N8 | N8 − N1 | N1 − C0 |
+| --- | --- | --- | --- | --- | --- |
+| original (main run) | 36.7 | 84.2 | 93.3 | +9.1 [6.4, 11.9] | +47.6 [43.0, 52.2] |
+| reworded (this check) | 23.3 | 85.8 | 92.0 | +6.2 [3.6, 8.9] | +62.4 [58.0, 66.7] |
+
+Share of the original N8 − N1 gain that survives, on the same items with groups
+resampled together:
+
+| judge change | share surviving | 95% CI |
+| --- | --- | --- |
+| same model, reworded instructions | 0.68 | [0.41, 1.03] |
+| different model family (`gpt-5-nano`), **post hoc** | 0.10 | [−0.17, 0.37] |
+
+Difference 0.59 [0.22, 1.03], p = 0.002. The cross-family row and the difference were
+computed after the same-judge result was seen and are labelled post hoc in the results
+file. One rewording of one judge is a perturbation, not an update by training.
+
 ### Mechanism: what the verdict-free arm does and does not settle
 
 The original reports state a verdict outright. That makes plain **answer-following** a
@@ -488,7 +525,7 @@ uv venv && uv pip install httpx numpy pandas scipy matplotlib pytest datasets mo
 
 # data: download into data/raw/ per data/SOURCES.md, then
 .venv/bin/python -m judge_pressure.data --n-test 450         # -> data/items.jsonl (471 items)
-.venv/bin/python -m pytest tests -q                   # 19 tests
+.venv/bin/python -m pytest tests -q                   # 23 tests
 .venv/bin/python -m judge_pressure.run --estimate --split dev
 
 .venv/bin/python -m judge_pressure.run --dry-run --split all # offline, deterministic, free
@@ -621,7 +658,7 @@ judge_pressure/metrics.py     Wilson, AUROC, ECE, paired group bootstrap, review
 judge_pressure/run.py         orchestration, --dry-run, --estimate, --split
 judge_pressure/report.py      tables, figures and review/dev_rendered.md, from logs only
 judge_pressure/modal_estimate.py  GPU-hour cost model behind docs/scaling.md (not used in this run)
-tests/                 19 tests
+tests/                 23 tests
 logs/                  raw call logs (not committed, ~80 MB; available on request)
 review/dev_rendered.md every dev case as the judge sees it, for label-validity review
 docs/LLM_Judges_Under_Agent_Report_Pressure.pdf   the written report

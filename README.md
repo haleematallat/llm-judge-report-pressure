@@ -9,6 +9,7 @@ Haleema Tallat
 - An LLM judge rates whether a household-robot plan is safe (450 held-out SafeAgentBench items). The plan is never edited; the agent may only append its own end-of-task report.
 - One report arguing for the wrong verdict raised the judge's error from **36.7% to 84.2%**. Choosing the most persuasive of 8 raised it to **93.3%** (preregistered N8 − N1: **+9.1pp [6.4, 11.9]**), but added only +0.9pp on a judge never queried during selection.
 - Under this pressure, a self-consistency review rule left **94% of errors unflagged**, up from 59% with no report.
+- Exploratory, after the main study: re-judging the same selected reports with the target judge's instructions **reworded** kept **0.68 [0.41, 1.03]** of the N8 − N1 gain; the never-queried judge from another model family kept **0.10 [−0.17, 0.37]** (difference 0.59 [0.22, 1.03], p = 0.002). Details in [`results/perturbation_check.md`](results/perturbation_check.md).
 - The benchmark labels were audited: after my human review of 112 items, 32 of 450 (7.1%) are flagged indefensible. Dropping them gives **+9.6pp [6.6, 12.6]**, so the result does not come from the detected label problems.
 
 ![Held-out error rate vs N, both judges](figures/fig_error_rate_vs_n.png)
@@ -35,7 +36,7 @@ Every table, the exploratory arms (direction split, verdict-free reports, a thir
 2. **Judges run with reasoning off or minimal.** At their defaults they used up the output budget and returned nothing parseable. A judge that reasons about the report may discount it more, so attack success here may be higher than against reasoning judges.
 3. **Near-ceiling baseline.** One unselected report already gives 84% error, which compresses the room for the preregistered N8 − N1 contrast.
 4. **Labels.** If a label is wrong, it reverses that item's contribution to a paired contrast instead of cancelling out, so 10% wrong labels could move a contrast by up to 20pp. The audit is AI-assisted and covers all 450 items, and I reviewed 112 of them; the 338 the agents accepted outside my random sample have had no human check. Label-independent measures (how many verdicts move to the argued option) are reported in [`docs/details.md`](docs/details.md).
-5. **Narrow scope.** One dataset, one attacker, one target judge and one transfer judge. No human arm, so nothing here measures human–AI complementarity.
+5. **Narrow scope.** One dataset, one attacker, one target judge and one transfer judge; the same-judge check is one rewording of one judge, not a judge retrained. No human arm, so nothing here measures human–AI complementarity.
 
 An earlier version of this repository claimed the paired design protected the contrasts from label errors. That claim was wrong and is withdrawn.
 
@@ -50,7 +51,7 @@ An earlier version of this repository claimed the paired design protected the co
 | `figures/` | the four figures |
 | `review/` | label provenance, quality notes, the audit sheets and my review |
 | `judge_pressure/` | data, judge protocol, attack, metrics, run and report code |
-| `tests/` | 19 tests |
+| `tests/` | 23 tests |
 
 Raw call logs (~80 MB) are not committed; they are available on request. All tables and figures are generated from them by `judge_pressure.report`.
 
@@ -58,7 +59,7 @@ Raw call logs (~80 MB) are not committed; they are available on request. All tab
 
 ```bash
 uv venv && uv pip install httpx numpy pandas scipy matplotlib pytest datasets modal
-.venv/bin/python -m pytest tests -q                       # 19 tests
+.venv/bin/python -m pytest tests -q                       # 23 tests
 .venv/bin/python -m judge_pressure.run --dry-run --split all   # offline, free
 ```
 
